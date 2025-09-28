@@ -22,6 +22,7 @@ class ConstantFunctionTest {
         assertEquals(893.128, func4.apply(9099), 1e-9);
     }
 
+    // Прописываем тест для публичного метода getConstant()
     @Test
     void testGetConstantMethod() {
         ConstantFunction func = new ConstantFunction(894.3);

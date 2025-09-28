@@ -1,5 +1,6 @@
 package ru.ssau.tk.avokado.functions;
 
+
 public class ConstantFunction implements MathFunction {
     private final double constant; // Создаём приватное завершённое поле для константы
 
