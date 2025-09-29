@@ -1,6 +1,6 @@
 package ru.ssau.tk.avokado.lab2.functions;
 
-public interface MathFunction extends MathFunction {
+public interface TabulatedFunction extends MathFunction {
     int getCount(); // получение количества табулированных значений
     double getX(int index); // получение значения аргумента x по номеру индекса:
     double getY(int index); // получение y
