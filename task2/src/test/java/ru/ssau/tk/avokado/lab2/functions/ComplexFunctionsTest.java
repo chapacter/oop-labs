@@ -36,7 +36,7 @@ public class ComplexFunctionsTest {
         double[] yValues = {-2.0, 0.0, 2.0};
         TabulatedFunction tabulatedFunc = new ArrayTabulatedFunction(xValues, yValues);
 
-        // Аналитическая функция
+        // Прописываем аналитическую функцию
         MathFunction sqrFunction = new SqrFunction();
 
         // Создаем сложную функцию: sqrFunction(tabulatedFunc(x))
@@ -62,7 +62,7 @@ public class ComplexFunctionsTest {
         assertEquals(2.0, chain.apply(0.0), 1e-9); // 2 * (0^2) = 0? Нет, constant всегда возвращает 2
         assertEquals(2.0, chain.apply(5.0), 1e-9); // constant игнорирует результат sqr
 
-        // Цепочка с табулированной функцией
+        // Прописываем цепочку с табулированной функцией
         double[] xValues = {0.0, 1.0};
         double[] yValues = {0.0, 3.0};
         TabulatedFunction tabulatedFunc = new LinkedListTabulatedFunction(xValues, yValues);
@@ -90,4 +90,5 @@ public class ComplexFunctionsTest {
         MathFunction chain = f1.andThen(f2).andThen(f3);
         assertEquals(5.0, chain.apply(0.0), 1e-9);
     }
+
 }
