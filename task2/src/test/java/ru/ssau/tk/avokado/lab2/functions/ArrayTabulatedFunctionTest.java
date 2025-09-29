@@ -209,4 +209,3 @@ class ArrayTabulatedFunctionTest {
         assertEquals(50.0, function.extrapolateRight(10.0), 1e-12);
     }
 }
-
