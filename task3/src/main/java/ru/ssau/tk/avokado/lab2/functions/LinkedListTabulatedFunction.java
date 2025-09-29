@@ -206,4 +206,21 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
         // Если дошли до конца - вставляем в конец
         addNode(x, y);
     }
+        @Override
+    public void remove(int index) {
+        Node nodeToRemove = getNode(index);
+
+        if (count == 1) {
+            head = null;
+        } else {
+            nodeToRemove.prev.next = nodeToRemove.next;
+            nodeToRemove.next.prev = nodeToRemove.prev;
+            if (nodeToRemove == head) {
+                head = head.next;
+            }
+        }
+        count--;
+    }
+}
+
 }
