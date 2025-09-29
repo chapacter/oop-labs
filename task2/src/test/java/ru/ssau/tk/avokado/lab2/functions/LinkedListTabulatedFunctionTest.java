@@ -90,4 +90,24 @@ class LinkedListTabulatedFunctionTest {
 
         assertEquals(10, f.apply(1));
     }
+
+    @Test
+public void testApply() {
+    double[] xValues = {0.0, 1.0, 2.0};
+    double[] yValues = {0.0, 1.0, 4.0};
+    LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(xValues, yValues);
+
+    // Точное совпадение
+    assertEquals(0.0, function.apply(0.0), 1e-12);
+    assertEquals(1.0, function.apply(1.0), 1e-12);
+
+    // Интерполяция
+    assertEquals(0.5, function.apply(0.5), 1e-12);
+    assertEquals(2.5, function.apply(1.5), 1e-12);
+
+    // Экстраполяция
+    assertEquals(-1.0, function.apply(-1.0), 1e-12); // left
+    assertEquals(7.0, function.apply(3.0), 1e-12);   // right
 }
+}
+
