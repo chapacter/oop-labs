@@ -10,8 +10,8 @@ public interface TabulatedFunction extends MathFunction {
     int indexOfX(double x); // Метод, возвращающий индекс аргумента x. Предполагается, что все x различны. Если такого x в таблице нет, то необходимо вернуть -1:
     int indexOfY(double y); // Для y
 
-    double leftBound(); // Самый левый
-    double rightBound(); // Возвращающий самый правый x
+    double leftBound(); // Возвращающий самый левый x
+    double rightBound(); // Самый правый
 
 
 }
