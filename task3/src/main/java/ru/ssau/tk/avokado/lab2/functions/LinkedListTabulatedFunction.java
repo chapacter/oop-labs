@@ -168,4 +168,42 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
         Node right = left.next;
         return interpolate(x, left.x, right.x, left.y, right.y);
     }
+    @Override
+    public void insert(double x, double y) {
+        if (head == null) {
+            addNode(x, y);
+            return;
+        }
+
+        Node current = head;
+        do {
+            if (current.x == x) {
+                current.y = y;
+                return;
+            }
+            current = current.next;
+        } while (current != head);
+
+        // Вставка в нужную позицию
+        current = head;
+        Node newNode = new Node(x, y);
+        do {
+            if (current.x > x) {
+                // Вставка перед current
+                newNode.next = current;
+                newNode.prev = current.prev;
+                current.prev.next = newNode;
+                current.prev = newNode;
+                if (current == head) {
+                    head = newNode;
+                }
+                count++;
+                return;
+            }
+            current = current.next;
+        } while (current != head);
+
+        // Если дошли до конца - вставляем в конец
+        addNode(x, y);
+    }
 }
