@@ -172,5 +172,107 @@ void testInsertMaintainsCircularStructure() {
     assertEquals(function.getX(0), function.leftBound(), 1e-12);
     assertEquals(function.getX(2), function.rightBound(), 1e-12);
     } 
+    @Test
+void testRemoveFromBeginning() {
+    double[] xValues = {1.0, 2.0, 3.0, 4.0};
+    double[] yValues = {10.0, 20.0, 30.0, 40.0};
+    LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(xValues, yValues);
+
+    function.remove(0);
+
+    assertEquals(3, function.getCount());
+    assertEquals(2.0, function.leftBound(), 1e-12);
+    assertEquals(20.0, function.getY(0), 1e-12);
+    assertEquals(4.0, function.rightBound(), 1e-12);
 }
+
+@Test
+void testRemoveFromEnd() {
+    double[] xValues = {1.0, 2.0, 3.0, 4.0};
+    double[] yValues = {10.0, 20.0, 30.0, 40.0};
+    LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(xValues, yValues);
+
+    function.remove(3);
+
+    assertEquals(3, function.getCount());
+    assertEquals(1.0, function.leftBound(), 1e-12);
+    assertEquals(3.0, function.rightBound(), 1e-12);
+    assertEquals(30.0, function.getY(2), 1e-12);
+}
+
+@Test
+void testRemoveFromMiddle() {
+    double[] xValues = {1.0, 2.0, 3.0, 4.0};
+    double[] yValues = {10.0, 20.0, 30.0, 40.0};
+    LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(xValues, yValues);
+
+    function.remove(1);
+
+    assertEquals(3, function.getCount());
+    assertEquals(1.0, function.getX(0), 1e-12);
+    assertEquals(3.0, function.getX(1), 1e-12);
+    assertEquals(4.0, function.getX(2), 1e-12);
+    assertEquals(30.0, function.getY(1), 1e-12);
+}
+
+@Test
+void testRemoveInvalidIndex() {
+    double[] xValues = {1.0, 2.0, 3.0};
+    double[] yValues = {10.0, 20.0, 30.0};
+    LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(xValues, yValues);
+
+    assertThrows(IndexOutOfBoundsException.class, () -> function.remove(-1));
+    assertThrows(IndexOutOfBoundsException.class, () -> function.remove(3));
+}
+
+@Test
+void testRemoveSingleElement() {
+    double[] xValues = {1.0};
+    double[] yValues = {10.0};
+    LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(xValues, yValues);
+
+    function.remove(0);
+
+    assertEquals(0, function.getCount());
+    // Проверяем, что список стал пустым
+    assertThrows(IndexOutOfBoundsException.class, () -> function.getX(0));
+}
+
+@Test
+void testRemoveHeadMaintainsStructure() {
+    double[] xValues = {1.0, 2.0, 3.0};
+    double[] yValues = {10.0, 20.0, 30.0};
+    LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(xValues, yValues);
+
+    function.remove(0);
+
+    assertEquals(2, function.getCount());
+    // Проверяем, что новая голова корректна
+    assertEquals(2.0, function.leftBound(), 1e-12);
+    assertEquals(3.0, function.rightBound(), 1e-12);
+    
+    // Проверяем циклическую структуру
+    assertEquals(function.getX(0), function.leftBound(), 1e-12);
+    assertEquals(function.getX(1), function.rightBound(), 1e-12);
+}
+
+@Test
+void testRemoveAndMaintainCircularLinks() {
+    double[] xValues = {1.0, 2.0, 3.0};
+    double[] yValues = {10.0, 20.0, 30.0};
+    LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(xValues, yValues);
+
+    function.remove(1);
+
+    assertEquals(2, function.getCount());
+    // Проверяем, что связи остались корректными
+    assertEquals(1.0, function.getX(0), 1e-12);
+    assertEquals(3.0, function.getX(1), 1e-12);
+    
+    // Проверяем, что prev и next ссылки корректны
+    assertEquals(function.getX(1), function.rightBound(), 1e-12);
+    assertEquals(function.getX(0), function.leftBound(), 1e-12);
+    }
+}
+
 
