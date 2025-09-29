@@ -90,4 +90,87 @@ class LinkedListTabulatedFunctionTest {
 
         assertEquals(10, f.apply(1));
     }
+    // Добавить в LinkedListTabulatedFunctionTest.java
+
+@Test
+void testInsertAtBeginning() {
+    double[] xValues = {2.0, 3.0, 4.0};
+    double[] yValues = {20.0, 30.0, 40.0};
+    LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(xValues, yValues);
+
+    function.insert(1.0, 10.0);
+
+    assertEquals(4, function.getCount());
+    assertEquals(1.0, function.leftBound(), 1e-12);
+    assertEquals(10.0, function.getY(0), 1e-12);
+    assertEquals(2.0, function.getX(1), 1e-12);
 }
+
+@Test
+void testInsertAtEnd() {
+    double[] xValues = {1.0, 2.0, 3.0};
+    double[] yValues = {10.0, 20.0, 30.0};
+    LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(xValues, yValues);
+
+    function.insert(4.0, 40.0);
+
+    assertEquals(4, function.getCount());
+    assertEquals(4.0, function.rightBound(), 1e-12);
+    assertEquals(40.0, function.getY(3), 1e-12);
+}
+
+@Test
+void testInsertInMiddle() {
+    double[] xValues = {1.0, 3.0, 4.0};
+    double[] yValues = {10.0, 30.0, 40.0};
+    LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(xValues, yValues);
+
+    function.insert(2.0, 25.0);
+
+    assertEquals(4, function.getCount());
+    assertEquals(1.0, function.getX(0), 1e-12);
+    assertEquals(2.0, function.getX(1), 1e-12);
+    assertEquals(3.0, function.getX(2), 1e-12);
+    assertEquals(25.0, function.getY(1), 1e-12);
+}
+
+@Test
+void testInsertReplaceExisting() {
+    double[] xValues = {1.0, 2.0, 3.0};
+    double[] yValues = {10.0, 20.0, 30.0};
+    LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(xValues, yValues);
+
+    function.insert(2.0, 25.0);
+
+    assertEquals(3, function.getCount());
+    assertEquals(25.0, function.getY(1), 1e-12);
+    assertEquals(2.0, function.getX(1), 1e-12);
+}
+
+@Test
+void testInsertIntoEmptyList() {
+    // Если есть конструктор для пустого списка
+    double[] xValues = {};
+    double[] yValues = {};
+    // Этот тест может не понадобиться, так как конструктор требует непустые массивы
+}
+
+@Test
+void testInsertMaintainsCircularStructure() {
+    double[] xValues = {1.0, 2.0};
+    double[] yValues = {10.0, 20.0};
+    LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(xValues, yValues);
+
+    function.insert(1.5, 15.0);
+
+    // Проверяем, что структура осталась циклической
+    assertEquals(3, function.getCount());
+    assertEquals(1.0, function.leftBound(), 1e-12);
+    assertEquals(2.0, function.rightBound(), 1e-12);
+    
+    // Проверяем связи
+    assertEquals(function.getX(0), function.leftBound(), 1e-12);
+    assertEquals(function.getX(2), function.rightBound(), 1e-12);
+    } 
+}
+
