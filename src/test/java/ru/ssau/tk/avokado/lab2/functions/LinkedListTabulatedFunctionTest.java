@@ -225,8 +225,8 @@ class LinkedListTabulatedFunctionTest {
         double[] yValues = {10.0, 20.0, 30.0};
         LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(xValues, yValues);
 
-        assertThrows(IndexOutOfBoundsException.class, () -> function.remove(-1));
-        assertThrows(IndexOutOfBoundsException.class, () -> function.remove(3));
+        assertThrows(IllegalArgumentException.class, () -> function.remove(-1));
+        assertThrows(IllegalArgumentException.class, () -> function.remove(3));
     }
 
     @Test
@@ -239,7 +239,7 @@ class LinkedListTabulatedFunctionTest {
 
         assertEquals(0, function.getCount());
         // Проверяем, что список стал пустым
-        assertThrows(IndexOutOfBoundsException.class, () -> function.getX(0));
+        assertThrows(IllegalArgumentException.class, () -> function.getX(0));
     }
 
     @Test

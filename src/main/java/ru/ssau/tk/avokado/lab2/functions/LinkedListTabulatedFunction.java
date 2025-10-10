@@ -48,7 +48,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
     // Конструктор с дискретизацией функции source
     public LinkedListTabulatedFunction(MathFunction source, double xFrom, double xTo, int count) {
         if (count < 2) {
-            throw new IllegalArgumentException("Количество точек должно быть >= 2");
+            throw new IllegalArgumentException("Кол-во точек < 2");
         }
         if (xFrom > xTo) {
             double tmp = xFrom;
@@ -66,7 +66,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
     // Получение узла по индексу
     private Node getNode(int index) {
         if (index < 0 || index >= count) {
-            throw new IndexOutOfBoundsException();
+            throw new IllegalArgumentException("Некорректный индекс: " + index);
         }
         Node current;
         if (index < count / 2) {
@@ -90,16 +90,28 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
 
     @Override
     public double getX(int index) {
+        if (index < 0 || index >= count) { // Или лучше делать? "index >= getCount()"?
+            throw new IllegalArgumentException("Некорректный индекс: " + index);
+        }
+
         return getNode(index).x;
     }
 
     @Override
     public double getY(int index) {
+        if (index < 0 || index >= count) {
+            throw new IllegalArgumentException("Некорректный индекс: " + index);
+        }
+
         return getNode(index).y;
     }
 
     @Override
     public void setY(int index, double value) {
+        if (index < 0 || index >= count) {
+            throw new IllegalArgumentException("Некорректный индекс: " + index);
+        }
+
         getNode(index).y = value;
     }
 
@@ -135,7 +147,9 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
 
     @Override
     protected int floorIndexOfX(double x) {
-        if (x <= leftBound()) return 0;
+        if (x < leftBound()) {
+            throw new IllegalArgumentException("x: " + x + " < левой границы");
+        }
         if (x >= rightBound()) return count - 1;
 
         Node current = head;
