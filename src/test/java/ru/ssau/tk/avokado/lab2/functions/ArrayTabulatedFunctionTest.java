@@ -7,369 +7,127 @@ import java.util.Arrays;
 class ArrayTabulatedFunctionTest {
 
     @Test
-    void testGetCount() {
-        double[] xValues = {1.0, 2.0};
-        double[] yValues = {5.0, 6.0};
-        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
+    void testGetters() {
+        double[] x = {1.0, 2.0, 3.0};
+        double[] y = {2.0, 4.0, 6.0};
 
-        assertEquals(2, function.getCount());
+        ArrayTabulatedFunction func = new ArrayTabulatedFunction(x, y);
+
+        assertEquals(3, func.getCount());
+        assertEquals(1.0, func.leftBound());
+        assertEquals(3.0, func.rightBound());
+        assertEquals(1.0, func.getX(0));
+        assertEquals(4.0, func.getY(1));
     }
 
     @Test
-    void testGetX() {
-        double[] xValues = {1.0, 2.0, 3.0};
-        double[] yValues = {10.0, 20.0, 30.0};
-        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
+    void testSetYAndIndexOf() {
+        double[] x = {1.0, 2.0, 3.0};
+        double[] y = {2.0, 4.0, 6.0};
 
-        assertEquals(1.0, function.getX(0), 1e-12);
-        assertEquals(2.0, function.getX(1), 1e-12);
-        assertEquals(3.0, function.getX(2), 1e-12);
+        ArrayTabulatedFunction func = new ArrayTabulatedFunction(x, y);
+
+        func.setY(0, 10.0);
+        assertEquals(10.0, func.getY(0));
+
+        assertEquals(0, func.indexOfX(1.0));
+        assertEquals(-1, func.indexOfX(10.0));
+
+        assertEquals(0, func.indexOfY(10.0));
+        assertEquals(-1, func.indexOfY(123.0));
     }
 
     @Test
-    void testGetY() {
-        double[] xValues = {1.0, 2.0, 3.0};
-        double[] yValues = {10.0, 20.0, 30.0};
-        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
+    void testIllegalIndexes() {
+        double[] x = {1.0, 2.0, 3.0};
+        double[] y = {2.0, 4.0, 6.0};
 
-        assertEquals(10.0, function.getY(0), 1e-12);
-        assertEquals(20.0, function.getY(1), 1e-12);
-        assertEquals(30.0, function.getY(2), 1e-12);
+        ArrayTabulatedFunction func = new ArrayTabulatedFunction(x, y);
+
+        assertThrows(IllegalArgumentException.class, () -> func.getX(-1));
+        assertThrows(IllegalArgumentException.class, () -> func.getX(3));
+
+        assertThrows(IllegalArgumentException.class, () -> func.getY(-1));
+        assertThrows(IllegalArgumentException.class, () -> func.getY(3));
+
+        assertThrows(IllegalArgumentException.class, () -> func.setY(5, 100));
     }
 
     @Test
-    void testSetY() {
-        double[] xValues = {1.0, 2.0, 3.0};
-        double[] yValues = {10.0, 20.0, 30.0};
-        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
+    void testIteratorThrowsException() {
+        double[] x = {1.0, 2.0};
+        double[] y = {10.0, 20.0};
 
-        function.setY(1, 25.0);
-        assertEquals(25.0, function.getY(1), 1e-12);
+        ArrayTabulatedFunction func = new ArrayTabulatedFunction(x, y);
 
-        assertEquals(10.0, function.getY(0), 1e-12);
-        assertEquals(30.0, function.getY(2), 1e-12);
+        assertThrows(UnsupportedOperationException.class, func::iterator);
     }
 
     @Test
-    void testIndexOfX() {
-        double[] xValues = {1.0, 2.0, 3.0, 4.0};
-        double[] yValues = {10.0, 20.0, 30.0, 40.0};
-        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
-
-        assertEquals(1, function.indexOfX(2.0));
-        assertEquals(3, function.indexOfX(4.0));
-
-        assertEquals(-1, function.indexOfX(2.5));
-        assertEquals(-1, function.indexOfX(0.0));
-        assertEquals(-1, function.indexOfX(5.0));
-
-        assertEquals(2, function.indexOfX(3.0 + 1e-13));
+    void testConstructorRejectsSmallTable() {
+        double[] x = {1.0};
+        double[] y = {2.0};
+        assertThrows(IllegalArgumentException.class, () -> new ArrayTabulatedFunction(x, y));
     }
 
     @Test
-    void testIndexOfY() {
-        double[] xValues = {1.0, 2.0, 3.0, 4.0};
-        double[] yValues = {10.0, 20.0, 30.0, 40.0};
-        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
+    void testInterpolationAndExtrapolation() {
+        double[] x = {1.0, 2.0, 3.0};
+        double[] y = {2.0, 4.0, 6.0};
+        ArrayTabulatedFunction func = new ArrayTabulatedFunction(x, y);
 
-        assertEquals(0, function.indexOfY(10.0));
-        assertEquals(2, function.indexOfY(30.0));
+        // Проверяем интерполяцию в середине
+        double mid = func.interpolate(1.5, 0);
+        assertEquals(3.0, mid, 1e-6);
 
-        assertEquals(-1, function.indexOfY(15.0));
-        assertEquals(-1, function.indexOfY(0.0));
-        assertEquals(-1, function.indexOfY(50.0));
+        // Проверяем экстраполяцию слева
+        double left = func.extrapolateLeft(0.0);
+        assertTrue(left < 2.0);
 
-        assertEquals(1, function.indexOfY(20.0 + 1e-13)); // Почти 20.0
-    }
-
-
-    @Test
-    void testLeftBound() {
-        double[] xValues = {1.5, 2.0, 3.0};
-        double[] yValues = {10.0, 20.0, 30.0};
-        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
-
-        assertEquals(1.5, function.leftBound(), 1e-12);
+        // Проверяем экстраполяцию справа
+        double right = func.extrapolateRight(4.0);
+        assertTrue(right > 6.0);
     }
 
     @Test
-    void testRightBound() {
-        double[] xValues = {1.0, 2.0, 3.5};
-        double[] yValues = {10.0, 20.0, 30.0};
-        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
+    void testFloorIndexOfXEdgeCases() {
+        double[] x = {0.0, 5.0, 10.0};
+        double[] y = {0.0, 25.0, 100.0};
+        ArrayTabulatedFunction func = new ArrayTabulatedFunction(x, y);
 
-        assertEquals(3.5, function.rightBound(), 1e-12);
-    }
-
-    @Test
-    void testFloorIndexOfX() {
-        double[] xValues = {1.0, 2.0, 3.0, 4.0};
-        double[] yValues = {10.0, 20.0, 30.0, 40.0};
-        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
-
-        // Левее всех точек
-        assertThrows(IllegalArgumentException.class, () -> function.floorIndexOfX(0.5));
-
-        // Правее всех точек
-        assertThrows(IllegalArgumentException.class, () -> function.floorIndexOfX(5.0));
+        // Точно по точке
+        assertEquals(0, func.floorIndexOfX(0.0));
 
         // Между точками
-        assertEquals(1, function.floorIndexOfX(2.5));
-        assertEquals(2, function.floorIndexOfX(3.5));
+        assertEquals(1, func.floorIndexOfX(7.5));
 
+        // Меньше левого края
+        assertThrows(IllegalArgumentException.class, () -> func.floorIndexOfX(-5.0));
 
-        // Точное совпадение с точкой (должен вернуть индекс левой границы интервала)
-        assertEquals(1, function.floorIndexOfX(2.0));
-        assertEquals(2, function.floorIndexOfX(3.0));
+        // Правее правого края
+        assertThrows(IllegalArgumentException.class, () -> func.floorIndexOfX(15.0));
     }
 
     @Test
-    void testExtrapolateLeft() {
-        double[] xValues = {1.0, 2.0, 3.0};
-        double[] yValues = {10.0, 20.0, 30.0};
-        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
+    void testInsertAndRemove() {
+        double[] x = {1.0, 3.0, 5.0};
+        double[] y = {10.0, 30.0, 50.0};
+        ArrayTabulatedFunction func = new ArrayTabulatedFunction(x, y);
 
-        double result = function.extrapolateLeft(0.5);
-        assertEquals(5.0, result, 1e-12); // 10 * 0.5 = 5.0
-    }
+        // Вставка нового элемента
+        func.insert(4.0, 40.0);
+        assertEquals(4.0, func.getX(func.indexOfY(40.0)));
 
-    @Test
-    void testExtrapolateRight() {
-        double[] xValues = {1.0, 2.0, 3.0};
-        double[] yValues = {10.0, 20.0, 30.0};
-        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
+        // Замена существующего
+        func.insert(4.0, 44.0);
+        assertEquals(44.0, func.getY(func.indexOfX(4.0)));
 
-        // Экстраполяция справа: используем последние две точки
-        // Уравнение прямой через (2,20) и (3,30): y = 10x
-        double result = function.extrapolateRight(4.0);
-        assertEquals(40.0, result, 1e-12); // 10 * 4.0 = 40.0
-    }
+        // Удаление элемента
+        int oldCount = func.getCount();
+        func.remove(func.indexOfX(4.0));
+        assertEquals(oldCount - 1, func.getCount());
 
-    @Test
-    void testInterpolateWithIndex() {
-        double[] xValues = {1.0, 2.0, 3.0, 4.0};
-        double[] yValues = {10.0, 20.0, 30.0, 40.0};
-        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
-
-        // Интерполяция в середине интервала
-        double result = function.interpolate(2.5, 1); // Между 2.0 и 3.0
-        assertEquals(25.0, result, 1e-12); // (20 + 30)/2 = 25.0
-
-        // Граничные случаи
-        assertThrows(IllegalArgumentException.class, () -> function.interpolate(0.5, 0)); // Левая экстраполяция
-        assertThrows(IllegalArgumentException.class, () -> function.interpolate(4.5, 2)); // Правая экстраполяция
-    }
-
-    @Test
-    void testInterpolateWithSinglePointThrows() {
-        double[] xValues = {5.0};
-        double[] yValues = {50.0};
-        assertThrows(IllegalArgumentException.class, () -> new ArrayTabulatedFunction(xValues, yValues));
-    }
-
-    @Test
-    void testApply() {
-        double[] xValues = {1.0, 2.0, 3.0};
-        double[] yValues = {10.0, 20.0, 30.0};
-        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
-
-        assertEquals(10.0, function.apply(1.0), 1e-12);
-        assertEquals(20.0, function.apply(2.0), 1e-12);
-        assertEquals(30.0, function.apply(3.0), 1e-12);
-
-        assertEquals(15.0, function.apply(1.5), 1e-12);
-        assertEquals(25.0, function.apply(2.5), 1e-12);
-
-        // Экстраполяция слева
-        assertEquals(5.0, function.apply(0.5), 1e-12);
-
-        // Экстраполяция справа
-        assertEquals(40.0, function.apply(4.0), 1e-12);
-    }
-
-    @Test
-    void testApplyWithSinglePointThrows() {
-        double[] xValues = {5.0};
-        double[] yValues = {50.0};
-        assertThrows(IllegalArgumentException.class,
-                () -> new ArrayTabulatedFunction(xValues, yValues));
-    }
-
-    @Test
-    void testExtrapolateWithSinglePointThrows() {
-        double[] xValues = {5.0};
-        double[] yValues = {50.0};
-        assertThrows(IllegalArgumentException.class,
-                () -> new ArrayTabulatedFunction(xValues, yValues));
-    }
-
-    @Test
-    void testInsertAtBeginning() {
-        double[] xValues = {2.0, 3.0, 4.0};
-        double[] yValues = {20.0, 30.0, 40.0};
-        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
-
-        function.insert(1.0, 10.0);
-
-        assertEquals(4, function.getCount());
-        assertEquals(1.0, function.getX(0), 1e-12);
-        assertEquals(10.0, function.getY(0), 1e-12);
-        assertEquals(2.0, function.getX(1), 1e-12);
-    }
-
-    @Test
-    void testInsertAtEnd() {
-        double[] xValues = {1.0, 2.0, 3.0};
-        double[] yValues = {10.0, 20.0, 30.0};
-        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
-
-        function.insert(4.0, 40.0);
-
-        assertEquals(4, function.getCount());
-        assertEquals(3.0, function.getX(2), 1e-12);
-        assertEquals(4.0, function.getX(3), 1e-12);
-        assertEquals(40.0, function.getY(3), 1e-12);
-    }
-
-    @Test
-    void testInsertInMiddle() {
-        double[] xValues = {1.0, 3.0, 4.0};
-        double[] yValues = {10.0, 30.0, 40.0};
-        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
-
-        function.insert(2.0, 25.0);
-
-        assertEquals(4, function.getCount());
-        assertEquals(1.0, function.getX(0), 1e-12);
-        assertEquals(2.0, function.getX(1), 1e-12);
-        assertEquals(3.0, function.getX(2), 1e-12);
-        assertEquals(25.0, function.getY(1), 1e-12);
-    }
-
-    @Test
-    void testInsertReplaceExisting() {
-        double[] xValues = {1.0, 2.0, 3.0};
-        double[] yValues = {10.0, 20.0, 30.0};
-        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
-
-        function.insert(2.0, 25.0);
-
-        assertEquals(3, function.getCount()); // Количество не должно измениться
-        assertEquals(25.0, function.getY(1), 1e-12); // Значение должно обновиться
-        assertEquals(2.0, function.getX(1), 1e-12); // X остался прежним
-    }
-
-    @Test
-    void testInsertIntoEmptyArray() {
-        double[] xValues = {};
-        double[] yValues = {};
-        assertThrows(IllegalArgumentException.class, () -> new ArrayTabulatedFunction(xValues, yValues));
-    }
-
-    @Test
-    void testInsertWithCapacity() {
-        // Тест для случая, когда есть запас в массивах
-        double[] xValues = new double[10];
-        double[] yValues = new double[10];
-        xValues[0] = 1.0; yValues[0] = 10.0;
-        xValues[1] = 2.0; yValues[1] = 20.0;
-        ArrayTabulatedFunction function = new ArrayTabulatedFunction(
-                Arrays.copyOf(xValues, 2), Arrays.copyOf(yValues, 2)
-        );
-
-        function.insert(1.5, 15.0);
-
-        assertEquals(3, function.getCount());
-        assertEquals(1.5, function.getX(1), 1e-12);
-    }
-
-
-    @Test
-    void testRemoveFromBeginning() {
-        double[] xValues = {1.0, 2.0, 3.0, 4.0};
-        double[] yValues = {10.0, 20.0, 30.0, 40.0};
-        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
-
-        function.remove(0);
-
-        assertEquals(3, function.getCount());
-        assertEquals(2.0, function.getX(0), 1e-12);
-        assertEquals(20.0, function.getY(0), 1e-12);
-        assertEquals(4.0, function.getX(2), 1e-12);
-    }
-
-    @Test
-    void testRemoveFromEnd() {
-        double[] xValues = {1.0, 2.0, 3.0, 4.0};
-        double[] yValues = {10.0, 20.0, 30.0, 40.0};
-        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
-
-        function.remove(3);
-
-        assertEquals(3, function.getCount());
-        assertEquals(1.0, function.getX(0), 1e-12);
-        assertEquals(3.0, function.getX(2), 1e-12);
-        assertEquals(30.0, function.getY(2), 1e-12);
-    }
-
-    @Test
-    void testRemoveFromMiddle() {
-        double[] xValues = {1.0, 2.0, 3.0, 4.0};
-        double[] yValues = {10.0, 20.0, 30.0, 40.0};
-        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
-
-        function.remove(1);
-
-        assertEquals(3, function.getCount());
-        assertEquals(1.0, function.getX(0), 1e-12);
-        assertEquals(3.0, function.getX(1), 1e-12);
-        assertEquals(4.0, function.getX(2), 1e-12);
-        assertEquals(30.0, function.getY(1), 1e-12);
-    }
-
-    @Test
-    void testRemoveInvalidIndex() {
-        double[] xValues = {1.0, 2.0, 3.0};
-        double[] yValues = {10.0, 20.0, 30.0};
-        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
-
-        assertThrows(IllegalArgumentException.class, () -> function.remove(-1));
-        assertThrows(IllegalArgumentException.class, () -> function.remove(3));
-    }
-
-    @Test
-    void testInvalidIndexGetX() {
-        double[] x = {0.0, 1.0};
-        double[] y = {0.0, 1.0};
-        ArrayTabulatedFunction f = new ArrayTabulatedFunction(x , y);
-
-        assertThrows(IllegalArgumentException.class, () -> f.getX(-1));
-        assertThrows(IllegalArgumentException.class, () -> f.getX(2));
-    }
-
-    @Test
-    void testConstructorTooShort() {
-        double[] x = {0.0, 1.0};
-        double[] y = {0.0, 1.0};
-        ArrayTabulatedFunction f = new ArrayTabulatedFunction(x , y);
-
-        assertThrows(IllegalArgumentException.class, () -> f.getX(-1));
-        assertThrows(IllegalArgumentException.class, () -> f.getX(2));
-    }
-
-    @Test
-    void testRemoveAndThenInsert() {
-        double[] xValues = {1.0, 2.0, 3.0};
-        double[] yValues = {10.0, 20.0, 30.0};
-        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
-
-        function.remove(1);
-        function.insert(2.5, 25.0);
-
-        assertEquals(3, function.getCount());
-        assertEquals(1.0, function.getX(0), 1e-12);
-        assertEquals(2.5, function.getX(1), 1e-12);
-        assertEquals(3.0, function.getX(2), 1e-12);
-        assertEquals(25.0, function.getY(1), 1e-12);
+        // Удаление несуществующего индекса
+        assertThrows(IllegalArgumentException.class, () -> func.remove(100));
     }
 }

@@ -1,6 +1,8 @@
 package ru.ssau.tk.avokado.lab2.functions;
 
-public interface TabulatedFunction extends MathFunction {
+import java.util.Iterator;
+
+public interface TabulatedFunction extends MathFunction, Iterable<Point> {
     int getCount(); // получение количества табулированных значений
     double getX(int index); // получение значения аргумента x по номеру индекса:
     double getY(int index); // получение y
@@ -12,7 +14,4 @@ public interface TabulatedFunction extends MathFunction {
 
     double leftBound(); // Возвращающий самый левый x
     double rightBound(); // Самый правый
-
-
 }
-

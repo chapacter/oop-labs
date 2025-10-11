@@ -1,5 +1,7 @@
 package ru.ssau.tk.avokado.lab2.functions;
 
+import java.util.Iterator;
+
 public class LinkedListTabulatedFunction extends AbstractTabulatedFunction implements TabulatedFunction, Insertable, Removable {
 
     // Внутренний класс узла списка
@@ -235,6 +237,12 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
             }
         }
         count--;
+    }
+
+
+    @Override
+    public Iterator<Point> iterator() {
+        throw new UnsupportedOperationException("Итератор не поддерживается");
     }
 }
 

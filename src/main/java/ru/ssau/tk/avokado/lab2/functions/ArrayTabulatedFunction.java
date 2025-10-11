@@ -1,6 +1,7 @@
 package ru.ssau.tk.avokado.lab2.functions;
 
 import java.util.Arrays;
+import java.util.Iterator;
 
 // Прописываем класс ArrayTabulatedFunction для расширения класса AbstractTabulatedFunction
 public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements Insertable, Removable {
@@ -214,5 +215,10 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
         this.xValues = newX;
         this.yValues = newY;
         this.count--;
+    }
+
+    @Override
+    public Iterator<Point> iterator() {
+        throw new UnsupportedOperationException("Итератор не поддерживается");
     }
 }
