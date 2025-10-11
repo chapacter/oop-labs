@@ -1,6 +1,10 @@
 package ru.ssau.tk.avokado.lab2.functions;
 
 import java.util.Iterator;
+import ru.ssau.tk.avokado.lab2.exceptions.InterpolationException;
+import ru.ssau.tk.avokado.lab2.exceptions.DifferentLengthOfArraysException;
+import ru.ssau.tk.avokado.lab2.exceptions.ArrayIsNotSortedException;
+
 
 public class LinkedListTabulatedFunction extends AbstractTabulatedFunction implements TabulatedFunction, Insertable, Removable {
 
@@ -39,13 +43,16 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
 
     // Конструктор с массивами xValues и yValues
     public LinkedListTabulatedFunction(double[] xValues, double[] yValues) {
-        if (xValues.length != yValues.length) {
-            throw new IllegalArgumentException("Длины массивов не совпадают");
+        AbstractTabulatedFunction.checkLengthIsTheSame(xValues, yValues);
+        if (xValues.length == 0) {
+            throw new IllegalArgumentException("Длина таблицы < 1");
         }
+        AbstractTabulatedFunction.checkSorted(xValues);
         for (int i = 0; i < xValues.length; i++) {
             addNode(xValues[i], yValues[i]);
         }
     }
+
 
     // Конструктор с дискретизацией функции source
     public LinkedListTabulatedFunction(MathFunction source, double xFrom, double xTo, int count) {
@@ -182,6 +189,11 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
     protected double interpolate(double x, int floorIndex) {
         Node left = getNode(floorIndex);
         Node right = left.next;
+        if (x < left.x || x > right.x) {
+            throw new ru.ssau.tk.avokado.lab2.exceptions.InterpolationException(
+                    "x = " + x + " вне интервала интерполяции [" + left.x + ", " + right.x + "]"
+            );
+        }
         return interpolate(x, left.x, right.x, left.y, right.y);
     }
 

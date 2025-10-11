@@ -1,4 +1,7 @@
 package ru.ssau.tk.avokado.lab2.functions;
+import ru.ssau.tk.avokado.lab2.exceptions.InterpolationException;
+import ru.ssau.tk.avokado.lab2.exceptions.DifferentLengthOfArraysException;
+import ru.ssau.tk.avokado.lab2.exceptions.ArrayIsNotSortedException;
 
 public abstract class AbstractTabulatedFunction implements TabulatedFunction {
 
@@ -28,6 +31,28 @@ public abstract class AbstractTabulatedFunction implements TabulatedFunction {
             } else {
                 int floorIndex = floorIndexOfX(x);
                 return interpolate(x, floorIndex);
+            }
+        }
+    }
+    public static void checkLengthIsTheSame(double[] xValues, double[] yValues) {
+        if (xValues == null || yValues == null) {
+            throw new DifferentLengthOfArraysException("xValues or yValues is null");
+        }
+        if (xValues.length != yValues.length) {
+            throw new DifferentLengthOfArraysException("Lengths of xValues and yValues are different");
+        }
+    }
+
+    public static void checkSorted(double[] xValues) {
+        if (xValues == null) {
+            throw new ArrayIsNotSortedException("xValues is null");
+        }
+        for (int i = 1; i < xValues.length; i++) {
+            if (!(xValues[i] > xValues[i - 1])) {
+                throw new ArrayIsNotSortedException(
+                        "Array xValues is not strictly increasing at index " + i + ": "
+                                + xValues[i - 1] + " >= " + xValues[i]
+                );
             }
         }
     }

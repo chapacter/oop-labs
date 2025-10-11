@@ -95,7 +95,6 @@ class LinkedListTabulatedFunctionTest {
 
         assertEquals(10, f.apply(1));
     }
-    // Добавить в LinkedListTabulatedFunctionTest.java
 
     @Test
     void testInsertAtBeginning() {

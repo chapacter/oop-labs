@@ -2,6 +2,9 @@ package ru.ssau.tk.avokado.lab2.functions;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import ru.ssau.tk.avokado.lab2.exceptions.InterpolationException;
+import ru.ssau.tk.avokado.lab2.exceptions.DifferentLengthOfArraysException;
+import ru.ssau.tk.avokado.lab2.exceptions.ArrayIsNotSortedException;
 
 // Прописываем класс ArrayTabulatedFunction для расширения класса AbstractTabulatedFunction
 public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements Insertable, Removable {
@@ -11,9 +14,11 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
 
     // Прописываем первый конструктор, состоящий из массивов x и y
     public ArrayTabulatedFunction(double[] xValues, double[] yValues) {
+        AbstractTabulatedFunction.checkLengthIsTheSame(xValues, yValues);
         if (xValues.length < 2) {
             throw new IllegalArgumentException("Длина таблицы < 2");
         }
+        AbstractTabulatedFunction.checkSorted(xValues);
 
         // Создаем копии массивов методом Arrays.copyOf()
         this.xValues = Arrays.copyOf(xValues, xValues.length);
@@ -26,7 +31,7 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
         if (source == null) {
             throw new IllegalArgumentException("функция = null");
         }
-        if (getCount() < 2) {
+        if (count < 2) { // <-- здесь надо проверять параметр count, а не getCount()
             throw new IllegalArgumentException("Кол-во точек < 2");
         }
         if (xFrom > xTo) {
@@ -61,7 +66,7 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
 
     @Override
     public double getX(int index) {
-        if (index < 0 || index >= count) { // Или лучше делать? "index >= getCount()"?
+        if (index < 0 || index >= count) {
             throw new IllegalArgumentException("Некорректный индекс: " + index);
         }
         return xValues[index];
@@ -140,23 +145,18 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
 
     @Override
     protected double interpolate(double x, int floorIndex) {
-        if (floorIndex < 0 || floorIndex >= count - 1) {
-            throw new IllegalArgumentException("x выходит за границы интервала");
-        }
-        if (x < leftBound() || x > rightBound()) {
-            throw new IllegalArgumentException("x выходит за границы интервала");
-        }
-
 
         double leftX = xValues[floorIndex];
         double rightX = xValues[floorIndex + 1];
+        if (x < leftX || x > rightX) {
+            throw new ru.ssau.tk.avokado.lab2.exceptions.InterpolationException(
+                    "x = " + x + " вне интервала интерполяции [" + leftX + ", " + rightX + "]"
+            );
+        }
         double leftY = yValues[floorIndex];
         double rightY = yValues[floorIndex + 1];
-
         return interpolate(x, leftX, rightX, leftY, rightY);
-
     }
-
 
     @Override
     public void insert(double x, double y) {
