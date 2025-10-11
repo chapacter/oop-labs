@@ -242,7 +242,25 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
 
     @Override
     public Iterator<Point> iterator() {
-        throw new UnsupportedOperationException("Итератор не поддерживается");
+        return new java.util.Iterator<>() {
+            private Node current = head;
+            private int iteratedCount = 0;
+
+            @Override
+            public boolean hasNext() {
+                return iteratedCount < count;
+            }
+
+            @Override
+            public Point next() {
+                if (!hasNext()) {
+                    throw new java.util.NoSuchElementException();
+                }
+                Point point = new Point(current.x, current.y);
+                current = current.next;
+                iteratedCount++;
+                return point;
+            }
+        };
     }
 }
-

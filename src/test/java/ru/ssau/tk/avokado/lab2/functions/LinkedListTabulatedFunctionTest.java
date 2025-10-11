@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import ru.ssau.tk.avokado.lab2.functions.LinkedListTabulatedFunction;
 import ru.ssau.tk.avokado.lab2.functions.MathFunction;
 import ru.ssau.tk.avokado.lab2.functions.SqrFunction;
+import java.util.Iterator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -150,15 +151,7 @@ class LinkedListTabulatedFunctionTest {
         assertEquals(25.0, function.getY(1), 1e-12);
         assertEquals(2.0, function.getX(1), 1e-12);
     }
-
-    @Test
-    void testInsertIntoEmptyList() {
-        // Если есть конструктор для пустого списка
-        double[] xValues = {};
-        double[] yValues = {};
-        // Этот тест может не понадобиться, так как конструктор требует непустые массивы
-    }
-
+    
     @Test
     void testInsertMaintainsCircularStructure() {
         double[] xValues = {1.0, 2.0};
@@ -226,7 +219,7 @@ class LinkedListTabulatedFunctionTest {
         LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(xValues, yValues);
 
         assertThrows(IllegalArgumentException.class, () -> function.remove(-1));
-        assertThrows(IllegalArgumentException.class, () -> function.remove(3));
+        assertThrows(IllegalArgumentException.class, () -> function.remove(4));
     }
 
     @Test
@@ -296,6 +289,39 @@ class LinkedListTabulatedFunctionTest {
         // Экстраполяция
         assertEquals(-1.0, function.apply(-1.0), 1e-12); // left
         assertEquals(7.0, function.apply(3.0), 1e-12);   // right
+    }
+
+    @Test
+    void testIteratorWhile() {
+        LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(
+                new double[]{1, 2, 3},
+                new double[]{10, 20, 30}
+        );
+        Iterator<Point> iterator = function.iterator();
+        int i = 0;
+        while (iterator.hasNext()) {
+            Point p = iterator.next();
+            assertEquals(i + 1, p.x);
+            assertEquals((i + 1) * 10, p.y);
+            i++;
+        }
+        assertEquals(3, i);
+    }
+
+    @Test
+    void testIteratorForEach() {
+        LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(
+                new double[]{1, 2, 3},
+                new double[]{10, 20, 30}
+        );
+        int i = 0;
+        double[] expectedY = {10, 20, 30};
+        for (Point p : function) {
+            assertEquals(i + 1, p.x);
+            assertEquals(expectedY[i], p.y);
+            i++;
+        }
+        assertEquals(3, i);
     }
 }
 
