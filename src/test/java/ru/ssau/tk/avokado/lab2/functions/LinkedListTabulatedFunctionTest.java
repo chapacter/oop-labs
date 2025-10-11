@@ -151,7 +151,7 @@ class LinkedListTabulatedFunctionTest {
         assertEquals(25.0, function.getY(1), 1e-12);
         assertEquals(2.0, function.getX(1), 1e-12);
     }
-    
+
     @Test
     void testInsertMaintainsCircularStructure() {
         double[] xValues = {1.0, 2.0};
