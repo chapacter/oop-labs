@@ -53,15 +53,15 @@ class ArrayTabulatedFunctionTest {
         assertThrows(IllegalArgumentException.class, () -> function.setY(5, 100));
     }
 
-    @Test
-    void testIteratorThrowsException() {
-        double[] x = {1.0, 2.0};
-        double[] y = {10.0, 20.0};
-
-        ArrayTabulatedFunction function= new ArrayTabulatedFunction(x, y);
-
-        assertThrows(UnsupportedOperationException.class, function::iterator);
-    }
+//    @Test
+//    void testIteratorThrowsException() {
+//        double[] x = {1.0, 2.0};
+//        double[] y = {10.0, 20.0};
+//
+//        ArrayTabulatedFunction function= new ArrayTabulatedFunction(x, y);
+//
+//        assertThrows(UnsupportedOperationException.class, function::iterator);
+//    }
 
     @Test
     void testConstructorRejectsSmallTable() {

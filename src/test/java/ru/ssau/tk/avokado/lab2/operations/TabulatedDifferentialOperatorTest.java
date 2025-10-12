@@ -1,4 +1,4 @@
-package ru.ssau.tk.avokado.lab2.functions.operations;
+package ru.ssau.tk.avokado.lab2.operations;
 
 import org.junit.jupiter.api.Test;
 import ru.ssau.tk.avokado.lab2.functions.ArrayTabulatedFunction;

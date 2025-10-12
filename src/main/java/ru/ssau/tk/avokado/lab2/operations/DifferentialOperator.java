@@ -1,4 +1,4 @@
-package ru.ssau.tk.avokado.lab2.functions.operations;
+package ru.ssau.tk.avokado.lab2.operations;
 
 import ru.ssau.tk.avokado.lab2.functions.MathFunction;
 
