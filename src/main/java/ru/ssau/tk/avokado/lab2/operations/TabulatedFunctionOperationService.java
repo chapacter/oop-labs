@@ -99,4 +99,26 @@ public class TabulatedFunctionOperationService {
             }
         });
     }
+
+
+    public TabulatedFunction multiply(TabulatedFunction a, TabulatedFunction b) {
+        return doOperation(a, b, new BiOperation() {
+            @Override
+            public double apply(double u, double v) {
+                return u * v;
+            }
+        });
+    }
+
+    public TabulatedFunction divide(TabulatedFunction a, TabulatedFunction b) {
+        return doOperation(a, b, new BiOperation() {
+            @Override
+            public double apply(double u, double v) {
+                if (v == 0) {
+                    throw new ArithmeticException("Division by zero at some point");
+                }
+                return u / v;
+            }
+        });
+    }
 }

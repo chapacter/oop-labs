@@ -176,5 +176,31 @@ public class TabulatedFunctionOperationServiceTest {
             }
         });
     }
+
+    @Test
+    public void testMultiplyAndDivide() {
+        TabulatedFunctionOperationService service = new TabulatedFunctionOperationService(new ArrayTabulatedFunctionFactory());
+
+        double[] x = {1.0, 2.0, 3.0};
+        double[] y1 = {2.0, 4.0, 6.0};
+        double[] y2 = {1.0, 2.0, 3.0};
+
+        TabulatedFunction f1 = new ArrayTabulatedFunction(x, y1);
+        TabulatedFunction f2 = new ArrayTabulatedFunction(x, y2);
+
+        TabulatedFunction multiplied = service.multiply(f1, f2);
+        assertEquals(2.0, multiplied.getY(0), 1e-12);
+        assertEquals(8.0, multiplied.getY(1), 1e-12);
+        assertEquals(18.0, multiplied.getY(2), 1e-12);
+
+        TabulatedFunction divided = service.divide(f1, f2);
+        assertEquals(2.0, divided.getY(0), 1e-12);
+        assertEquals(2.0, divided.getY(1), 1e-12);
+        assertEquals(2.0, divided.getY(2), 1e-12);
+
+        double[] y3 = {1.0, 0.0, 3.0};
+        TabulatedFunction f3 = new ArrayTabulatedFunction(x, y3);
+        assertThrows(ArithmeticException.class, () -> service.divide(f1, f3));
+    }
 }
 
