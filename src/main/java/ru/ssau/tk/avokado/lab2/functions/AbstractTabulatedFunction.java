@@ -1,9 +1,13 @@
 package ru.ssau.tk.avokado.lab2.functions;
-import ru.ssau.tk.avokado.lab2.exceptions.InterpolationException;
 import ru.ssau.tk.avokado.lab2.exceptions.DifferentLengthOfArraysException;
 import ru.ssau.tk.avokado.lab2.exceptions.ArrayIsNotSortedException;
 
-public abstract class AbstractTabulatedFunction implements TabulatedFunction {
+import java.io.Serial;
+import java.io.Serializable;
+
+public abstract class AbstractTabulatedFunction implements TabulatedFunction, Serializable {
+    @Serial
+    private static final long serialVersionUID = 45745025833456345L;
 
     // Прописываем абстрактные защищённые методы
     protected abstract int floorIndexOfX(double x);
