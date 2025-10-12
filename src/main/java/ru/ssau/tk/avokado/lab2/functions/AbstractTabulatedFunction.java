@@ -73,7 +73,6 @@ public abstract class AbstractTabulatedFunction implements TabulatedFunction {
                     .append("]\n");
         }
 
-        // Удаляем последний \n, если есть точки
         return getCount() > 0 ? sb.toString().trim() : sb.toString();
     }
 }
