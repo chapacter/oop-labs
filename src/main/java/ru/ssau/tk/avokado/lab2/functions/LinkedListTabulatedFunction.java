@@ -1,15 +1,19 @@
 package ru.ssau.tk.avokado.lab2.functions;
 
+import java.io.Serial;
 import java.util.Iterator;
-import ru.ssau.tk.avokado.lab2.exceptions.InterpolationException;
-import ru.ssau.tk.avokado.lab2.exceptions.DifferentLengthOfArraysException;
-import ru.ssau.tk.avokado.lab2.exceptions.ArrayIsNotSortedException;
+import java.io.Serializable;
 
 
-public class LinkedListTabulatedFunction extends AbstractTabulatedFunction implements TabulatedFunction, Insertable, Removable {
+public class LinkedListTabulatedFunction extends AbstractTabulatedFunction implements TabulatedFunction, Insertable, Removable, Serializable {
+    @Serial
+    private static final long serialVersionUID = -6692951459863380154L;
 
     // Внутренний класс узла списка
-    private static class Node {
+    private static class Node implements Serializable{
+        @Serial
+        private static final long serialVersionUID = -3158113372194908641L;
+
         public Node next;
         public Node prev;
         public double x;
