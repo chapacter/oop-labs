@@ -115,7 +115,6 @@ public class TabulatedFunctionOperationServiceTest {
         assertEquals(4.0, res.getY(1), 1e-12);
         assertEquals(4.0, res.getY(2), 1e-12);
 
-        // переключаем фабрику на LinkedList и проверяем, что результат создаётся через текущую фабрику
         service.setFactory(new LinkedListTabulatedFunctionFactory());
         TabulatedFunction res2 = service.add(a, b);
         assertTrue(res2 instanceof LinkedListTabulatedFunction);
@@ -145,7 +144,6 @@ public class TabulatedFunctionOperationServiceTest {
                 new double[]{0.0, 1.0, 2.0},
                 new double[]{0.0, 1.0, 4.0}
         );
-        // исправлено: массив x во второй функции тоже строго возрастающий, но отличается в позиции 1
         final TabulatedFunction b = new ArrayTabulatedFunction(
                 new double[]{0.0, 1.5, 2.0},
                 new double[]{0.0, 1.0, 4.0}
