@@ -21,8 +21,24 @@ public final class FunctionsIO {
         dataOutputStream.flush();
     }
 
-    // void writeTabulatedFunction(BufferedWriter writer, TabulatedFunction function)
-    // Для Y
+    public static void writeTabulatedFunction(BufferedWriter writer, TabulatedFunction function) {
+        if (writer == null) {
+            throw new IllegalArgumentException("writer is null");
+        }
+        if (function == null) {
+            throw new IllegalArgumentException("function is null");
+        }
+
+        PrintWriter pw = new PrintWriter(writer);
+
+        pw.println(function.getCount());
+
+        for (Point p : function) {
+            pw.printf("%f %f\n", p.x, p.y);
+        }
+
+        pw.flush();
+    }
 
     public static TabulatedFunction readTabulatedFunction(BufferedInputStream inputStream,
                                                           TabulatedFunctionFactory factory) throws IOException {
