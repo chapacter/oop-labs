@@ -1,5 +1,7 @@
 package ru.ssau.tk.avokado.lab2.functions;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Iterator;
 import ru.ssau.tk.avokado.lab2.exceptions.InterpolationException;
@@ -7,7 +9,11 @@ import ru.ssau.tk.avokado.lab2.exceptions.DifferentLengthOfArraysException;
 import ru.ssau.tk.avokado.lab2.exceptions.ArrayIsNotSortedException;
 
 // Прописываем класс ArrayTabulatedFunction для расширения класса AbstractTabulatedFunction
-public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements Insertable, Removable {
+public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements Insertable, Removable, Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 917223344556677889L;
+
     private double[] xValues;
     private double[] yValues;
     private int count;
@@ -31,7 +37,7 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
         if (source == null) {
             throw new IllegalArgumentException("функция = null");
         }
-        if (count < 2) { // <-- здесь надо проверять параметр count, а не getCount()
+        if (count < 2) {
             throw new IllegalArgumentException("Кол-во точек < 2");
         }
         if (xFrom > xTo) {
