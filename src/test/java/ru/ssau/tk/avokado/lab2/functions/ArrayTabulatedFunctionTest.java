@@ -2,7 +2,7 @@ package ru.ssau.tk.avokado.lab2.functions;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-import java.util.Iterator;
+import org.junit.jupiter.api.Assertions;
 
 class ArrayTabulatedFunctionTest {
 
@@ -52,16 +52,6 @@ class ArrayTabulatedFunctionTest {
 
         assertThrows(IllegalArgumentException.class, () -> function.setY(5, 100));
     }
-
-//    @Test
-//    void testIteratorThrowsException() {
-//        double[] x = {1.0, 2.0};
-//        double[] y = {10.0, 20.0};
-//
-//        ArrayTabulatedFunction function= new ArrayTabulatedFunction(x, y);
-//
-//        assertThrows(UnsupportedOperationException.class, function::iterator);
-//    }
 
     @Test
     void testConstructorRejectsSmallTable() {
@@ -130,4 +120,30 @@ class ArrayTabulatedFunctionTest {
         // Удаление несуществующего индекса
         assertThrows(IllegalArgumentException.class, () -> function.remove(100));
     }
+
+    @Test
+    void insert1() {
+        MathFunction func = new IdentityFunction();
+        ArrayTabulatedFunction test = new ArrayTabulatedFunction(func,0,5,6);
+
+        int oldCount = test.getCount();
+
+        test.insert(2.5, 22222);
+
+        Assertions.assertEquals(oldCount+1, test.getCount());
+    }
+
+    @Test
+    void insert2() {
+        MathFunction func = new IdentityFunction();
+        ArrayTabulatedFunction test = new ArrayTabulatedFunction(func,0,5,6);
+
+        int oldCount = test.getCount();
+
+        test.insert(5, 22222);
+
+        Assertions.assertEquals(oldCount, test.getCount());
+    }
+
+
 }
