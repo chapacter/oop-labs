@@ -4,6 +4,9 @@ import ru.ssau.tk.avokado.lab2.functions.Point;
 import ru.ssau.tk.avokado.lab2.functions.TabulatedFunction;
 import ru.ssau.tk.avokado.lab2.functions.factory.TabulatedFunctionFactory;
 import java.io.*;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.Locale;
 
 public final class FunctionsIO {
     private FunctionsIO() {
@@ -56,8 +59,57 @@ public final class FunctionsIO {
         return factory.create(xValues, yValues);
     }
 
-    // static TabulatedFunction readTabulatedFunction(BufferedReader reader, TabulatedFunctionFactory factory)
-    // Для Y
+    public static TabulatedFunction readTabulatedFunction(BufferedReader reader,
+                                                          TabulatedFunctionFactory factory) throws IOException {
+        if (reader == null) {
+            throw new IllegalArgumentException("reader is null");
+        }
+        if (factory == null) {
+            throw new IllegalArgumentException("factory is null");
+        }
+
+        String firstLine = reader.readLine();
+        if (firstLine == null) {
+            throw new IOException("Empty input: expected count");
+        }
+
+        int count;
+        try {
+            count = Integer.parseInt(firstLine.trim());
+        } catch (NumberFormatException e) {
+            throw new IOException("Invalid count: " + firstLine, e);
+        }
+
+        double[] xValues = new double[count];
+        double[] yValues = new double[count];
+
+        NumberFormat nf = NumberFormat.getInstance(Locale.forLanguageTag("ru"));
+
+        for (int i = 0; i < count; i++) {
+            String line = reader.readLine();
+            if (line == null) {
+                throw new IOException("Unexpected end of input at line for point " + i);
+            }
+            String trimmed = line.trim();
+            if (trimmed.isEmpty()) {
+                throw new IOException("Empty line for point " + i);
+            }
+            String[] parts = trimmed.split("\\s+");
+            if (parts.length < 2) {
+                throw new IOException("Expected two numbers separated by space at line for point " + i);
+            }
+            try {
+                Number nx = nf.parse(parts[0]);
+                Number ny = nf.parse(parts[1]);
+                xValues[i] = nx.doubleValue();
+                yValues[i] = ny.doubleValue();
+            } catch (ParseException e) {
+                throw new IOException(e);
+            }
+        }
+
+        return factory.create(xValues, yValues);
+    }
 
 
     public static void serialize(BufferedOutputStream stream, TabulatedFunction function) throws IOException {
