@@ -7,7 +7,7 @@ public class ReadTask implements Runnable {
 
     public ReadTask(TabulatedFunction function) {
         if (function == null) {
-            throw new IllegalArgumentException("Function cannot be null");
+            throw new IllegalArgumentException("Function == null");
         }
         this.function = function;
     }
