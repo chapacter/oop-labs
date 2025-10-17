@@ -9,7 +9,7 @@ public class ReadWriteTaskExecutor {
         TabulatedFunction function = new LinkedListTabulatedFunction(new ConstantFunction(-1), 1, 1000, 10000);
         ReadTask rTask = new ReadTask(function);
         WriteTask wTask = new WriteTask(function, 0.5);
-        new Thread(rTask).start();
+        new Thread(rTask).start(); // или их надо вызывать в обратном порядке?
         new Thread(wTask).start();
     }
 }
