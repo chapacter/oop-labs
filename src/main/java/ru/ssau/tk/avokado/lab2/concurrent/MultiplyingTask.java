@@ -16,8 +16,10 @@ public class MultiplyingTask implements Runnable {
     public void run() {
         int n = function.getCount();
         for (int i = 0; i < n; i++) {
-            double oldY = function.getY(i);
-            function.setY(i, oldY * 2.0);
+            synchronized (function) {
+                double oldY = function.getY(i);
+                function.setY(i, oldY * 2.0);
+            }
         }
         System.out.println("Thread " + Thread.currentThread().getName() + " finished MultiplyingTask");
     }
