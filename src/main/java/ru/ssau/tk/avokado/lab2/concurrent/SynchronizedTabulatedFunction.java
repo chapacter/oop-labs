@@ -143,4 +143,17 @@ public class SynchronizedTabulatedFunction implements TabulatedFunction {
             return Objects.hashCode(delegate);
         }
     }
+
+    public interface Operation<T> {
+        T apply(SynchronizedTabulatedFunction function);
+    }
+
+    public <T> T doSynchronously(Operation<? extends T> operation) {
+        if (operation == null) {
+            throw new IllegalArgumentException("operation is null");
+        }
+        synchronized (mutex) {
+            return operation.apply(this);
+        }
+    }
 }
