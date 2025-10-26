@@ -4,6 +4,7 @@ import ru.ssau.tk.avokado.lab2.functions.TabulatedFunction;
 import ru.ssau.tk.avokado.lab2.functions.Point;
 import ru.ssau.tk.avokado.lab2.functions.factory.ArrayTabulatedFunctionFactory;
 import ru.ssau.tk.avokado.lab2.functions.factory.TabulatedFunctionFactory;
+import ru.ssau.tk.avokado.lab2.concurrent.SynchronizedTabulatedFunction;
 
 public class TabulatedDifferentialOperator implements DifferentialOperator<TabulatedFunction> {
 
@@ -44,4 +45,25 @@ public class TabulatedDifferentialOperator implements DifferentialOperator<Tabul
         }
         return factory.create(xValues, yValues);
     }
+
+    public TabulatedFunction deriveSynchronously(final TabulatedFunction function) {
+        if (function == null) {
+            throw new IllegalArgumentException("function is null");
+        }
+
+        final SynchronizedTabulatedFunction wrapper;
+        if (function instanceof SynchronizedTabulatedFunction) {
+            wrapper = (SynchronizedTabulatedFunction) function;
+        } else {
+            wrapper = new SynchronizedTabulatedFunction(function);
+        }
+
+        return wrapper.doSynchronously(new SynchronizedTabulatedFunction.Operation<TabulatedFunction>() {
+            @Override
+            public TabulatedFunction apply(SynchronizedTabulatedFunction synchronizedFunction) {
+                return TabulatedDifferentialOperator.this.derive(synchronizedFunction);
+            }
+        });
+    }
+
 }
