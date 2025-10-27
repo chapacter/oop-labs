@@ -110,6 +110,7 @@ public class SynchronizedTabulatedFunction implements TabulatedFunction {
                 public void remove() {
                     throw new UnsupportedOperationException("remove");
                 }
+
             };
         }
     }
