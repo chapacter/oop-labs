@@ -1,7 +1,9 @@
 package ru.ssau.tk.avokado.lab2.concurrent;
 
+import org.jetbrains.annotations.NotNull;
 import ru.ssau.tk.avokado.lab2.functions.Point;
 import ru.ssau.tk.avokado.lab2.functions.TabulatedFunction;
+import ru.ssau.tk.avokado.lab2.operations.TabulatedFunctionOperationService;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -87,37 +89,29 @@ public class SynchronizedTabulatedFunction implements TabulatedFunction {
     }
 
     @Override
-    public Iterator<Point> iterator() {
-        final Iterator<Point> it;
+    public @NotNull Iterator<Point> iterator() {
         synchronized (mutex) {
-            it = delegate.iterator();
+            Point[] it = TabulatedFunctionOperationService.asPoints(delegate);
+            return new Iterator<Point>() {
+                private int index = 0;
+
+                @Override
+                public boolean hasNext() {
+                    return index < it.length;
+                }
+
+                @Override
+                public Point next() {
+                    if (!hasNext()) { throw new NoSuchElementException(); }
+                    return it[index++];
+                }
+
+                @Override
+                public void remove() {
+                    throw new UnsupportedOperationException("remove");
+                }
+            };
         }
-        return new Iterator<Point>() {
-            @Override
-            public boolean hasNext() {
-                synchronized (mutex) {
-                    return it.hasNext();
-                }
-            }
-
-            @Override
-            public Point next() {
-                synchronized (mutex) {
-                    try {
-                        return it.next();
-                    } catch (NoSuchElementException e) {
-                        throw e;
-                    }
-                }
-            }
-
-            @Override
-            public void remove() {
-                synchronized (mutex) {
-                    it.remove();
-                }
-            }
-        };
     }
 
     @Override
