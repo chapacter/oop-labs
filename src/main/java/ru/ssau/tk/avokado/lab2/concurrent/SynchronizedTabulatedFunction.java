@@ -90,29 +90,37 @@ public class SynchronizedTabulatedFunction implements TabulatedFunction {
 
     @Override
     public @NotNull Iterator<Point> iterator() {
+        final Point[] it;
         synchronized (mutex) {
-            Point[] it = TabulatedFunctionOperationService.asPoints(delegate);
-            return new Iterator<Point>() {
-                private int index = 0;
+            it = TabulatedFunctionOperationService.asPoints(delegate);
+        }
+        return new Iterator<Point>() {
+            private int index = 0;
 
-                @Override
-                public boolean hasNext() {
+            @Override
+            public boolean hasNext() {
+                synchronized (mutex) {
                     return index < it.length;
                 }
+            }
 
-                @Override
-                public Point next() {
-                    if (!hasNext()) { throw new NoSuchElementException(); }
+            @Override
+            public Point next() {
+                synchronized (mutex) {
+                    if (!hasNext()) {
+                        throw new NoSuchElementException();
+                    }
                     return it[index++];
                 }
+            }
 
-                @Override
-                public void remove() {
+            @Override
+            public void remove() {
+                synchronized (mutex) {
                     throw new UnsupportedOperationException("remove");
                 }
-
-            };
-        }
+            }
+        };
     }
 
     @Override
