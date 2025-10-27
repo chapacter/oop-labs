@@ -6,6 +6,7 @@ import ru.ssau.tk.avokado.lab2.functions.Point;
 import ru.ssau.tk.avokado.lab2.functions.TabulatedFunction;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -156,5 +157,130 @@ class SynchronizedTabulatedFunctionTest {
             fail("Expected UnsupportedOperationException from iterator.remove()");
         } catch (UnsupportedOperationException expected) {
         }
+    }
+
+
+    @Test
+    void testIteratorIsImmutableSnapshot() {
+        double[] x = {1.0, 2.0, 3.0};
+        double[] y = {10.0, 20.0, 30.0};
+        ArrayTabulatedFunction base = new ArrayTabulatedFunction(x, y);
+        SynchronizedTabulatedFunction sync = new SynchronizedTabulatedFunction(base);
+
+        // Создаем итератор
+        Iterator<Point> iterator = sync.iterator();
+
+        // Модифицируем исходные данные после создания итератора
+        sync.setY(0, 100.0);
+        sync.setY(1, 200.0);
+        sync.setY(2, 300.0);
+
+        // Итератор должен возвращать исходные значения (копию), а не измененные
+        assertTrue(iterator.hasNext());
+        Point point1 = iterator.next();
+        assertEquals(1.0, point1.x, 1e-12);
+        assertEquals(10.0, point1.y, 1e-12); // Ожидаем исходное значение, не 100.0
+
+        Point point2 = iterator.next();
+        assertEquals(2.0, point2.x, 1e-12);
+        assertEquals(20.0, point2.y, 1e-12); // Ожидаем исходное значение, не 200.0
+
+        Point point3 = iterator.next();
+        assertEquals(3.0, point3.x, 1e-12);
+        assertEquals(30.0, point3.y, 1e-12); // Ожидаем исходное значение, не 300.0
+
+        assertFalse(iterator.hasNext());
+    }
+
+    @Test
+    void testMultipleIteratorsAreIndependent() {
+        double[] x = {1.0, 2.0};
+        double[] y = {10.0, 20.0};
+        ArrayTabulatedFunction base = new ArrayTabulatedFunction(x, y);
+        SynchronizedTabulatedFunction sync = new SynchronizedTabulatedFunction(base);
+
+        // Создаем два итератора
+        Iterator<Point> iterator1 = sync.iterator();
+        Iterator<Point> iterator2 = sync.iterator();
+
+        // Первый итератор проходит все элементы
+        Point p1_1 = iterator1.next();
+        Point p1_2 = iterator1.next();
+        assertFalse(iterator1.hasNext());
+
+        // Второй итератор все еще должен работать с самого начала
+        assertTrue(iterator2.hasNext());
+        Point p2_1 = iterator2.next();
+        assertEquals(p1_1.x, p2_1.x, 1e-12);
+        assertEquals(p1_1.y, p2_1.y, 1e-12);
+
+        assertTrue(iterator2.hasNext());
+        Point p2_2 = iterator2.next();
+        assertEquals(p1_2.x, p2_2.x, 1e-12);
+        assertEquals(p1_2.y, p2_2.y, 1e-12);
+
+        assertFalse(iterator2.hasNext());
+    }
+
+    @Test
+    void testIteratorNoConcurrentModification() {
+        double[] x = {1.0, 2.0, 3.0, 4.0};
+        double[] y = {1.0, 4.0, 9.0, 16.0};
+        ArrayTabulatedFunction base = new ArrayTabulatedFunction(x, y);
+        SynchronizedTabulatedFunction sync = new SynchronizedTabulatedFunction(base);
+
+        // В процессе итерации изменяем данные - не должно влиять на текущий итератор
+        int count = 0;
+        for (Point point : sync) {
+            // Во время итерации изменяем значения
+            sync.setY(count, -1.0); // Изменяем текущий элемент и другие
+
+            // Проверяем, что итератор возвращает исходные значения
+            assertEquals(x[count], point.x, 1e-12);
+            assertEquals(y[count], point.y, 1e-12); // Ожидаем исходное значение
+
+            count++;
+        }
+        assertEquals(4, count);
+    }
+
+    @Test
+    void testIteratorNextBeyondBoundsThrowsException() {
+        double[] x = {1.0, 2.0};
+        double[] y = {10.0, 20.0};
+        ArrayTabulatedFunction base = new ArrayTabulatedFunction(x, y);
+        SynchronizedTabulatedFunction sync = new SynchronizedTabulatedFunction(base);
+
+        Iterator<Point> iterator = sync.iterator();
+
+        // Читаем все доступные элементы
+        iterator.next();
+        iterator.next();
+
+        // Проверяем, что следующий вызов next() бросает исключение
+        assertFalse(iterator.hasNext());
+        assertThrows(NoSuchElementException.class, iterator::next);
+    }
+
+    @Test
+    void testIteratorWithSingleElement() {
+        double[] x = new double[]{5.0, 6.0};
+        double[] y = y = new double[]{50.0, 60.0};
+
+        ArrayTabulatedFunction base = new ArrayTabulatedFunction(x, y);
+        SynchronizedTabulatedFunction sync = new SynchronizedTabulatedFunction(base);
+
+        Iterator<Point> iterator = sync.iterator();
+        assertTrue(iterator.hasNext());
+
+        int count = 0;
+        while (iterator.hasNext()) {
+            Point point = iterator.next();
+            assertEquals(x[count], point.x, 1e-12);
+            assertEquals(y[count], point.y, 1e-12);
+            count++;
+        }
+
+        assertEquals(x.length, count);
     }
 }
