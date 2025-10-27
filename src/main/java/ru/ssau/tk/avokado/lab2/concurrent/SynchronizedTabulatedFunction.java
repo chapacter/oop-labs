@@ -1,6 +1,5 @@
 package ru.ssau.tk.avokado.lab2.concurrent;
 
-import org.jetbrains.annotations.NotNull;
 import ru.ssau.tk.avokado.lab2.functions.Point;
 import ru.ssau.tk.avokado.lab2.functions.TabulatedFunction;
 import ru.ssau.tk.avokado.lab2.operations.TabulatedFunctionOperationService;
@@ -89,7 +88,7 @@ public class SynchronizedTabulatedFunction implements TabulatedFunction {
     }
 
     @Override
-    public @NotNull Iterator<Point> iterator() {
+    public Iterator<Point> iterator() {
         final Point[] it;
         synchronized (mutex) {
             it = TabulatedFunctionOperationService.asPoints(delegate);
