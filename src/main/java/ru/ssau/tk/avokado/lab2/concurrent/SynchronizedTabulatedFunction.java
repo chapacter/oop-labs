@@ -3,12 +3,15 @@ package ru.ssau.tk.avokado.lab2.concurrent;
 import ru.ssau.tk.avokado.lab2.functions.Point;
 import ru.ssau.tk.avokado.lab2.functions.TabulatedFunction;
 import ru.ssau.tk.avokado.lab2.operations.TabulatedFunctionOperationService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
 public class SynchronizedTabulatedFunction implements TabulatedFunction {
+    private static final Logger logger = LoggerFactory.getLogger(SynchronizedTabulatedFunction.class);
     private final TabulatedFunction delegate;
     private final Object mutex;
 
@@ -18,10 +21,12 @@ public class SynchronizedTabulatedFunction implements TabulatedFunction {
 
     public SynchronizedTabulatedFunction(TabulatedFunction delegate, Object mutex) {
         if (delegate == null) {
+            logger.error("SynchronizedTabulatedFunction: delegate == null (нельзя создать синхронизированную обёртку для null)");
             throw new IllegalArgumentException("delegate is null");
         }
         this.delegate = delegate;
         this.mutex = (mutex == null) ? this : mutex;
+        logger.info("Создан SynchronizedTabulatedFunction для delegate типа {}", delegate.getClass().getSimpleName());
     }
 
     @Override
@@ -91,6 +96,7 @@ public class SynchronizedTabulatedFunction implements TabulatedFunction {
     public Iterator<Point> iterator() {
         final Point[] it;
         synchronized (mutex) {
+            logger.debug("iterator(): создание итератора делегата внутри синхронизированного блока");
             it = TabulatedFunctionOperationService.asPoints(delegate);
         }
         return new Iterator<Point>() {
@@ -99,6 +105,7 @@ public class SynchronizedTabulatedFunction implements TabulatedFunction {
             @Override
             public boolean hasNext() {
                 synchronized (mutex) {
+                    logger.trace("iterator.hasNext -> {}", index < it.length);
                     return index < it.length;
                 }
             }
@@ -152,8 +159,10 @@ public class SynchronizedTabulatedFunction implements TabulatedFunction {
 
     public <T> T doSynchronously(Operation<? extends T> operation) {
         if (operation == null) {
+            logger.error("doSynchronously: operation == null");
             throw new IllegalArgumentException("operation is null");
         }
+        logger.debug("doSynchronously: начинаем выполнение операции {}, синхронизированно", operation.getClass().getName());
         synchronized (mutex) {
             return operation.apply(this);
         }
