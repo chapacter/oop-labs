@@ -1,0 +1,7 @@
+test,impl,n,mean_ns,median_ns,std_ns,notes
+findFunctionByName,framework,500,8448495,4417300,N/A,"измерения JPA (warmup=200, measured=500)"
+findUserByName,framework,500,4637670,3507900,N/A,"измерения JPA (warmup=200, measured=500)"
+loadFunctionAndPoints,framework,500,10906465,4864500,N/A,"измерения JPA (warmup=200, measured=500)"
+findFunctionByName,manual, , , , ,"TODO: вставить результаты manual (JDBC)"
+findUserByName,manual, , , , ,"TODO: вставить результаты manual (JDBC)"
+loadFunctionAndPoints,manual, , , , ,"TODO: вставить результаты manual (JDBC)"
