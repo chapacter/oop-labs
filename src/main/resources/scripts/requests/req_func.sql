@@ -11,7 +11,7 @@ SELECT * FROM functions WHERE name LIKE ?;
 -- Множественный
 SELECT * FROM functions WHERE user_id = ? AND name LIKE ? AND created_at BETWEEN ? AND ?;
 
--- С сортировкой
+-- С сортировкой по имени
 SELECT * FROM functions WHERE user_id = ? ORDER BY name ASC;
 
 UPDATE functions SET name = ? WHERE id = ?;
