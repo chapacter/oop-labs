@@ -1,20 +1,17 @@
-INSERT INTO functions (name, description, user_id) VALUES (?, ?, ?);
+INSERT INTO functions (name, format, func_result, user_id) VALUES (?, ?, ?, ?);
 
--- Конкретный
+-- Поиск
 SELECT * FROM functions WHERE id = ?;
 SELECT * FROM functions WHERE user_id = ?;
 SELECT * FROM functions WHERE name = ?;
-
--- Частичное совпадение
 SELECT * FROM functions WHERE name LIKE ?;
-
--- Множественный
 SELECT * FROM functions WHERE user_id = ? AND name LIKE ? AND created_at BETWEEN ? AND ?;
-
--- С сортировкой по имени
 SELECT * FROM functions WHERE user_id = ? ORDER BY name ASC;
 
+-- Обновление
+UPDATE functions SET name = ?, format = ?, func_result = ? WHERE id = ?;
 UPDATE functions SET name = ? WHERE id = ?;
-UPDATE functions SET description = ? WHERE id = ?;
+UPDATE functions SET format = ? WHERE id = ?;
+UPDATE functions SET func_result = ? WHERE id = ?;
 
 DELETE FROM functions WHERE id = ?;

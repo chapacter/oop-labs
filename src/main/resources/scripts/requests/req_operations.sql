@@ -1,15 +1,11 @@
 INSERT INTO operations (name, description) VALUES (?, ?);
 
---Конкретынй
+-- Поиск
 SELECT * FROM operations WHERE id = ?;
 SELECT * FROM operations WHERE name = ?;
+SELECT * FROM operations;
 
--- По нескольким
-SELECT * FROM functions
-WHERE user_id = ?
-AND name LIKE ?
-AND created_at BETWEEN ? AND ?;
-
+UPDATE operations SET name = ?, description = ? WHERE id = ?;
 UPDATE operations SET description = ? WHERE id = ?;
 
 DELETE FROM operations WHERE id = ?;
