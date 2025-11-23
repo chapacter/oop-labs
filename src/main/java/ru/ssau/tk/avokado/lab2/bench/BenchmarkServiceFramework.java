@@ -48,7 +48,7 @@ public class BenchmarkServiceFramework implements CommandLineRunner {
         int measured = 500;
 
         if (!populator.isPopulated(totalFunctions)) {
-            populator.populate(totalFunctions, batchSize);
+            populator.populate(totalFunctions, 2,  batchSize);
         } else {
             logger.info("DB already has >= {} functions (JPA).", totalFunctions);
         }

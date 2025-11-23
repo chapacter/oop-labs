@@ -1,0 +1,17 @@
+test,impl,mean_ns,median_ns,stddev_ns
+sort_by_name,db,143367848,122148400,66309430
+sort_by_name,memory,87588925,72977500,45748452
+sort_users_by_name_asc,db,100,11573815,7911000
+sort_users_by_name_asc,memory,100,14440709,6444499
+sort_users_by_name_desc,db,100,31808431,11686800
+sort_users_by_name_desc,memory,100,11737990,5682699
+sort_users_by_id_asc,db,100,8136226,5486100
+sort_users_by_id_asc,memory,100,6610247,4424900
+sort_functions_by_name_asc,db,100,145260191,130819501
+sort_functions_by_name_asc,memory,100,91524858,76858200
+sort_functions_by_user_id_asc,db,100,99321388,81871101
+sort_functions_by_user_id_asc,memory,100,83800357,66650999
+sort_points_by_x_asc,db,100,160407950,148511400
+sort_points_by_x_asc,memory,100,169767178,136359000
+sort_points_by_function_id_asc,db,100,167582309,150101600
+sort_points_by_function_id_asc,memory,100,155077349,140024700
