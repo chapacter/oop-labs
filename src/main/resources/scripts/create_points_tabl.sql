@@ -1,8 +1,8 @@
 CREATE TABLE points (
     id BIGSERIAL PRIMARY KEY,
     function_id BIGINT NOT NULL,
-    x_value DECIMAL NOT NULL,
-    y_value DECIMAL NOT NULL,
-    point_order INT NOT NULL,
+    point_index INTEGER NOT NULL,
+    x DOUBLE PRECISION NOT NULL,
+    y DOUBLE PRECISION NOT NULL,
     FOREIGN KEY (function_id) REFERENCES functions(id) ON DELETE CASCADE
 );
