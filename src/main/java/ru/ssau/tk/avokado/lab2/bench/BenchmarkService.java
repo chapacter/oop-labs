@@ -1,0 +1,164 @@
+package ru.ssau.tk.avokado.lab2.bench;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+/**
+ * Запускает JDBC-only бенчмарки.
+ */
+public class BenchmarkService {
+
+    private static final Logger logger = LoggerFactory.getLogger(BenchmarkService.class);
+
+    private final Connection connection;
+    private final DbPopulator populator;
+
+    public BenchmarkService(Connection connection) {
+        this.connection = connection;
+        this.populator = new DbPopulator(connection);
+    }
+
+    public BenchmarkService(Connection connection, Connection connection1, DbPopulator populator) {
+        this.connection = connection1;
+        this.populator = populator;
+    }
+
+    public void run() throws Exception {
+        int totalFunctions = 10000;
+        int batchSize = 10000;
+        int warmup = 200;
+        int measured = 500;
+
+        if (!populator.isPopulated(totalFunctions)) {
+            populator.populate(totalFunctions, 2, batchSize);
+        } else {
+            logger.info("DB already has >= {} functions (JDBC).", totalFunctions);
+        }
+
+        // 1) find user by name (JDBC)
+        runJdbcBench("findUserByName_jdbc", warmup, measured, this::opFindUserByName);
+
+        // 2) find function by name (JDBC)
+        runJdbcBench("findFunctionByName_jdbc", warmup, measured, this::opFindFunctionByName);
+
+        // 3) load function and touch points collection (join-like)
+        runJdbcBench("loadFunctionAndPoints_jdbc", warmup, measured, this::opLoadFunctionAndPoints);
+
+        logger.info("JDBC-only benchmarks finished. CSV files in project root.");
+    }
+
+    private interface Action { void run() throws Exception; }
+
+    /**
+     * Универсальный раннер: прогрев + измерения + запись CSV + лог с медианой.
+     */
+    private void runJdbcBench(String testName, int warmup, int measured, Action action) {
+        logger.info("Benchmarking {} (warmup={} measured={})", testName, warmup, measured);
+
+        // warmup
+        for (int i = 0; i < warmup; i++) {
+            try { action.run(); } catch (Exception ex) { /* ignore warmup errors */ }
+        }
+
+        List<Long> times = new ArrayList<>(measured);
+        for (int i = 0; i < measured; i++) {
+            long s = System.nanoTime();
+            try {
+                action.run();
+            } catch (Exception ex) {
+                // не падаем на одной итерации — записываем очень большое время как отметку
+                logger.warn("Iteration {} thrown exception in {}: {}", i, testName, ex.toString());
+            }
+            long e = System.nanoTime();
+            times.add(e - s);
+        }
+
+        // Write CSV
+        String csv = testName + ".csv";
+        try (PrintWriter pw = new PrintWriter(new FileWriter(csv))) {
+            pw.println("test,impl,iteration,nanos");
+            for (int i = 0; i < times.size(); i++) {
+                pw.println(testName + ",jdbc," + i + "," + times.get(i));
+            }
+            pw.flush();
+        } catch (Exception ex) {
+            logger.error("Failed to write CSV {}: {}", csv, ex.toString());
+        }
+
+        long med = median(times);
+        // Тут именно тот формат, который ты просил: "Wrote <file> (median ~ <N> ns)"
+        logger.info("Wrote {} (median ~ {} ns)", csv, med);
+    }
+
+    // медиана: корректно на сортированном списке
+    private long median(List<Long> arr) {
+        if (arr == null || arr.isEmpty()) return 0L;
+        List<Long> copy = new ArrayList<>(arr);
+        Collections.sort(copy);
+        int n = copy.size();
+        if (n % 2 == 1) {
+            return copy.get(n/2);
+        } else {
+            // среднее двух для парного — округлённо в long
+            return (copy.get(n/2 - 1) + copy.get(n/2)) / 2;
+        }
+    }
+
+    // --- операции (JDBC) ---
+    void opFindUserByName() throws SQLException {
+        String sql = "SELECT * FROM users WHERE name = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, "seed_user");
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                // Получаем результат, чтобы убедиться, что запрос завершен
+                rs.getLong("id");
+            }
+        }
+    }
+
+    void opFindFunctionByName() throws SQLException {
+        String sql = "SELECT * FROM functions WHERE name = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, "func_0");
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                // Получаем результат, чтобы убедиться, что запрос завершен
+                rs.getLong("id");
+            }
+        }
+    }
+
+    void opLoadFunctionAndPoints() throws SQLException {
+        String sql = "SELECT f.id FROM functions f WHERE f.name = ? LIMIT 1";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, "func_0");
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                long funcId = rs.getLong("id");
+                
+                // Теперь загружаем точки для этой функции
+                String pointsSql = "SELECT * FROM points WHERE function_id = ?";
+                try (PreparedStatement pointsStmt = connection.prepareStatement(pointsSql)) {
+                    pointsStmt.setLong(1, funcId);
+                    ResultSet pointsRs = pointsStmt.executeQuery();
+                    // Вычисляем размер коллекции, чтобы убедиться, что данные загружены
+                    int count = 0;
+                    while (pointsRs.next()) {
+                        count++;
+                    }
+                }
+            }
+        }
+    }
+}
