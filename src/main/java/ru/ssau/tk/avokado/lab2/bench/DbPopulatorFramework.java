@@ -62,24 +62,26 @@ public class DbPopulatorFramework {
             if (created % 1000 == 0) System.out.println("Inserted " + created + " / " + totalFunctions);
         }
 
-        List<TabulatedPoint> pBatch = new ArrayList<>(batchSize * 2);
-        List<FunctionEntity> allFuncs = functionRepository.findAll();
-        for (int i = 0; i < allFuncs.size(); i++) {
-            FunctionEntity f = allFuncs.get(i);
-            for (int j = 0; j < pointsPerFunction; j++) {
-                TabulatedPoint p = new TabulatedPoint();
-                p.setIndexInFunction(j);
-                p.setX(i + j * 0.1);
-                p.setY(Math.sin(i + j));
-                p.setFunction(f);
-                pBatch.add(p);
-                if (pBatch.size() >= batchSize) {
-                    pointRepository.saveAll(pBatch);
-                    pBatch.clear();
+        if (pointsPerFunction > 0) {
+            List<TabulatedPoint> pBatch = new ArrayList<>(batchSize * 2);
+            List<FunctionEntity> allFuncs = functionRepository.findAll();
+            for (int i = 0; i < allFuncs.size(); i++) {
+                FunctionEntity f = allFuncs.get(i);
+                for (int j = 0; j < pointsPerFunction; j++) {
+                    TabulatedPoint p = new TabulatedPoint();
+                    p.setIndexInFunction(j);
+                    p.setX(i + j * 0.1);
+                    p.setY(Math.sin(i + j));
+                    p.setFunction(f);
+                    pBatch.add(p);
+                    if (pBatch.size() >= batchSize) {
+                        pointRepository.saveAll(pBatch);
+                        pBatch.clear();
+                    }
                 }
             }
+            if (!pBatch.isEmpty()) pointRepository.saveAll(pBatch);
         }
-        if (!pBatch.isEmpty()) pointRepository.saveAll(pBatch);
 
         System.out.println("Populate finished. functions=" + functionRepository.count() + ", points=" + pointRepository.count());
     }

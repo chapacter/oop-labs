@@ -58,7 +58,7 @@ public class SearchServiceFramework {
         logger.info("Hierarchical search function={} by user={}", functionName, userName);
         return functionRepository.findByName(functionName)
                 .filter(f -> {
-                    User u = f.getUser(); // fetch parent (may be lazy)
+                    User u = f.getUser();
                     return u != null && userName.equals(u.getName());
                 })
                 .map(f -> new SearchResultDto("Function", safeGetId(f), f));

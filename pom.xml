@@ -9,7 +9,6 @@
     <artifactId>lab3</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <!-- Spring Boot parent управляет версиями -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -17,42 +16,35 @@
         <relativePath/>
     </parent>
 
-    <!-- Используем Java 21 -->
     <properties>
         <java.version>21</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- версию Testcontainers вынесем в свойство, чтобы проще менять -->
         <testcontainers.version>1.19.3</testcontainers.version>
     </properties>
 
     <dependencies>
-        <!-- Spring Data JPA (включает нужные логгер-стартеры) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
-        <!-- Spring Boot core -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
 
-        <!-- PostgreSQL JDBC драйвер -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>42.7.2</version>
         </dependency>
 
-        <!-- тесты Spring Boot + JUnit (включает junit, mockito и др.) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
 
-        <!-- Testcontainers: доступны и для main — нужно для BenchmarkRunnerFramework (compile/runtime) -->
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>testcontainers</artifactId>
@@ -65,7 +57,6 @@
             <version>${testcontainers.version}</version>
         </dependency>
 
-        <!-- junit-jupiter для удобства (test scope) -->
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>junit-jupiter</artifactId>
@@ -73,7 +64,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- аннотации (необязательно) -->
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
@@ -100,7 +90,6 @@
 
     <build>
         <plugins>
-            <!-- явно указываем выпуск байткода для Java 21 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -110,7 +99,6 @@
                 </configuration>
             </plugin>
 
-            <!-- spring-boot maven plugin для запуска/пакета -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

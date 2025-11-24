@@ -123,7 +123,6 @@ public class SortingBenchmarkFramework implements CommandLineRunner {
     private <T> void runBoth(String name, DbFetch<T> dbFetch, MemFetch<T> memFetch, int warmup, int measured) throws Exception {
         System.out.println("Benchmarking " + name + " (warmup=" + warmup + " measured=" + measured + ")");
 
-        // DB
         for (int i = 0; i < warmup; i++) dbFetch.get();
         List<Long> dbTimes = new ArrayList<>(measured);
         for (int i = 0; i < measured; i++) {
@@ -135,7 +134,6 @@ public class SortingBenchmarkFramework implements CommandLineRunner {
         }
         writeCsv("sort_" + name + "_db.csv", "test,impl,iteration,nanos", name + ",db,", dbTimes);
 
-        // Memory
         for (int i = 0; i < warmup; i++) memFetch.get();
         List<Long> memTimes = new ArrayList<>(measured);
         for (int i = 0; i < measured; i++) {
