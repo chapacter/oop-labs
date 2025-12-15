@@ -2,6 +2,9 @@ package ru.ssau.tk.avokado.lab2.entities;
 
 import jakarta.persistence.*;
 import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+import ru.ssau.tk.avokado.lab2.auth.Role;
 
 @Entity
 @Table(name = "users")
@@ -21,7 +24,18 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FunctionEntity> functions;
 
+    // NEW: роли пользователя
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "role")
+    @Enumerated(EnumType.STRING)
+    private Set<Role> roles = new HashSet<>();
+
     public User() {}
+
+    // getters/setters (добавить для roles)
+    public Set<Role> getRoles() { return roles; }
+    public void setRoles(Set<Role> roles) { this.roles = roles; }
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }

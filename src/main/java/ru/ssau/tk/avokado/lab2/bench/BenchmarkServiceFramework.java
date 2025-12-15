@@ -42,7 +42,7 @@ public class BenchmarkServiceFramework implements CommandLineRunner {
         int measured = 500;
 
         if (!populator.isPopulated(totalFunctions)) {
-            populator.populate(totalFunctions, 2,  batchSize);
+            populator.populate(totalFunctions, 2, batchSize);
         } else {
             logger.info("DB already has >= {} functions (JPA).", totalFunctions);
         }
@@ -56,12 +56,18 @@ public class BenchmarkServiceFramework implements CommandLineRunner {
         logger.info("Framework-only benchmarks finished. CSV files in project root.");
     }
 
-    private interface Action { void run(); }
+    private interface Action {
+        void run();
+    }
+
     private void runJpaBench(String testName, int warmup, int measured, Action action) {
         logger.info("Benchmarking {} (warmup={} measured={})", testName, warmup, measured);
 
         for (int i = 0; i < warmup; i++) {
-            try { action.run(); } catch (Exception ex) {}
+            try {
+                action.run();
+            } catch (Exception ex) {
+            }
         }
 
         List<Long> times = new ArrayList<>(measured);
@@ -97,9 +103,9 @@ public class BenchmarkServiceFramework implements CommandLineRunner {
         Collections.sort(copy);
         int n = copy.size();
         if (n % 2 == 1) {
-            return copy.get(n/2);
+            return copy.get(n / 2);
         } else {
-            return (copy.get(n/2 - 1) + copy.get(n/2)) / 2;
+            return (copy.get(n / 2 - 1) + copy.get(n / 2)) / 2;
         }
     }
 
