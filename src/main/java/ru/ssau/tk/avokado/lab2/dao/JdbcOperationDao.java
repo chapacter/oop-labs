@@ -171,4 +171,20 @@ public class JdbcOperationDao implements OperationDao {
                 resultSet.getString("description")
         );
     }
+
+    @Override
+    public List<OperationDto> findByNameContaining(String name) {
+        String sql = "SELECT id, name, description FROM operations WHERE name ILIKE ?";
+        List<OperationDto> operations = new ArrayList<>();
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, "%" + name + "%");
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                operations.add(mapResultSetToDto(resultSet));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error finding operations by name containing: " + name, e);
+        }
+        return operations;
+    }
 }

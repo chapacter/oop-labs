@@ -124,10 +124,10 @@ public class JdbcResultValueDao implements ResultValueDao {
         if (processedFunctionIds == null || processedFunctionIds.isEmpty()) {
             return new ArrayList<>();
         }
-        
+
         String sql = "SELECT id, processed_function_id, point_index, x, y FROM result_values WHERE processed_function_id IN (" +
                 String.join(",", processedFunctionIds.stream().map(id -> "?").toArray(String[]::new)) + ")";
-        
+
         List<ResultValueDto> resultValues = new ArrayList<>();
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             for (int i = 0; i < processedFunctionIds.size(); i++) {

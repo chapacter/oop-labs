@@ -1,13 +1,13 @@
 package ru.ssau.tk.avokado.lab2.dao;
 
-import ru.ssau.tk.avokado.lab2.dto.UserDto;
-import ru.ssau.tk.avokado.lab2.DatabaseConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.ssau.tk.avokado.lab2.DatabaseConnection;
+import ru.ssau.tk.avokado.lab2.dto.UserDto;
 
 import java.sql.*;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class JdbcUserDao implements UserDao {
@@ -221,7 +221,7 @@ public class JdbcUserDao implements UserDao {
             if (accessLvl != null) {
                 stmt.setInt(1, accessLvl);
             } else {
-                stmt.setNull(1, java.sql.Types.INTEGER);
+                stmt.setNull(1, Types.INTEGER);
             }
             stmt.setLong(2, id);
 
@@ -288,9 +288,9 @@ public class JdbcUserDao implements UserDao {
 
             while (rs.next()) {
                 UserDto user = new UserDto(
-                    rs.getLong("id"),
-                    rs.getString("name"),
-                    rs.getInt("point_count")
+                        rs.getLong("id"),
+                        rs.getString("name"),
+                        rs.getInt("point_count")
                 );
                 users.add(user);
             }
@@ -320,5 +320,27 @@ public class JdbcUserDao implements UserDao {
             logger.error("Error checking user existence: {} - {}", name, e.getMessage());
             return false;
         }
+    }
+
+    @Override
+    public List<UserDto> findByNameContaining(String name) {
+        List<UserDto> users = new ArrayList<>();
+        String sql = "SELECT * FROM users WHERE name ILIKE ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, "%" + name + "%");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                users.add(mapResultSetToUser(rs));
+            }
+
+            logger.debug("Found {} users with name containing: {}", users.size(), name);
+        } catch (SQLException e) {
+            logger.error("Error finding users by name containing: {} - {}", name, e.getMessage());
+        }
+
+        return users;
     }
 }

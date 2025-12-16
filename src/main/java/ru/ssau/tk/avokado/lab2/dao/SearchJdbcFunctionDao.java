@@ -1,13 +1,16 @@
 package ru.ssau.tk.avokado.lab2.dao;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ru.ssau.tk.avokado.lab2.DatabaseConnection;
 import ru.ssau.tk.avokado.lab2.dto.FunctionDto;
 import ru.ssau.tk.avokado.lab2.dto.SearchCriteria;
 import ru.ssau.tk.avokado.lab2.dto.SearchResult;
-import ru.ssau.tk.avokado.lab2.DatabaseConnection;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,11 +61,11 @@ public class SearchJdbcFunctionDao implements SearchableDao<FunctionDto> {
                 parameters.add(criteria.getOffset());
             }
 
-            logger.debug("Сформирован SQL запрос: {}", sql.toString());
+            logger.debug("Сформирован SQL запрос: {}", sql);
             logger.debug("Параметры запроса: {}", parameters);
 
             try (Connection conn = DatabaseConnection.getConnection()) {
-                logger.trace("Выполнение count запроса: {}", countSql.toString());
+                logger.trace("Выполнение count запроса: {}", countSql);
                 try (PreparedStatement countStmt = conn.prepareStatement(countSql.toString())) {
                     setParameters(countStmt, countParameters);
                     ResultSet countRs = countStmt.executeQuery();
@@ -96,7 +99,7 @@ public class SearchJdbcFunctionDao implements SearchableDao<FunctionDto> {
             } catch (SQLException e) {
                 logger.error("Ошибка при выполнении поиска: {}", e.getMessage());
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             logger.error("Непредвиденная ошибка при поиске: {}", e.getMessage(), e);
         }
 
@@ -118,7 +121,7 @@ public class SearchJdbcFunctionDao implements SearchableDao<FunctionDto> {
         logger.debug("Поиск по полю: {} = {}", fieldName, value);
         SearchCriteria criteria = new SearchCriteria()
                 .addCondition(fieldName, SearchCriteria.Operator.EQUALS, value);
-        return search(criteria).getItems();
+        return search(criteria).items();
     }
 
     @Override
@@ -126,7 +129,7 @@ public class SearchJdbcFunctionDao implements SearchableDao<FunctionDto> {
         logger.debug("Поиск по шаблону: {} LIKE {}", fieldName, pattern);
         SearchCriteria criteria = new SearchCriteria()
                 .addCondition(fieldName, SearchCriteria.Operator.LIKE, "%" + pattern + "%");
-        return search(criteria).getItems();
+        return search(criteria).items();
     }
 
     @Override
@@ -137,7 +140,7 @@ public class SearchJdbcFunctionDao implements SearchableDao<FunctionDto> {
         }
         SearchCriteria criteria = new SearchCriteria()
                 .addCondition(fieldName, SearchCriteria.Operator.IN, values);
-        return search(criteria).getItems();
+        return search(criteria).items();
     }
 
     @Override
@@ -146,7 +149,7 @@ public class SearchJdbcFunctionDao implements SearchableDao<FunctionDto> {
         int offset = (page - 1) * pageSize;
         SearchCriteria criteria = new SearchCriteria()
                 .paginate(pageSize, offset);
-        return search(criteria).getItems();
+        return search(criteria).items();
     }
 
     @Override
@@ -154,7 +157,7 @@ public class SearchJdbcFunctionDao implements SearchableDao<FunctionDto> {
         logger.debug("Поиск с сортировкой: поле {}, направление {}", sortField, direction);
         SearchCriteria criteria = new SearchCriteria()
                 .sortBy(sortField, direction);
-        return search(criteria).getItems();
+        return search(criteria).items();
     }
 
     public List<FunctionDto> depthFirstSearch(Long startUserId, String namePattern) {
@@ -232,8 +235,8 @@ public class SearchJdbcFunctionDao implements SearchableDao<FunctionDto> {
 
         for (SearchCriteria criteria : criteriaList) {
             SearchResult<FunctionDto> result = search(criteria);
-            allResults.addAll(result.getItems());
-            totalCount += result.getTotalCount();
+            allResults.addAll(result.items());
+            totalCount += result.totalCount();
         }
 
         List<FunctionDto> uniqueResults = allResults.stream()
@@ -258,9 +261,9 @@ public class SearchJdbcFunctionDao implements SearchableDao<FunctionDto> {
     }
 
     private String buildConditionClause(SearchCriteria.Condition condition, List<Object> parameters, List<Object> countParameters) {
-        String field = condition.getField();
-        SearchCriteria.Operator operator = condition.getOperator();
-        Object value = condition.getValue();
+        String field = condition.field();
+        SearchCriteria.Operator operator = condition.operator();
+        Object value = condition.value();
 
         parameters.add(value);
         countParameters.add(value);

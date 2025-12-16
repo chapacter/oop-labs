@@ -25,21 +25,51 @@ public class FunctionDto {
         this.funcResult = funcResult;
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public Long getUserId() { return userId; }
-    public void setUserId(Long userId) { this.userId = userId; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public Long getUserId() {
+        return userId;
+    }
 
-    public Integer getFormat() { return format; }
-    public void setFormat(Integer format) { this.format = format; }
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
 
-    public String getFuncResult() { return funcResult; }
-    public void setFuncResult(String funcResult) { this.funcResult = funcResult; }
+    public String getName() {
+        return name;
+    }
 
-    public ZonedDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(ZonedDateTime createdAt) { this.createdAt = createdAt; }
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getFormat() {
+        return format;
+    }
+
+    public void setFormat(Integer format) {
+        this.format = format;
+    }
+
+    public String getFuncResult() {
+        return funcResult;
+    }
+
+    public void setFuncResult(String funcResult) {
+        this.funcResult = funcResult;
+    }
+
+    public ZonedDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(ZonedDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 }

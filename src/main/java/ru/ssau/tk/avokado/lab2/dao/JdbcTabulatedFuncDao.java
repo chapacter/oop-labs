@@ -140,10 +140,10 @@ public class JdbcTabulatedFuncDao implements TabulatedFuncDao {
         if (funcIds == null || funcIds.isEmpty()) {
             return new ArrayList<>();
         }
-        
+
         String sql = "SELECT id, func_id, x_val, y_val FROM tabulated_func WHERE func_id IN (" +
                 String.join(",", funcIds.stream().map(id -> "?").toArray(String[]::new)) + ")";
-        
+
         List<TabulatedFuncDto> tabulatedFuncs = new ArrayList<>();
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             for (int i = 0; i < funcIds.size(); i++) {

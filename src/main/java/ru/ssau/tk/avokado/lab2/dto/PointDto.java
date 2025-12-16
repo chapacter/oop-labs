@@ -22,20 +22,45 @@ public class PointDto {
         this.pointIndex = pointIndex;
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public Long getFunctionId() { return functionId; }
-    public void setFunctionId(Long functionId) { this.functionId = functionId; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public Double getX() { return x; }
-    public void setX(Double x) { this.x = x; }
+    public Long getFunctionId() {
+        return functionId;
+    }
 
-    public Double getY() { return y; }
-    public void setY(Double y) { this.y = y; }
+    public void setFunctionId(Long functionId) {
+        this.functionId = functionId;
+    }
 
-    public Integer getPointIndex() { return pointIndex; }
-    public void setPointIndex(Integer pointIndex) { this.pointIndex = pointIndex; }
+    public Double getX() {
+        return x;
+    }
+
+    public void setX(Double x) {
+        this.x = x;
+    }
+
+    public Double getY() {
+        return y;
+    }
+
+    public void setY(Double y) {
+        this.y = y;
+    }
+
+    public Integer getPointIndex() {
+        return pointIndex;
+    }
+
+    public void setPointIndex(Integer pointIndex) {
+        this.pointIndex = pointIndex;
+    }
 
     public Integer getIndex() {
         return pointIndex;

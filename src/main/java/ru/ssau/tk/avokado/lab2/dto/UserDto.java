@@ -2,12 +2,16 @@ package ru.ssau.tk.avokado.lab2.dto;
 
 import ru.ssau.tk.avokado.lab2.Role;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class UserDto {
     private Long id;
     private String name;
     private Integer accessLvl;
     private String passwordHash;
     private Integer pointCount; // для статистики
+    private Set<String> roles = new HashSet<>();
 
     public UserDto(String name, Integer accessLvl, String passwordHash) {
         this.name = name;
@@ -46,35 +50,86 @@ public class UserDto {
         this.accessLvl = role == Role.ADMIN ? 1 : 0;
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public Integer getAccessLvl() { return accessLvl; }
-    public void setAccessLvl(Integer accessLvl) { this.accessLvl = accessLvl; }
+    public String getName() {
+        return name;
+    }
 
-    public Integer getPointCount() { return pointCount; }
-    public void setPointCount(Integer pointCount) { this.pointCount = pointCount; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public String getPasswordHash() { return passwordHash; }
-    public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
-    
+    public Integer getAccessLvl() {
+        return accessLvl;
+    }
+
+    public void setAccessLvl(Integer accessLvl) {
+        this.accessLvl = accessLvl;
+    }
+
+    public Integer getPointCount() {
+        return pointCount;
+    }
+
+    public void setPointCount(Integer pointCount) {
+        this.pointCount = pointCount;
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
     // Методы для совместимости с тестами
     public String getUsername() {
         return name;
     }
-    
-    public Role getRole() {
-        return accessLvl == 1 ? Role.ADMIN : Role.USER;
-    }
-    
+
     public void setUsername(String name) {
         this.name = name;
     }
-    
+
+    public Role getRole() {
+        return accessLvl == 1 ? Role.ADMIN : Role.USER;
+    }
+
     public void setRole(Role role) {
         this.accessLvl = role == Role.ADMIN ? 1 : 0;
+    }
+
+    // Методы для работы с ролями
+    public Set<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<String> roles) {
+        this.roles = roles != null ? roles : new HashSet<>();
+    }
+
+    public void addRole(String role) {
+        if (this.roles == null) {
+            this.roles = new HashSet<>();
+        }
+        this.roles.add(role);
+    }
+
+    public void removeRole(String role) {
+        if (this.roles != null) {
+            this.roles.remove(role);
+        }
+    }
+
+    public boolean hasRole(String role) {
+        return this.roles != null && this.roles.contains(role);
     }
 }

@@ -1,14 +1,15 @@
 package ru.ssau.tk.avokado.lab2.dao;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ru.ssau.tk.avokado.lab2.DatabaseConnection;
 import ru.ssau.tk.avokado.lab2.dto.FunctionDto;
 import ru.ssau.tk.avokado.lab2.dto.PointDto;
-import ru.ssau.tk.avokado.lab2.DatabaseConnection;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class JdbcFunctionDao implements FunctionDao {
     private static final Logger logger = LoggerFactory.getLogger(JdbcFunctionDao.class);
@@ -96,7 +97,7 @@ public class JdbcFunctionDao implements FunctionDao {
             if (function.getFormat() != null) {
                 stmt.setInt(3, function.getFormat());
             } else {
-                stmt.setNull(3, java.sql.Types.INTEGER);
+                stmt.setNull(3, Types.INTEGER);
             }
             stmt.setString(4, function.getFuncResult());
 
@@ -125,7 +126,7 @@ public class JdbcFunctionDao implements FunctionDao {
             if (function.getFormat() != null) {
                 stmt.setInt(2, function.getFormat());
             } else {
-                stmt.setNull(2, java.sql.Types.INTEGER);
+                stmt.setNull(2, Types.INTEGER);
             }
             stmt.setString(3, function.getFuncResult());
             stmt.setLong(4, function.getId());
@@ -231,9 +232,9 @@ public class JdbcFunctionDao implements FunctionDao {
 
             stmt.setLong(1, userId);
             stmt.setString(2, namePattern);
-            stmt.setTimestamp(3, java.sql.Timestamp.from(start.toInstant()));
-            stmt.setTimestamp(4, java.sql.Timestamp.from(end.toInstant()));
-            
+            stmt.setTimestamp(3, Timestamp.from(start.toInstant()));
+            stmt.setTimestamp(4, Timestamp.from(end.toInstant()));
+
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -242,7 +243,7 @@ public class JdbcFunctionDao implements FunctionDao {
             }
 
             logger.debug("Found {} functions for user {} with name pattern {} and created between {} and {}",
-                         functions.size(), userId, namePattern, start, end);
+                    functions.size(), userId, namePattern, start, end);
         } catch (SQLException e) {
             logger.error("Error finding functions by user id, name pattern and created at range: {} - {}", userId, e.getMessage());
         }
@@ -310,7 +311,7 @@ public class JdbcFunctionDao implements FunctionDao {
             if (format != null) {
                 stmt.setInt(1, format);
             } else {
-                stmt.setNull(1, java.sql.Types.INTEGER);
+                stmt.setNull(1, Types.INTEGER);
             }
             stmt.setLong(2, id);
 
@@ -546,6 +547,11 @@ public class JdbcFunctionDao implements FunctionDao {
         return 0;
     }
 
+    @Override
+    public List<FunctionDto> findAll() {
+        return List.of();
+    }
+
     // Вспомогательные методы
     private FunctionDto mapResultSetToFunction(ResultSet rs) throws SQLException {
         FunctionDto function = new FunctionDto(rs.getLong("id"), rs.getLong("user_id"),
@@ -611,5 +617,27 @@ public class JdbcFunctionDao implements FunctionDao {
         }
 
         return Optional.empty();
+    }
+
+    @Override
+    public List<FunctionDto> findByNameContaining(String name) {
+        List<FunctionDto> functions = new ArrayList<>();
+        String sql = "SELECT * FROM functions WHERE name ILIKE ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, "%" + name + "%");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                functions.add(mapResultSetToFunction(rs));
+            }
+
+            logger.debug("Found {} functions with name containing: {}", functions.size(), name);
+        } catch (SQLException e) {
+            logger.error("Error finding functions by name containing: {} - {}", name, e.getMessage());
+        }
+
+        return functions;
     }
 }

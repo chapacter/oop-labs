@@ -127,9 +127,9 @@ public class JdbcProcessedFunctionDao implements ProcessedFunctionDao {
             statement.setLong(1, processedFunction.getFunctionId());
             statement.setLong(2, processedFunction.getOperationId());
             statement.setString(3, processedFunction.getResultSummary());
-            statement.setTimestamp(4, processedFunction.getCreatedAt() != null ? 
-                Timestamp.from(processedFunction.getCreatedAt().toInstant()) : 
-                Timestamp.from(ZonedDateTime.now().toInstant()));
+            statement.setTimestamp(4, processedFunction.getCreatedAt() != null ?
+                    Timestamp.from(processedFunction.getCreatedAt().toInstant()) :
+                    Timestamp.from(ZonedDateTime.now().toInstant()));
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 return resultSet.getLong("id");
@@ -147,9 +147,9 @@ public class JdbcProcessedFunctionDao implements ProcessedFunctionDao {
             statement.setLong(1, processedFunction.getFunctionId());
             statement.setLong(2, processedFunction.getOperationId());
             statement.setString(3, processedFunction.getResultSummary());
-            statement.setTimestamp(4, processedFunction.getCreatedAt() != null ? 
-                Timestamp.from(processedFunction.getCreatedAt().toInstant()) : 
-                Timestamp.from(ZonedDateTime.now().toInstant()));
+            statement.setTimestamp(4, processedFunction.getCreatedAt() != null ?
+                    Timestamp.from(processedFunction.getCreatedAt().toInstant()) :
+                    Timestamp.from(ZonedDateTime.now().toInstant()));
             statement.setLong(5, processedFunction.getId());
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {

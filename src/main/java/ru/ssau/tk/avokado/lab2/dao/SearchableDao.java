@@ -2,6 +2,7 @@ package ru.ssau.tk.avokado.lab2.dao;
 
 import ru.ssau.tk.avokado.lab2.dto.SearchCriteria;
 import ru.ssau.tk.avokado.lab2.dto.SearchResult;
+
 import java.util.List;
 
 public interface SearchableDao<T> {

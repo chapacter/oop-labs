@@ -1,10 +1,9 @@
 package ru.ssau.tk.avokado.lab2.dao;
 
-import ru.ssau.tk.avokado.lab2.dto.PointDto;
-import ru.ssau.tk.avokado.lab2.dto.FunctionDto;
-import ru.ssau.tk.avokado.lab2.DatabaseConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.ssau.tk.avokado.lab2.DatabaseConnection;
+import ru.ssau.tk.avokado.lab2.dto.PointDto;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -207,258 +206,278 @@ public class JdbcPointDao implements PointDao {
 
         return 0;
     }
-    
-        @Override
-        public List<PointDto> findByX(Double x) {
-            List<PointDto> points = new ArrayList<>();
-            String sql = "SELECT * FROM points WHERE x = ?";
-    
-            try (Connection conn = DatabaseConnection.getConnection();
-                 PreparedStatement stmt = conn.prepareStatement(sql)) {
-    
-                stmt.setDouble(1, x);
-                ResultSet rs = stmt.executeQuery();
-    
-                while (rs.next()) {
-                    PointDto point = mapResultSetToPoint(rs);
-                    points.add(point);
-                }
-    
-                logger.debug("Found {} points with x: {}", points.size(), x);
-            } catch (SQLException e) {
-                logger.error("Error finding points by x: {} - {}", x, e.getMessage());
-            }
-    
-            return points;
-        }
-    
-        @Override
-        public List<PointDto> findByY(Double y) {
-            List<PointDto> points = new ArrayList<>();
-            String sql = "SELECT * FROM points WHERE y = ?";
-    
-            try (Connection conn = DatabaseConnection.getConnection();
-                 PreparedStatement stmt = conn.prepareStatement(sql)) {
-    
-                stmt.setDouble(1, y);
-                ResultSet rs = stmt.executeQuery();
-    
-                while (rs.next()) {
-                    PointDto point = mapResultSetToPoint(rs);
-                    points.add(point);
-                }
-    
-                logger.debug("Found {} points with y: {}", points.size(), y);
-            } catch (SQLException e) {
-                logger.error("Error finding points by y: {} - {}", y, e.getMessage());
-            }
-    
-            return points;
-        }
-    
-        @Override
-        public List<PointDto> findByXBetween(Double x1, Double x2) {
-            List<PointDto> points = new ArrayList<>();
-            String sql = "SELECT * FROM points WHERE x BETWEEN ? AND ?";
-    
-            try (Connection conn = DatabaseConnection.getConnection();
-                 PreparedStatement stmt = conn.prepareStatement(sql)) {
-    
-                stmt.setDouble(1, x1);
-                stmt.setDouble(2, x2);
-                ResultSet rs = stmt.executeQuery();
-    
-                while (rs.next()) {
-                    PointDto point = mapResultSetToPoint(rs);
-                    points.add(point);
-                }
-    
-                logger.debug("Found {} points with x between {} and {}", points.size(), x1, x2);
-            } catch (SQLException e) {
-                logger.error("Error finding points by x between {} and {}: {}", x1, x2, e.getMessage());
-            }
-    
-            return points;
-        }
-    
-        @Override
-        public List<PointDto> findByYBetween(Double y1, Double y2) {
-            List<PointDto> points = new ArrayList<>();
-            String sql = "SELECT * FROM points WHERE y BETWEEN ? AND ?";
-    
-            try (Connection conn = DatabaseConnection.getConnection();
-                 PreparedStatement stmt = conn.prepareStatement(sql)) {
-    
-                stmt.setDouble(1, y1);
-                stmt.setDouble(2, y2);
-                ResultSet rs = stmt.executeQuery();
-    
-                while (rs.next()) {
-                    PointDto point = mapResultSetToPoint(rs);
-                    points.add(point);
-                }
-    
-                logger.debug("Found {} points with y between {} and {}", points.size(), y1, y2);
-            } catch (SQLException e) {
-                logger.error("Error finding points by y between {} and {}: {}", y1, y2, e.getMessage());
-            }
-    
-            return points;
-        }
-    
-        @Override
-        public List<PointDto> findByFunctionIdsIn(List<Long> functionIds) {
-            if (functionIds == null || functionIds.isEmpty()) {
-                return new ArrayList<>();
-            }
-    
-            List<PointDto> points = new ArrayList<>();
-            
-            // Создаем строку с нужным количеством плейсхолдеров
-            String placeholders = String.join(",", functionIds.stream().map(id -> "?").collect(Collectors.toList()));
-            String sql = "SELECT * FROM points WHERE function_id IN (" + placeholders + ") ORDER BY function_id, point_index";
-    
-            try (Connection conn = DatabaseConnection.getConnection();
-                 PreparedStatement stmt = conn.prepareStatement(sql)) {
-    
-                for (int i = 0; i < functionIds.size(); i++) {
-                    stmt.setLong(i + 1, functionIds.get(i));
-                }
-                
-                ResultSet rs = stmt.executeQuery();
-    
-                while (rs.next()) {
-                    PointDto point = mapResultSetToPoint(rs);
-                    points.add(point);
-                }
-    
-                logger.debug("Found {} points for function IDs: {}", points.size(), functionIds);
-            } catch (SQLException e) {
-                logger.error("Error finding points by function IDs: {} - {}", functionIds, e.getMessage());
-            }
-    
-            return points;
-        }
-    
-        @Override
-        public List<PointDto> findByFunctionIdOrderByXAsc(Long functionId) {
-            List<PointDto> points = new ArrayList<>();
-            String sql = "SELECT * FROM points WHERE function_id = ? ORDER BY x ASC";
-    
-            try (Connection conn = DatabaseConnection.getConnection();
-                 PreparedStatement stmt = conn.prepareStatement(sql)) {
-    
-                stmt.setLong(1, functionId);
-                ResultSet rs = stmt.executeQuery();
-    
-                while (rs.next()) {
-                    PointDto point = mapResultSetToPoint(rs);
-                    points.add(point);
-                }
-    
-                logger.debug("Found {} points for function id: {} ordered by x ASC", points.size(), functionId);
-            } catch (SQLException e) {
-                logger.error("Error finding points by function id ordered by x ASC: {} - {}", functionId, e.getMessage());
-            }
-    
-            return points;
-        }
-    
-        @Override
-        public List<PointDto> findByFunctionIdOrderByYAsc(Long functionId) {
-            List<PointDto> points = new ArrayList<>();
-            String sql = "SELECT * FROM points WHERE function_id = ? ORDER BY y ASC";
-    
-            try (Connection conn = DatabaseConnection.getConnection();
-                 PreparedStatement stmt = conn.prepareStatement(sql)) {
-    
-                stmt.setLong(1, functionId);
-                ResultSet rs = stmt.executeQuery();
-    
-                while (rs.next()) {
-                    PointDto point = mapResultSetToPoint(rs);
-                    points.add(point);
-                }
-    
-                logger.debug("Found {} points for function id: {} ordered by y ASC", points.size(), functionId);
-            } catch (SQLException e) {
-                logger.error("Error finding points by function id ordered by y ASC: {} - {}", functionId, e.getMessage());
-            }
-    
-            return points;
-        }
-    
-        @Override
-        public List<PointDto> findByFunctionIdOrderByXDesc(Long functionId) {
-            List<PointDto> points = new ArrayList<>();
-            String sql = "SELECT * FROM points WHERE function_id = ? ORDER BY x DESC";
-    
-            try (Connection conn = DatabaseConnection.getConnection();
-                 PreparedStatement stmt = conn.prepareStatement(sql)) {
-    
-                stmt.setLong(1, functionId);
-                ResultSet rs = stmt.executeQuery();
-    
-                while (rs.next()) {
-                    PointDto point = mapResultSetToPoint(rs);
-                    points.add(point);
-                }
-    
-                logger.debug("Found {} points for function id: {} ordered by x DESC", points.size(), functionId);
-            } catch (SQLException e) {
-                logger.error("Error finding points by function id ordered by x DESC: {} - {}", functionId, e.getMessage());
-            }
-    
-            return points;
-        }
-    
-        @Override
-        public List<PointDto> findByFunctionIdOrderByYDesc(Long functionId) {
-            List<PointDto> points = new ArrayList<>();
-            String sql = "SELECT * FROM points WHERE function_id = ? ORDER BY y DESC";
-    
-            try (Connection conn = DatabaseConnection.getConnection();
-                 PreparedStatement stmt = conn.prepareStatement(sql)) {
-    
-                stmt.setLong(1, functionId);
-                ResultSet rs = stmt.executeQuery();
-    
-                while (rs.next()) {
-                    PointDto point = mapResultSetToPoint(rs);
-                    points.add(point);
-                }
-    
-                logger.debug("Found {} points for function id: {} ordered by y DESC", points.size(), functionId);
-            } catch (SQLException e) {
-                logger.error("Error finding points by function id ordered by y DESC: {} - {}", functionId, e.getMessage());
-            }
-    
-            return points;
-        }
-    
-        @Override
-        public List<PointDto> findByUserId(Long userId) {
-            List<PointDto> points = new ArrayList<>();
-            String sql = "SELECT p.* FROM points p JOIN functions f ON p.function_id = f.id WHERE f.user_id = ?";
-    
-            try (Connection conn = DatabaseConnection.getConnection();
-                 PreparedStatement stmt = conn.prepareStatement(sql)) {
-    
-                stmt.setLong(1, userId);
-                ResultSet rs = stmt.executeQuery();
-    
-                while (rs.next()) {
-                    PointDto point = mapResultSetToPoint(rs);
-                    points.add(point);
-                }
-    
-                logger.debug("Found {} points for user id: {}", points.size(), userId);
-            } catch (SQLException e) {
-                logger.error("Error finding points by user id: {} - {}", userId, e.getMessage());
-            }
-    
-            return points;
-        }
-    
 
+    @Override
+    public List<PointDto> findByX(Double x) {
+        List<PointDto> points = new ArrayList<>();
+        String sql = "SELECT * FROM points WHERE x = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setDouble(1, x);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                PointDto point = mapResultSetToPoint(rs);
+                points.add(point);
+            }
+
+            logger.debug("Found {} points with x: {}", points.size(), x);
+        } catch (SQLException e) {
+            logger.error("Error finding points by x: {} - {}", x, e.getMessage());
+        }
+
+        return points;
+    }
+
+    @Override
+    public List<PointDto> findByY(Double y) {
+        List<PointDto> points = new ArrayList<>();
+        String sql = "SELECT * FROM points WHERE y = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setDouble(1, y);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                PointDto point = mapResultSetToPoint(rs);
+                points.add(point);
+            }
+
+            logger.debug("Found {} points with y: {}", points.size(), y);
+        } catch (SQLException e) {
+            logger.error("Error finding points by y: {} - {}", y, e.getMessage());
+        }
+
+        return points;
+    }
+
+    @Override
+    public List<PointDto> findByXBetween(Double x1, Double x2) {
+        List<PointDto> points = new ArrayList<>();
+        String sql = "SELECT * FROM points WHERE x BETWEEN ? AND ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setDouble(1, x1);
+            stmt.setDouble(2, x2);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                PointDto point = mapResultSetToPoint(rs);
+                points.add(point);
+            }
+
+            logger.debug("Found {} points with x between {} and {}", points.size(), x1, x2);
+        } catch (SQLException e) {
+            logger.error("Error finding points by x between {} and {}: {}", x1, x2, e.getMessage());
+        }
+
+        return points;
+    }
+
+    @Override
+    public List<PointDto> findByYBetween(Double y1, Double y2) {
+        List<PointDto> points = new ArrayList<>();
+        String sql = "SELECT * FROM points WHERE y BETWEEN ? AND ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setDouble(1, y1);
+            stmt.setDouble(2, y2);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                PointDto point = mapResultSetToPoint(rs);
+                points.add(point);
+            }
+
+            logger.debug("Found {} points with y between {} and {}", points.size(), y1, y2);
+        } catch (SQLException e) {
+            logger.error("Error finding points by y between {} and {}: {}", y1, y2, e.getMessage());
+        }
+
+        return points;
+    }
+
+    @Override
+    public List<PointDto> findByFunctionIdsIn(List<Long> functionIds) {
+        if (functionIds == null || functionIds.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        List<PointDto> points = new ArrayList<>();
+
+        // Создаем строку с нужным количеством плейсхолдеров
+        String placeholders = String.join(",", functionIds.stream().map(id -> "?").collect(Collectors.toList()));
+        String sql = "SELECT * FROM points WHERE function_id IN (" + placeholders + ") ORDER BY function_id, point_index";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            for (int i = 0; i < functionIds.size(); i++) {
+                stmt.setLong(i + 1, functionIds.get(i));
+            }
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                PointDto point = mapResultSetToPoint(rs);
+                points.add(point);
+            }
+
+            logger.debug("Found {} points for function IDs: {}", points.size(), functionIds);
+        } catch (SQLException e) {
+            logger.error("Error finding points by function IDs: {} - {}", functionIds, e.getMessage());
+        }
+
+        return points;
+    }
+
+    @Override
+    public List<PointDto> findByFunctionIdOrderByXAsc(Long functionId) {
+        List<PointDto> points = new ArrayList<>();
+        String sql = "SELECT * FROM points WHERE function_id = ? ORDER BY x ASC";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, functionId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                PointDto point = mapResultSetToPoint(rs);
+                points.add(point);
+            }
+
+            logger.debug("Found {} points for function id: {} ordered by x ASC", points.size(), functionId);
+        } catch (SQLException e) {
+            logger.error("Error finding points by function id ordered by x ASC: {} - {}", functionId, e.getMessage());
+        }
+
+        return points;
+    }
+
+    @Override
+    public List<PointDto> findByFunctionIdOrderByYAsc(Long functionId) {
+        List<PointDto> points = new ArrayList<>();
+        String sql = "SELECT * FROM points WHERE function_id = ? ORDER BY y ASC";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, functionId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                PointDto point = mapResultSetToPoint(rs);
+                points.add(point);
+            }
+
+            logger.debug("Found {} points for function id: {} ordered by y ASC", points.size(), functionId);
+        } catch (SQLException e) {
+            logger.error("Error finding points by function id ordered by y ASC: {} - {}", functionId, e.getMessage());
+        }
+
+        return points;
+    }
+
+    @Override
+    public List<PointDto> findByFunctionIdOrderByXDesc(Long functionId) {
+        List<PointDto> points = new ArrayList<>();
+        String sql = "SELECT * FROM points WHERE function_id = ? ORDER BY x DESC";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, functionId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                PointDto point = mapResultSetToPoint(rs);
+                points.add(point);
+            }
+
+            logger.debug("Found {} points for function id: {} ordered by x DESC", points.size(), functionId);
+        } catch (SQLException e) {
+            logger.error("Error finding points by function id ordered by x DESC: {} - {}", functionId, e.getMessage());
+        }
+
+        return points;
+    }
+
+    @Override
+    public List<PointDto> findByFunctionIdOrderByYDesc(Long functionId) {
+        List<PointDto> points = new ArrayList<>();
+        String sql = "SELECT * FROM points WHERE function_id = ? ORDER BY y DESC";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, functionId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                PointDto point = mapResultSetToPoint(rs);
+                points.add(point);
+            }
+
+            logger.debug("Found {} points for function id: {} ordered by y DESC", points.size(), functionId);
+        } catch (SQLException e) {
+            logger.error("Error finding points by function id ordered by y DESC: {} - {}", functionId, e.getMessage());
+        }
+
+        return points;
+    }
+
+    @Override
+    public List<PointDto> findByUserId(Long userId) {
+        List<PointDto> points = new ArrayList<>();
+        String sql = "SELECT p.* FROM points p JOIN functions f ON p.function_id = f.id WHERE f.user_id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, userId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                PointDto point = mapResultSetToPoint(rs);
+                points.add(point);
+            }
+
+            logger.debug("Found {} points for user id: {}", points.size(), userId);
+        } catch (SQLException e) {
+            logger.error("Error finding points by user id: {} - {}", userId, e.getMessage());
+        }
+
+        return points;
+    }
+
+    @Override
+    public List<PointDto> findAll() {
+        List<PointDto> points = new ArrayList<>();
+        String sql = "SELECT * FROM points ORDER BY id";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                PointDto point = mapResultSetToPoint(rs);
+                points.add(point);
+            }
+
+            logger.debug("Found {} points in total", points.size());
+        } catch (SQLException e) {
+            logger.error("Error finding all points: {}", e.getMessage());
+        }
+
+        return points;
+    }
 }
