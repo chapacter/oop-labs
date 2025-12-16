@@ -44,7 +44,6 @@ public class DbPopulatorFramework {
     @Transactional
     public void populate(int totalFunctions, int pointsPerFunction, int batchSize) {
         logger.info("Starting populate: functions={}, pointsPerFunction={}, batchSize={}", totalFunctions, pointsPerFunction, batchSize);
-        // Сначала очищаем точки, затем функции, затем пользователей — чтобы не было нарушений FK.
         pointRepository.deleteAllInBatch();
         functionRepository.deleteAllInBatch();
         userRepository.deleteAllInBatch();

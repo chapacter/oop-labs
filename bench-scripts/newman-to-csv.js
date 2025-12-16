@@ -1,6 +1,3 @@
-// bench-scripts/newman-to-csv.js
-// Usage: node newman-to-csv.js --input details_framework.json --out-details details.csv --out-agg aggregates.csv
-
 const fs = require('fs');
 const path = require('path');
 
@@ -31,10 +28,8 @@ function mean(arr) {
 (async () => {
   const args = parseArgs();
   const json = JSON.parse(fs.readFileSync(args.input, 'utf8'));
-  // newman JSON format: run.executions -> array of { item: {name}, request, response, responseCode, assertions, timings }
   const executions = (json.run && json.run.executions) || [];
 
-  // detail rows: requestName, iteration, request.method, request.url, response.code, response.responseTime
   const detailRows = [];
   const byName = {};
 
@@ -49,7 +44,6 @@ function mean(arr) {
     if (typeof time === 'number') byName[name].push(time);
   });
 
-  // write details CSV
   const detPath = args.details || path.join(path.dirname(args.input), 'details.csv');
   const detHeader = ['requestName','iteration','method','url','statusCode','responseTimeMs'];
   const detLines = [detHeader.join(',')].concat(detailRows.map(r => {
@@ -58,7 +52,6 @@ function mean(arr) {
   }));
   fs.writeFileSync(detPath, detLines.join('\n'), 'utf8');
 
-  // build aggregates
   const aggPath = args.agg || path.join(path.dirname(args.input), 'aggregates.csv');
   const aggHeader = ['requestName','count','minMs','medianMs','meanMs','maxMs'];
   const aggLines = [aggHeader.join(',')];

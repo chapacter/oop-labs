@@ -1,4 +1,4 @@
-# API contract — "Framework" (унифицированный контракт для ЛР6/ЛР7)
+# API contract — "Framework ana Manual"
 
 Базовый префикс: `/api`
 

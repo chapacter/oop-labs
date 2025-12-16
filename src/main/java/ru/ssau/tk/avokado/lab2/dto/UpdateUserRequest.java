@@ -3,7 +3,7 @@ package ru.ssau.tk.avokado.lab2.dto;
 public class UpdateUserRequest {
     private String name;
     private Integer accessLvl;
-    private String password; // optional - if provided, change password
+    private String password;
 
     public UpdateUserRequest() {}
 

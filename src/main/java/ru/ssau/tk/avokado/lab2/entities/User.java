@@ -24,7 +24,6 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FunctionEntity> functions;
 
-    // NEW: роли пользователя
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "role")
@@ -33,7 +32,6 @@ public class User {
 
     public User() {}
 
-    // getters/setters (добавить для roles)
     public Set<Role> getRoles() { return roles; }
     public void setRoles(Set<Role> roles) { this.roles = roles; }
 

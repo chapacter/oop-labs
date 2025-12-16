@@ -12,7 +12,6 @@ public class AdminUserController {
 
     public AdminUserController(UserService userService) { this.userService = userService; }
 
-    // Grant role to user (admin only)
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping("/{id}/roles")
     public void addRole(@PathVariable Long id, @RequestParam Role role) {

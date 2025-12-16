@@ -9,12 +9,6 @@ import ru.ssau.tk.avokado.lab2.dto.UpdateFunctionRequest;
 import java.util.List;
 
 public interface FunctionService {
-    /**
-     * @param nameFilter поиск по подстроке имени (contains), nullable
-     * @param userId фильтр по владельцу (nullable)
-     * @param withPoints если true — сервис добавляет pointsCount (не полные точки)
-     * @param pageable пагинация/сортировка
-     */
     Page<FunctionDto> list(String nameFilter, Long userId, boolean withPoints, Pageable pageable);
 
     FunctionDto get(Long id, boolean withPoints);

@@ -33,7 +33,6 @@ public class UserController {
 
     @PostMapping
     public UserDto create(@RequestBody CreateUserRequest req) {
-        // НЕ логируем пароль!
         logger.info("POST /api/users create name={}", req.getName());
         return service.create(req);
     }

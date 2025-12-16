@@ -15,7 +15,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.Customizer;
 
 @Configuration
-@EnableMethodSecurity // разрешает @PreAuthorize и т.п.
+@EnableMethodSecurity
 public class SecurityConfig {
 
     private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
@@ -29,21 +29,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                // выключаем CSRF для REST API
                 .csrf(csrf -> csrf.disable())
-                // Тут важный кусок: разрешаем публичный доступ к /api/auth/** и /api/admin/** (временно)
                 .authorizeHttpRequests(authorize -> authorize
-                        // регистрация/логин — открыты
                         .requestMatchers("/api/auth/**").permitAll()
-                        // actuator (если есть) — открыты
                         .requestMatchers("/actuator/**").permitAll()
-                        // ВАЖНО: сделать /api/admin/** permitAll для запуска populate/clear без авторизации
-                        // (после тестов можно вернуть .hasRole("ADMIN") и потребовать авторизацию)
                         .requestMatchers("/api/admin/**").permitAll()
-                        // все остальные требуют аутентификации
                         .anyRequest().authenticated()
                 )
-                // Basic Auth включаем
                 .httpBasic(Customizer.withDefaults());
 
         logger.info("SecurityFilterChain configured (Basic Auth; admin endpoints temporarily permitAll)");
@@ -55,7 +47,6 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // если где-то нужен AuthenticationManager
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();

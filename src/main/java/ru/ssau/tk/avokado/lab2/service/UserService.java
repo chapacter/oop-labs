@@ -13,8 +13,6 @@ public interface UserService {
     UserDto create(CreateUserRequest req);
     UserDto update(Long id, UpdateUserRequest req);
     void delete(Long id);
-
-    // new: роль/право управления
     void grantRole(Long userId, Role role);
     void revokeRole(Long userId, Role role);
 }

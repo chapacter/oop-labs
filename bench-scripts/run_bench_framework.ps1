@@ -1,4 +1,3 @@
-# bench-scripts\run_bench_framework.ps1
 param(
   [int]$Iterations = 200
 )

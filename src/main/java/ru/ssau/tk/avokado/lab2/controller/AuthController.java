@@ -18,7 +18,6 @@ public class AuthController {
 
     @PostMapping("/register")
     public UserDto register(@RequestBody CreateUserRequest req) {
-        // создаём с ролью USER
         return userService.create(req);
     }
 }

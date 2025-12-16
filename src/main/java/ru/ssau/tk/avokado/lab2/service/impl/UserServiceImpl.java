@@ -145,7 +145,6 @@ public class UserServiceImpl implements UserService {
         dto.setId(u.getId());
         dto.setName(u.getName());
         dto.setAccessLvl(u.getAccessLvl());
-        // copy roles to strings or Role enum, here Role enum
         dto.setRoles(u.getRoles() == null ? Set.of() : u.getRoles().stream().collect(Collectors.toSet()));
         return dto;
     }
