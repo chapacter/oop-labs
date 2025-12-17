@@ -1,0 +1,30 @@
+services:
+  db:
+    image: postgres:15
+    container_name: lab2-db
+    environment:
+      POSTGRES_DB: avokado-bd
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./src/main/resources/scripts/create_tables.sql:/docker-entrypoint-initdb.d/1-create_tables.sql
+  app:
+    build: .
+    container_name: lab2-app
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: avokado-bd
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+    ports:
+      - "8081:8080"
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
