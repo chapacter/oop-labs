@@ -1,8 +1,13 @@
-CREATE TABLE points (
-    id BIGSERIAL PRIMARY KEY,
-    function_id BIGINT NOT NULL,
-    point_index INTEGER NOT NULL,
-    x DOUBLE PRECISION NOT NULL,
-    y DOUBLE PRECISION NOT NULL,
-    FOREIGN KEY (function_id) REFERENCES functions(id) ON DELETE CASCADE
-);
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'points') THEN
+        CREATE TABLE points (
+            id BIGSERIAL PRIMARY KEY,
+            function_id BIGINT NOT NULL,
+            point_index INTEGER NOT NULL,
+            x DOUBLE PRECISION NOT NULL,
+            y DOUBLE PRECISION NOT NULL,
+            FOREIGN KEY (function_id) REFERENCES functions(id) ON DELETE CASCADE
+        );
+    END IF;
+END $$;
