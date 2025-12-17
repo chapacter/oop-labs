@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>test interface</title>
+    <meta charset="UTF-8">
+    <link href="css/style.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .login-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            box-sizing: border-box;
+        }
+        
+        .btn {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        
+        .btn-primary {
+            background-color: #007bff;
+        }
+        
+        .btn-success {
+            background-color: #28a745;
+        }
+        
+        .btn-warning {
+            background-color: #ffc107;
+            color: #212529;
+        }
+        
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+        
+        .api-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .api-section.active {
+            display: block;
+        }
+        
+        .api-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .api-button {
+            text-align: left;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        
+        .api-button:hover {
+            background-color: #e9ecef;
+        }
+        
+        .api-button h4 {
+            margin: 0 5px 0;
+            color: #333;
+        }
+        
+        .api-button p {
+            margin: 0;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .user-info {
+            background-color: #d4edda;
+            padding: 10px;
+            border-radius: 3px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logout-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Веб-интерфейс для тестирования API</h1>
+        <p>Интерактивный интерфейс для проверки работы всех сервлетов</p>
+    </div>
+
+    <div class="login-section" id="loginSection">
+        <h2>Вход в систему</h2>
+        <div class="form-group">
+            <label for="username">Имя пользователя:</label>
+            <input id="username" placeholder="Введите имя пользователя" type="text">
+        </div>
+        <div class="form-group">
+            <label for="password">Пароль:</label>
+            <input id="password" placeholder="Введите пароль" type="password">
+        </div>
+        <button class="btn btn-primary" onclick="login()">Войти</button>
+        <!--            <button class="btn btn-success" onclick="registerUser()">Создать пользователя</button>-->
+
+        <div style="margin-top: 20px; padding: 15px; background-color: #f8f9fa; border-radius: 5px;">
+            <h3>Создать нового пользователя</h3>
+            <div class="form-group">
+                <label for="newUsername">Имя пользователя:</label>
+                <input id="newUsername" placeholder="Введите имя нового пользователя" type="text">
+            </div>
+            <div class="form-group">
+                <label for="newPassword">Пароль:</label>
+                <input id="newPassword" placeholder="Введите пароль" type="password">
+            </div>
+            <button class="btn btn-success" onclick="registerUser()">Создать пользователя</button>
+            <button class="btn btn-success" onclick="registerUser()">Создать пользователя</button>
+        </div>
+    </div>
+
+    <div class="api-section" id="apiSection">
+        <div class="user-info">
+            <div>Пользователь: <strong id="currentUser"></strong> | Роль: <strong id="userRole"></strong></div>
+            <button class="logout-btn" onclick="logout()">Выйти</button>
+        </div>
+
+        <h2>Доступные API операции</h2>
+        <p>Выберите интересующую вас группу API операций:</p>
+
+        <div class="api-buttons">
+            <div class="api-button" onclick="showApiGroup('users')">
+                <h4>Пользователи (Users)</h4>
+                <p>Управление пользователями: создание, чтение, обновление, удаление</p>
+            </div>
+
+            <div class="api-button" onclick="showApiGroup('functions')">
+                <h4>Функции (Functions)</h4>
+                <p>Работа с математическими функциями</p>
+            </div>
+
+            <div class="api-button" onclick="showApiGroup('points')">
+                <h4>Точки (Points)</h4>
+                <p>Работа с точками функций</p>
+            </div>
+
+            <div class="api-button" onclick="showApiGroup('operations')">
+                <h4>Операции (Operations)</h4>
+                <p>Управление операциями</p>
+            </div>
+
+            <div class="api-button" onclick="showApiGroup('processed')">
+                <h4>Обработанные функции</h4>
+                <p>Результаты выполненных операций</p>
+            </div>
+
+            <div class="api-button" onclick="showApiGroup('results')">
+                <h4>Результирующие значения</h4>
+                <p>Значения после обработки</p>
+            </div>
+
+            <div class="api-button" onclick="showApiGroup('tabulated')">
+                <h4>Табулированные функции</h4>
+                <p>Табличные представления функций</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="api-section" id="apiDetails">
+        <button class="btn" onclick="showMainApiSection()">← Назад к списку</button>
+        <h2 id="apiDetailsTitle"></h2>
+        <div id="apiButtonsContainer"></div>
+    </div>
+</div>
+
+<script>
+    let authToken = null;
+    let currentUser = null;
+    let userRole = null;
+
+    function login() {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        if (!username || !password) {
+            alert('Пожалуйста, введите имя пользователя и пароль');
+            return;
+        }
+
+        // Кодируем учетные данные в формате Base64
+        const credentials = btoa(`${username}:${password}`);
+        authToken = `Basic ${credentials}`;
+        currentUser = username;
+
+        // Пробуем выполнить запрос для определения роли пользователя
+        checkUserRole();
+    }
+
+    async function checkUserRole() {
+        try {
+            const response = await fetch('/api/users', {
+                method: 'GET',
+                headers: {
+                    'Authorization': authToken,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.status === 200) {
+                // Если запрос успешен, значит пользователь имеет права (либо админ, либо обычный пользователь)
+                // Для определения роли попробуем получить конкретного пользователя
+                const userInfoResponse = await fetch('/api/users/1', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': authToken,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (userInfoResponse.status === 200) {
+                    userRole = 'Администратор';
+                } else {
+                    userRole = 'Пользователь';
+                }
+            } else if (response.status === 403) {
+                userRole = 'Администратор';
+            } else {
+                userRole = 'Пользователь';
+            }
+
+            showApiSection();
+        } catch (error) {
+            alert('Ошибка при проверке данных пользователя: ' + error.message);
+        }
+    }
+
+    function showApiSection() {
+        document.getElementById('loginSection').classList.add('hidden');
+        document.getElementById('apiSection').classList.add('active');
+
+        document.getElementById('currentUser').textContent = currentUser;
+        document.getElementById('userRole').textContent = userRole;
+    }
+
+    function showMainApiSection() {
+        document.getElementById('apiSection').classList.add('active');
+        document.getElementById('apiDetails').classList.remove('active');
+    }
+
+    function showApiGroup(group) {
+        document.getElementById('apiSection').classList.remove('active');
+        document.getElementById('apiDetails').classList.add('active');
+
+        let title, buttons;
+
+        switch(group) {
+            case 'users':
+                document.getElementById('apiDetailsTitle').textContent = 'Операции с пользователями';
+                buttons = `
+                    <button class="btn btn-primary" onclick="apiCall('GET', '/api/users')">Получить всех пользователей</button>
+                    <button class="btn btn-success" onclick="showForm('createUserForm')">Создать пользователя</button>
+                    <button class="btn btn-warning" onclick="showIdInput('user', 'GET', '/api/users')">Получить пользователя по ID</button>
+                    <button class="btn btn-warning" onclick="showIdInput('user', 'PUT', '/api/users')">Обновить пользователя</button>
+                    <button class="btn btn-danger" onclick="showIdInput('user', 'DELETE', '/api/users')">Удалить пользователя</button>
+                `;
+                break;
+            case 'functions':
+                document.getElementById('apiDetailsTitle').textContent = 'Операции с функциями';
+                buttons = `
+                    <button class="btn btn-primary" onclick="apiCall('GET', '/api/functions')">Получить все функции</button>
+                    <button class="btn btn-success" onclick="showForm('createFunctionForm')">Создать функцию</button>
+                    <button class="btn btn-warning" onclick="showIdInput('function', 'GET', '/api/functions')">Получить функцию по ID</button>
+                    <button class="btn btn-warning" onclick="showIdInput('function', 'PUT', '/api/functions')">Обновить функцию</button>
+                    <button class="btn btn-danger" onclick="showIdInput('function', 'DELETE', '/api/functions')">Удалить функцию</button>
+                `;
+                break;
+            case 'points':
+                document.getElementById('apiDetailsTitle').textContent = 'Операции с точками';
+                buttons = `
+                    <button class="btn btn-primary" onclick="apiCall('GET', '/api/points')">Получить все точки</button>
+                    <button class="btn btn-success" onclick="showForm('createPointForm')">Создать точку</button>
+                    <button class="btn btn-warning" onclick="showIdInput('point', 'GET', '/api/points')">Получить точку по ID</button>
+                    <button class="btn btn-warning" onclick="showIdInput('point', 'PUT', '/api/points')">Обновить точку</button>
+                    <button class="btn btn-danger" onclick="showIdInput('point', 'DELETE', '/api/points')">Удалить точку</button>
+                `;
+                break;
+            case 'operations':
+                document.getElementById('apiDetailsTitle').textContent = 'Операции с операциями';
+                buttons = `
+                    <button class="btn btn-primary" onclick="apiCall('GET', '/api/operations')">Получить все операции</button>
+                    <button class="btn btn-success" onclick="showForm('createOperationForm')">Создать операцию</button>
+                    <button class="btn btn-warning" onclick="showIdInput('operation', 'GET', '/api/operations')">Получить операцию по ID</button>
+                    <button class="btn btn-warning" onclick="showIdInput('operation', 'PUT', '/api/operations')">Обновить операцию</button>
+                    <button class="btn btn-danger" onclick="showIdInput('operation', 'DELETE', '/api/operations')">Удалить операцию</button>
+                `;
+                break;
+            case 'processed':
+                document.getElementById('apiDetailsTitle').textContent = 'Операции с обработанными функциями';
+                buttons = `
+                    <button class="btn btn-primary" onclick="apiCall('GET', '/api/processed-functions')">Получить все обработанные функции</button>
+                    <button class="btn btn-success" onclick="showForm('createProcessedFunctionForm')">Создать обработанную функцию</button>
+                    <button class="btn btn-warning" onclick="showIdInput('processed', 'GET', '/api/processed-functions')">Получить обработанную функцию по ID</button>
+                    <button class="btn btn-warning" onclick="showIdInput('processed', 'PUT', '/api/processed-functions')">Обновить обработанную функцию</button>
+                    <button class="btn btn-danger" onclick="showIdInput('processed', 'DELETE', '/api/processed-functions')">Удалить обработанную функцию</button>
+                `;
+                break;
+            case 'results':
+                document.getElementById('apiDetailsTitle').textContent = 'Операции с результирующими значениями';
+                buttons = `
+                    <button class="btn btn-primary" onclick="apiCall('GET', '/api/result-values')">Получить все результирующие значения</button>
+                    <button class="btn btn-success" onclick="showForm('createResultValueForm')">Создать результирующее значение</button>
+                    <button class="btn btn-warning" onclick="showIdInput('result', 'GET', '/api/result-values')">Получить результирующее значение по ID</button>
+                    <button class="btn btn-warning" onclick="showIdInput('result', 'PUT', '/api/result-values')">Обновить результирующее значение</button>
+                    <button class="btn btn-danger" onclick="showIdInput('result', 'DELETE', '/api/result-values')">Удалить результирующее значение</button>
+                `;
+                break;
+            case 'tabulated':
+                document.getElementById('apiDetailsTitle').textContent = 'Операции с табулированными функциями';
+                buttons = `
+                    <button class="btn btn-primary" onclick="apiCall('GET', '/api/tabulated-functions')">Получить все табулированные функции</button>
+                    <button class="btn btn-success" onclick="showForm('createTabulatedFunctionForm')">Создать табулированную функцию</button>
+                    <button class="btn btn-warning" onclick="showIdInput('tabulated', 'GET', '/api/tabulated-functions')">Получить табулированную функцию по ID</button>
+                    <button class="btn btn-warning" onclick="showIdInput('tabulated', 'PUT', '/api/tabulated-functions')">Обновить табулированную функцию</button>
+                    <button class="btn btn-danger" onclick="showIdInput('tabulated', 'DELETE', '/api/tabulated-functions')">Удалить табулированную функцию</button>
+                `;
+                break;
+        }
+
+        document.getElementById('apiButtonsContainer').innerHTML = buttons;
+    }
+
+    function showForm(formType) {
+        let formHtml = '';
+
+        switch(formType) {
+            case 'createUserForm':
+                formHtml = `
+                    <div class="form-group">
+                        <label>Имя пользователя:</label>
+                        <input type="text" id="createUserName" placeholder="Введите имя">
+                    </div>
+                    <div class="form-group">
+                        <label>Уровень доступа (0-USER, 1-ADMIN):</label>
+                        <input type="number" id="createUserAccessLvl" placeholder="0 или 1" min="0" max="1">
+                    </div>
+                    <div class="form-group">
+                        <label>Пароль:</label>
+                        <input type="password" id="createUserPassword" placeholder="Введите пароль">
+                    </div>
+                    <button class="btn btn-success" onclick="createUser()">Создать пользователя</button>
+                `;
+                break;
+            case 'createFunctionForm':
+                formHtml = `
+                    <div class="form-group">
+                        <label>ID пользователя:</label>
+                        <input type="number" id="createFunctionUserId" placeholder="Введите ID пользователя">
+                    </div>
+                    <div class="form-group">
+                        <label>Название:</label>
+                        <input type="text" id="createFunctionName" placeholder="Введите название функции">
+                    </div>
+                    <div class="form-group">
+                        <label>Формат:</label>
+                        <input type="number" id="createFunctionFormat" placeholder="Введите формат (опционально)">
+                    </div>
+                    <div class="form-group">
+                        <label>Результат функции:</label>
+                        <input type="text" id="createFunctionResult" placeholder="Введите результат функции">
+                    </div>
+                    <button class="btn btn-success" onclick="createFunction()">Создать функцию</button>
+                `;
+                break;
+            case 'createPointForm':
+                formHtml = `
+                    <div class="form-group">
+                        <label>ID функции:</label>
+                        <input type="number" id="createPointFunctionId" placeholder="Введите ID функции">
+                    </div>
+                    <div class="form-group">
+                        <label>X:</label>
+                        <input type="number" id="createPointX" step="any" placeholder="Введите X">
+                    </div>
+                    <div class="form-group">
+                        <label>Y:</label>
+                        <input type="number" id="createPointY" step="any" placeholder="Введите Y">
+                    </div>
+                    <div class="form-group">
+                        <label>Индекс точки:</label>
+                        <input type="number" id="createPointIndex" placeholder="Введите индекс точки">
+                    </div>
+                    <button class="btn btn-success" onclick="createPoint()">Создать точку</button>
+                `;
+                break;
+            case 'createOperationForm':
+                formHtml = `
+                    <div class="form-group">
+                        <label>Название:</label>
+                        <input type="text" id="createOperationName" placeholder="Введите название операции">
+                    </div>
+                    <div class="form-group">
+                        <label>Описание:</label>
+                        <input type="text" id="createOperationDescription" placeholder="Введите описание операции">
+                    </div>
+                    <button class="btn btn-success" onclick="createOperation()">Создать операцию</button>
+                `;
+                break;
+            case 'createProcessedFunctionForm':
+                formHtml = `
+                    <div class="form-group">
+                        <label>ID функции:</label>
+                        <input type="number" id="createProcessedFunctionId" placeholder="Введите ID функции">
+                    </div>
+                    <div class="form-group">
+                        <label>ID операции:</label>
+                        <input type="number" id="createProcessedOperationId" placeholder="Введите ID операции">
+                    </div>
+                    <div class="form-group">
+                        <label>Результат:</label>
+                        <input type="text" id="createProcessedResultSummary" placeholder="Введите результат">
+                    </div>
+                    <button class="btn btn-success" onclick="createProcessedFunction()">Создать обработанную функцию</button>
+                `;
+                break;
+            case 'createResultValueForm':
+                formHtml = `
+                    <div class="form-group">
+                        <label>ID обработанной функции:</label>
+                        <input type="number" id="createResultProcessedFunctionId" placeholder="Введите ID обработанной функции">
+                    </div>
+                    <div class="form-group">
+                        <label>Индекс точки:</label>
+                        <input type="number" id="createResultPointIndex" placeholder="Введите индекс точки">
+                    </div>
+                    <div class="form-group">
+                        <label>X:</label>
+                        <input type="number" id="createResultX" step="any" placeholder="Введите X">
+                    </div>
+                    <div class="form-group">
+                        <label>Y:</label>
+                        <input type="number" id="createResultY" step="any" placeholder="Введите Y">
+                    </div>
+                    <button class="btn btn-success" onclick="createResultValue()">Создать результирующее значение</button>
+                `;
+                break;
+            case 'createTabulatedFunctionForm':
+                formHtml = `
+                    <div class="form-group">
+                        <label>ID функции:</label>
+                        <input type="number" id="createTabulatedFunctionId" placeholder="Введите ID функции">
+                    </div>
+                    <div class="form-group">
+                        <label>X:</label>
+                        <input type="number" id="createTabulatedX" step="any" placeholder="Введите X">
+                    </div>
+                    <div class="form-group">
+                        <label>Y:</label>
+                        <input type="number" id="createTabulatedY" step="any" placeholder="Введите Y">
+                    </div>
+                    <button class="btn btn-success" onclick="createTabulatedFunction()">Создать табулированную функцию</button>
+                `;
+                break;
+        }
+
+        document.getElementById('apiButtonsContainer').innerHTML = formHtml + '<button class="btn" onclick="showApiGroup(\'' + getGroupFromForm(formType) + '\')">← Назад</button>';
+    }
+
+    function getGroupFromForm(formType) {
+        if (formType.includes('User')) return 'users';
+        if (formType.includes('Function')) return 'functions';
+        if (formType.includes('Point')) return 'points';
+        if (formType.includes('Operation')) return 'operations';
+        if (formType.includes('Processed')) return 'processed';
+        if (formType.includes('Result')) return 'results';
+        if (formType.includes('Tabulated')) return 'tabulated';
+    }
+
+    function showIdInput(entityType, method, endpoint) {
+        const id = prompt(`Введите ID ${entityType}:`);
+        if (id) {
+            if (method === 'GET' || method === 'DELETE') {
+                apiCall(method, `${endpoint}/${id}`);
+            } else {
+                showUpdateForm(entityType, id, endpoint);
+            }
+        }
+    }
+
+    function showUpdateForm(entityType, id, endpoint) {
+        let formHtml = '';
+
+        switch(entityType) {
+            case 'user':
+                formHtml = `
+                    <div class="form-group">
+                        <label>Новое имя (оставьте пустым, чтобы не менять):</label>
+                        <input type="text" id="updateUserName" placeholder="Введите новое имя">
+                    </div>
+                    <div class="form-group">
+                        <label>Новый уровень доступа (0-USER, 1-ADMIN, оставьте пустым, чтобы не менять):</label>
+                        <input type="number" id="updateUserAccessLvl" placeholder="0 или 1" min="0" max="1">
+                    </div>
+                    <button class="btn btn-warning" onclick="updateUser(${id})">Обновить пользователя</button>
+                `;
+                break;
+            case 'function':
+                formHtml = `
+                    <div class="form-group">
+                        <label>Новое название (оставьте пустым, чтобы не менять):</label>
+                        <input type="text" id="updateFunctionName" placeholder="Введите новое название">
+                    </div>
+                    <div class="form-group">
+                        <label>Новый формат (оставьте пустым, чтобы не менять):</label>
+                        <input type="number" id="updateFunctionFormat" placeholder="Введите новый формат">
+                    </div>
+                    <div class="form-group">
+                        <label>Новый результат (оставьте пустым, чтобы не менять):</label>
+                        <input type="text" id="updateFunctionResult" placeholder="Введите новый результат">
+                    </div>
+                    <button class="btn btn-warning" onclick="updateFunction(${id})">Обновить функцию</button>
+                `;
+                break;
+            case 'point':
+                formHtml = `
+                    <div class="form-group">
+                        <label>Новый X (оставьте пустым, чтобы не менять):</label>
+                        <input type="number" id="updatePointX" step="any" placeholder="Введите новый X">
+                    </div>
+                    <div class="form-group">
+                        <label>Новый Y (оставьте пустым, чтобы не менять):</label>
+                        <input type="number" id="updatePointY" step="any" placeholder="Введите новый Y">
+                    </div>
+                    <div class="form-group">
+                        <label>Новый индекс точки (оставьте пустым, чтобы не менять):</label>
+                        <input type="number" id="updatePointIndex" placeholder="Введите новый индекс">
+                    </div>
+                    <button class="btn btn-warning" onclick="updatePoint(${id})">Обновить точку</button>
+                `;
+                break;
+            case 'operation':
+                formHtml = `
+                    <div class="form-group">
+                        <label>Новое название (оставьте пустым, чтобы не менять):</label>
+                        <input type="text" id="updateOperationName" placeholder="Введите новое название">
+                    </div>
+                    <div class="form-group">
+                        <label>Новое описание (оставьте пустым, чтобы не менять):</label>
+                        <input type="text" id="updateOperationDescription" placeholder="Введите новое описание">
+                    </div>
+                    <button class="btn btn-warning" onclick="updateOperation(${id})">Обновить операцию</button>
+                `;
+                break;
+            case 'processed':
+                formHtml = `
+                    <div class="form-group">
+                        <label>Новый результат (оставьте пустым, чтобы не менять):</label>
+                        <input type="text" id="updateProcessedResultSummary" placeholder="Введите новый результат">
+                    </div>
+                    <button class="btn btn-warning" onclick="updateProcessedFunction(${id})">Обновить обработанную функцию</button>
+                `;
+                break;
+            case 'result':
+                formHtml = `
+                    <div class="form-group">
+                        <label>Новый X (оставьте пустым, чтобы не менять):</label>
+                        <input type="number" id="updateResultX" step="any" placeholder="Введите новый X">
+                    </div>
+                    <div class="form-group">
+                        <label>Новый Y (оставьте пустым, чтобы не менять):</label>
+                        <input type="number" id="updateResultY" step="any" placeholder="Введите новый Y">
+                    </div>
+                    <button class="btn btn-warning" onclick="updateResultValue(${id})">Обновить результирующее значение</button>
+                `;
+                break;
+            case 'tabulated':
+                formHtml = `
+                    <div class="form-group">
+                        <label>Новый X (оставьте пустым, чтобы не менять):</label>
+                        <input type="number" id="updateTabulatedX" step="any" placeholder="Введите новый X">
+                    </div>
+                    <div class="form-group">
+                        <label>Новый Y (оставьте пустым, чтобы не менять):</label>
+                        <input type="number" id="updateTabulatedY" step="any" placeholder="Введите новый Y">
+                    </div>
+                    <button class="btn btn-warning" onclick="updateTabulatedFunction(${id})">Обновить табулированную функцию</button>
+                `;
+                break;
+        }
+
+        document.getElementById('apiButtonsContainer').innerHTML = formHtml + '<button class="btn" onclick="showApiGroup(\'' + entityType + 's' + (entityType === 'processed' ? '' : (entityType === 'result' ? 's' : '')) + '\')">← Назад</button>';
+    }
+
+    async function apiCall(method, endpoint, data = null) {
+        try {
+            const config = {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': authToken || ''  // Добавляем пустую строку, если токен не определен
+                },
+            };
+
+            if (data) {
+                config.body = JSON.stringify(data);
+            }
+
+            const response = await fetch(endpoint, config);
+            let responseText = `Метод: ${method}, Эндпоинт: ${endpoint}\nСтатус: ${response.status}\n\n`;
+
+            if (response.status >= 200 && response.status < 300) {
+                const responseBody = await response.text();
+                if (responseBody) {
+                    try {
+                        const jsonData = JSON.parse(responseBody);
+                        responseText += `Ответ:\n${JSON.stringify(jsonData, null, 2)}`;
+                    } catch (e) {
+                        responseText += `Ответ:\n${responseBody}`;
+                    }
+                } else {
+                    responseText += 'Ответ: (пустой)';
+                }
+            } else {
+                const errorBody = await response.text();
+                responseText += `Ошибка:\n${errorBody}`;
+            }
+
+            alert(responseText);
+        } catch (error) {
+            alert(`Ошибка при выполнении запроса: ${error.message}`);
+        }
+    }
+
+    function logout() {
+        authToken = null;
+        currentUser = null;
+        userRole = null;
+
+        document.getElementById('loginSection').classList.remove('hidden');
+        document.getElementById('apiSection').classList.remove('active');
+        document.getElementById('apiDetails').classList.remove('active');
+
+        document.getElementById('username').value = '';
+        document.getElementById('password').value = '';
+    }
+
+    // Функции для создания сущностей
+    // ВНИМАНИЕ: В реальной системе пароли должны хешироваться перед отправкой
+    function createUser() {
+        const userData = {
+            name: document.getElementById('createUserName').value,
+            accessLvl: parseInt(document.getElementById('createUserAccessLvl').value) || 0,
+            password: document.getElementById('createUserPassword').value // В тестовой системе пароль передается как есть
+        };
+
+        if (!userData.name || !userData.password) {
+            alert('Ошибка: Заполните обязательные поля (имя и пароль)');
+            return;
+        }
+
+        apiCall('POST', '/api/users', userData);
+    }
+
+    function createFunction() {
+        const functionData = {
+            userId: parseInt(document.getElementById('createFunctionUserId').value),
+            name: document.getElementById('createFunctionName').value,
+            format: parseInt(document.getElementById('createFunctionFormat').value) || null,
+            funcResult: document.getElementById('createFunctionResult').value
+        };
+
+        if (!functionData.name) {
+            alert('Ошибка: Заполните обязательное поле (название)');
+            return;
+        }
+
+        apiCall('POST', '/api/functions', functionData);
+    }
+
+    function createPoint() {
+        const pointData = {
+            functionId: parseInt(document.getElementById('createPointFunctionId').value),
+            x: parseFloat(document.getElementById('createPointX').value),
+            y: parseFloat(document.getElementById('createPointY').value),
+            pointIndex: parseInt(document.getElementById('createPointIndex').value)
+        };
+
+        if (!pointData.functionId || isNaN(pointData.x) || isNaN(pointData.y)) {
+            alert('Ошибка: Заполните обязательные поля (ID функции, X, Y)');
+            return;
+        }
+
+        apiCall('POST', '/api/points', pointData);
+    }
+
+    function createOperation() {
+        const operationData = {
+            name: document.getElementById('createOperationName').value,
+            description: document.getElementById('createOperationDescription').value
+        };
+
+        if (!operationData.name) {
+            alert('Ошибка: Заполните обязательное поле (название)');
+            return;
+        }
+
+        apiCall('POST', '/api/operations', operationData);
+    }
+
+    function createProcessedFunction() {
+        const processedFunctionData = {
+            functionId: parseInt(document.getElementById('createProcessedFunctionId').value),
+            operationId: parseInt(document.getElementById('createProcessedOperationId').value),
+            resultSummary: document.getElementById('createProcessedResultSummary').value
+        };
+
+        if (!processedFunctionData.functionId || !processedFunctionData.operationId) {
+            alert('Ошибка: Заполните обязательные поля (ID функции, ID операции)');
+            return;
+        }
+
+        apiCall('POST', '/api/processed-functions', processedFunctionData);
+    }
+
+    function createResultValue() {
+        const resultValueData = {
+            processedFunctionId: parseInt(document.getElementById('createResultProcessedFunctionId').value),
+            pointIndex: parseInt(document.getElementById('createResultPointIndex').value),
+            x: parseFloat(document.getElementById('createResultX').value),
+            y: parseFloat(document.getElementById('createResultY').value)
+        };
+
+        if (!resultValueData.processedFunctionId || isNaN(resultValueData.x) || isNaN(resultValueData.y)) {
+            alert('Ошибка: Заполните обязательные поля (ID обработанной функции, X, Y)');
+            return;
+        }
+
+        apiCall('POST', '/api/result-values', resultValueData);
+    }
+
+    function createTabulatedFunction() {
+        const tabulatedFunctionData = {
+            funcId: parseInt(document.getElementById('createTabulatedFunctionId').value),
+            xVal: parseFloat(document.getElementById('createTabulatedX').value),
+            yVal: parseFloat(document.getElementById('createTabulatedY').value)
+        };
+
+        if (!tabulatedFunctionData.funcId || isNaN(tabulatedFunctionData.xVal) || isNaN(tabulatedFunctionData.yVal)) {
+            alert('Ошибка: Заполните обязательные поля (ID функции, X, Y)');
+            return;
+        }
+
+        apiCall('POST', '/api/tabulated-functions', tabulatedFunctionData);
+    }
+
+    // Функции для обновления сущностей
+    function updateUser(id) {
+        const updateData = {};
+        const newName = document.getElementById('updateUserName').value;
+        const newAccessLvl = document.getElementById('updateUserAccessLvl').value;
+
+        if (newName) updateData.name = newName;
+        if (newAccessLvl !== '') updateData.accessLvl = parseInt(newAccessLvl);
+
+        apiCall('PUT', `/api/users/${id}`, updateData);
+    }
+
+    function updateFunction(id) {
+        const updateData = {};
+        const newName = document.getElementById('updateFunctionName').value;
+        const newFormat = document.getElementById('updateFunctionFormat').value;
+        const newResult = document.getElementById('updateFunctionResult').value;
+
+        if (newName) updateData.name = newName;
+        if (newFormat) updateData.format = parseInt(newFormat);
+        if (newResult) updateData.funcResult = newResult;
+
+        apiCall('PUT', `/api/functions/${id}`, updateData);
+    }
+
+    function updatePoint(id) {
+        const updateData = {};
+        const newX = document.getElementById('updatePointX').value;
+        const newY = document.getElementById('updatePointY').value;
+        const newIndex = document.getElementById('updatePointIndex').value;
+
+        if (newX !== '') updateData.x = parseFloat(newX);
+        if (newY !== '') updateData.y = parseFloat(newY);
+        if (newIndex !== '') updateData.pointIndex = parseInt(newIndex);
+
+        apiCall('PUT', `/api/points/${id}`, updateData);
+    }
+
+    function updateOperation(id) {
+        const updateData = {};
+        const newName = document.getElementById('updateOperationName').value;
+        const newDescription = document.getElementById('updateOperationDescription').value;
+
+        if (newName) updateData.name = newName;
+        if (newDescription) updateData.description = newDescription;
+
+        apiCall('PUT', `/api/operations/${id}`, updateData);
+    }
+
+    function updateProcessedFunction(id) {
+        const updateData = {};
+        const newResult = document.getElementById('updateProcessedResultSummary').value;
+
+        if (newResult) updateData.resultSummary = newResult;
+
+        apiCall('PUT', `/api/processed-functions/${id}`, updateData);
+    }
+
+    function updateResultValue(id) {
+        const updateData = {};
+        const newX = document.getElementById('updateResultX').value;
+        const newY = document.getElementById('updateResultY').value;
+
+        if (newX !== '') updateData.x = parseFloat(newX);
+        if (newY !== '') updateData.y = parseFloat(newY);
+
+        apiCall('PUT', `/api/result-values/${id}`, updateData);
+    }
+
+    function updateTabulatedFunction(id) {
+        const updateData = {};
+        const newX = document.getElementById('updateTabulatedX').value;
+        const newY = document.getElementById('updateTabulatedY').value;
+
+        if (newX !== '') updateData.xVal = parseFloat(newX);
+        if (newY !== '') updateData.yVal = parseFloat(newY);
+
+        apiCall('PUT', `/api/tabulated-functions/${id}`, updateData);
+    }
+    async function registerUser() {
+        const username = document.getElementById('newUsername').value;
+        const password = document.getElementById('newPassword').value;
+
+        if (!username || !password) {
+            alert('Пожалуйста, введите имя пользователя и пароль');
+            return;
+        }
+
+        const userData = {
+            name: username,
+            password: password,
+            accessLvl: 0  // по умолчанию обычный пользователь
+        };
+
+        try {
+            const response = await fetch('/api/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': authToken
+                },
+                body: JSON.stringify(userData)
+            });
+
+            let responseText = `Регистрация пользователя: ${username}\nСтатус: ${response.status}\n\n`;
+
+            if (response.status === 201) {
+                const responseBody = await response.text();
+                if (responseBody) {
+                    try {
+                        const jsonData = JSON.parse(responseBody);
+                        responseText += `Пользователь успешно создан:\n${JSON.stringify(jsonData, null, 2)}`;
+                    } catch (e) {
+                        responseText += `Ответ:\n${responseBody}`;
+                    }
+                }
+                alert(responseText);
+            } else {
+                const errorBody = await response.text();
+                responseText += `Ошибка:\n${errorBody}`;
+                alert(responseText);
+            }
+        } catch (error) {
+            alert(`Ошибка при регистрации пользователя: ${error.message}`);
+        }
+    }
+</script>
+</body>
+</html>
