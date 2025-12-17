@@ -1,8 +1,6 @@
 package ru.ssau.tk.avokado.lab2.functions;
 
 import org.junit.jupiter.api.Test;
-import ru.ssau.tk.avokado.lab2.functions.DeBoorFunction;
-import ru.ssau.tk.avokado.lab2.functions.MathFunction;
 
 import static org.junit.jupiter.api.Assertions.*;
 

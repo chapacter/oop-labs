@@ -1,11 +1,11 @@
 package ru.ssau.tk.avokado.lab2.dao;
 
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import ru.ssau.tk.avokado.lab2.DatabaseConnection;
 import ru.ssau.tk.avokado.lab2.Role;
 import ru.ssau.tk.avokado.lab2.dto.FunctionDto;
 import ru.ssau.tk.avokado.lab2.dto.PointDto;
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import ru.ssau.tk.avokado.lab2.dto.UserDto;
 
 import java.io.BufferedReader;
@@ -23,9 +23,9 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestMethodOrder(OrderAnnotation.class)
 @DisplayName("JdbcPointDao Tests")
 class PointDaoTest {
-    private JdbcPointDao pointDao;
     private static final Long TEST_FUNC_ID = 1L;
     private static final Long TEST_USER_ID = 1L;
+    private JdbcPointDao pointDao;
     private Long savedPointId;
 
     @BeforeEach
@@ -33,14 +33,14 @@ class PointDaoTest {
         // Удаляем все существующие таблицы перед созданием новых
         try (Connection conn = DatabaseConnection.getConnection()) {
             String dropTablesScript =
-                "DROP TABLE IF EXISTS result_values CASCADE;" +
-                "DROP TABLE IF EXISTS processed_functions CASCADE;" +
-                "DROP TABLE IF EXISTS tabulated_func CASCADE;" +
-                "DROP TABLE IF EXISTS points CASCADE;" +
-                "DROP TABLE IF EXISTS functions CASCADE;" +
-                "DROP TABLE IF EXISTS operations CASCADE;" +
-                "DROP TABLE IF EXISTS users CASCADE;";
-            
+                    "DROP TABLE IF EXISTS result_values CASCADE;" +
+                            "DROP TABLE IF EXISTS processed_functions CASCADE;" +
+                            "DROP TABLE IF EXISTS tabulated_func CASCADE;" +
+                            "DROP TABLE IF EXISTS points CASCADE;" +
+                            "DROP TABLE IF EXISTS functions CASCADE;" +
+                            "DROP TABLE IF EXISTS operations CASCADE;" +
+                            "DROP TABLE IF EXISTS users CASCADE;";
+
             PreparedStatement dropStmt = conn.prepareStatement(dropTablesScript);
             dropStmt.execute();
         } catch (SQLException e) {

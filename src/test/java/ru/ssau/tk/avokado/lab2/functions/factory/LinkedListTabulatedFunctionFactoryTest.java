@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import ru.ssau.tk.avokado.lab2.functions.LinkedListTabulatedFunction;
 import ru.ssau.tk.avokado.lab2.functions.TabulatedFunction;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 class LinkedListTabulatedFunctionFactoryTest {
 
@@ -13,6 +13,6 @@ class LinkedListTabulatedFunctionFactoryTest {
         double[] x = {1, 2, 3};
         double[] y = {2, 4, 6};
         TabulatedFunction function = new LinkedListTabulatedFunctionFactory().create(x, y);
-        assertTrue(function instanceof LinkedListTabulatedFunction);
+        assertInstanceOf(LinkedListTabulatedFunction.class, function);
     }
 }

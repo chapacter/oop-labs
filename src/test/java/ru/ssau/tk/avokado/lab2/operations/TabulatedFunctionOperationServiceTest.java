@@ -3,7 +3,10 @@ package ru.ssau.tk.avokado.lab2.operations;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 import ru.ssau.tk.avokado.lab2.exceptions.InconsistentFunctionsException;
-import ru.ssau.tk.avokado.lab2.functions.*;
+import ru.ssau.tk.avokado.lab2.functions.ArrayTabulatedFunction;
+import ru.ssau.tk.avokado.lab2.functions.LinkedListTabulatedFunction;
+import ru.ssau.tk.avokado.lab2.functions.Point;
+import ru.ssau.tk.avokado.lab2.functions.TabulatedFunction;
 import ru.ssau.tk.avokado.lab2.functions.factory.ArrayTabulatedFunctionFactory;
 import ru.ssau.tk.avokado.lab2.functions.factory.LinkedListTabulatedFunctionFactory;
 import ru.ssau.tk.avokado.lab2.functions.factory.TabulatedFunctionFactory;
@@ -15,17 +18,17 @@ public class TabulatedFunctionOperationServiceTest {
     @Test
     public void testDefaultConstructorSetsArrayFactory() {
         TabulatedFunctionOperationService service = new TabulatedFunctionOperationService();
-        assertTrue(service.getFactory() instanceof ArrayTabulatedFunctionFactory);
+        assertInstanceOf(ArrayTabulatedFunctionFactory.class, service.getFactory());
     }
 
     @Test
     public void testCtorWithFactoryAndSetter() {
         TabulatedFunctionFactory lf = new LinkedListTabulatedFunctionFactory();
         TabulatedFunctionOperationService service = new TabulatedFunctionOperationService(lf);
-        assertTrue(service.getFactory() instanceof LinkedListTabulatedFunctionFactory);
+        assertInstanceOf(LinkedListTabulatedFunctionFactory.class, service.getFactory());
 
         service.setFactory(new ArrayTabulatedFunctionFactory());
-        assertTrue(service.getFactory() instanceof ArrayTabulatedFunctionFactory);
+        assertInstanceOf(ArrayTabulatedFunctionFactory.class, service.getFactory());
     }
 
     @Test
@@ -36,8 +39,8 @@ public class TabulatedFunctionOperationServiceTest {
 
         Point[] pts = TabulatedFunctionOperationService.asPoints(f);
         assertEquals(3, pts.length);
-        assertEquals(1.0, pts[0].x, 1e-12);
-        assertEquals(20.0, pts[1].y, 1e-12);
+        assertEquals(1.0, pts[0].x(), 1e-12);
+        assertEquals(20.0, pts[1].y(), 1e-12);
     }
 
     @Test
@@ -50,8 +53,8 @@ public class TabulatedFunctionOperationServiceTest {
 
         assertEquals(3, points.length);
         for (int i = 0; i < points.length; i++) {
-            assertEquals(x[i], points[i].x, 1e-12);
-            assertEquals(y[i], points[i].y, 1e-12);
+            assertEquals(x[i], points[i].x(), 1e-12);
+            assertEquals(y[i], points[i].y(), 1e-12);
         }
     }
 
@@ -63,8 +66,8 @@ public class TabulatedFunctionOperationServiceTest {
 
         Point[] points = TabulatedFunctionOperationService.asPoints(f);
         assertEquals(2, points.length);
-        assertEquals(0.0, points[0].x, 1e-12);
-        assertEquals(10.0, points[1].y, 1e-12);
+        assertEquals(0.0, points[0].x(), 1e-12);
+        assertEquals(10.0, points[1].y(), 1e-12);
     }
 
     @Test
@@ -94,7 +97,7 @@ public class TabulatedFunctionOperationServiceTest {
         assertEquals(1.0, res.getY(0), 1e-12);
         assertEquals(3.0, res.getY(1), 1e-12);
         assertEquals(7.0, res.getY(2), 1e-12);
-        assertTrue(res instanceof ArrayTabulatedFunction);
+        assertInstanceOf(ArrayTabulatedFunction.class, res);
     }
 
     @Test
@@ -117,15 +120,15 @@ public class TabulatedFunctionOperationServiceTest {
 
         service.setFactory(new LinkedListTabulatedFunctionFactory());
         TabulatedFunction res2 = service.add(a, b);
-        assertTrue(res2 instanceof LinkedListTabulatedFunction);
+        assertInstanceOf(LinkedListTabulatedFunction.class, res2);
     }
 
     @Test
     public void testDifferentCountsThrows() {
         final TabulatedFunctionOperationService service = new TabulatedFunctionOperationService(new ArrayTabulatedFunctionFactory());
 
-        final TabulatedFunction a = new ArrayTabulatedFunction(new double[]{0,1}, new double[]{0,1});
-        final TabulatedFunction b = new ArrayTabulatedFunction(new double[]{0,1,2}, new double[]{0,1,4});
+        final TabulatedFunction a = new ArrayTabulatedFunction(new double[]{0, 1}, new double[]{0, 1});
+        final TabulatedFunction b = new ArrayTabulatedFunction(new double[]{0, 1, 2}, new double[]{0, 1, 4});
 
         assertThrows(InconsistentFunctionsException.class, new Executable() {
             @Override
@@ -149,7 +152,7 @@ public class TabulatedFunctionOperationServiceTest {
                 new double[]{0.0, 1.0, 4.0}
         );
 
-        assertThrows(InconsistentFunctionsException.class, new org.junit.jupiter.api.function.Executable() {
+        assertThrows(InconsistentFunctionsException.class, new Executable() {
             @Override
             public void execute() throws Throwable {
                 service.subtract(a, b);
@@ -165,14 +168,14 @@ public class TabulatedFunctionOperationServiceTest {
         assertThrows(IllegalArgumentException.class, new Executable() {
             @Override
             public void execute() throws Throwable {
-                service.add(null, new ArrayTabulatedFunction(new double[]{0,1}, new double[]{0,1}));
+                service.add(null, new ArrayTabulatedFunction(new double[]{0, 1}, new double[]{0, 1}));
             }
         });
 
         assertThrows(IllegalArgumentException.class, new Executable() {
             @Override
             public void execute() throws Throwable {
-                service.subtract(new ArrayTabulatedFunction(new double[]{0,1}, new double[]{0,1}), null);
+                service.subtract(new ArrayTabulatedFunction(new double[]{0, 1}, new double[]{0, 1}), null);
             }
         });
     }

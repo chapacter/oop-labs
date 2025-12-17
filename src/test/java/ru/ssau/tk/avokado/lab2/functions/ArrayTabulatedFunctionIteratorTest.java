@@ -19,8 +19,8 @@ public class ArrayTabulatedFunctionIteratorTest {
         int idx = 0;
         while (it.hasNext()) {
             Point p = it.next();
-            assertEquals(x[idx], p.x, 1e-12);
-            assertEquals(y[idx], p.y, 1e-12);
+            assertEquals(x[idx], p.x(), 1e-12);
+            assertEquals(y[idx], p.y(), 1e-12);
             idx++;
         }
         assertEquals(3, idx);
@@ -40,8 +40,8 @@ public class ArrayTabulatedFunctionIteratorTest {
 
         int idx = 0;
         for (Point p : f) {
-            assertEquals(x[idx], p.x, 1e-12);
-            assertEquals(y[idx], p.y, 1e-12);
+            assertEquals(x[idx], p.x(), 1e-12);
+            assertEquals(y[idx], p.y(), 1e-12);
             idx++;
         }
         assertEquals(4, idx);
@@ -72,18 +72,18 @@ public class ArrayTabulatedFunctionIteratorTest {
         Iterator<Point> b = f.iterator();
 
         Point pa1 = a.next();
-        assertEquals(1.0, pa1.x, 1e-12);
+        assertEquals(1.0, pa1.x(), 1e-12);
         Point pa2 = a.next();
-        assertEquals(2.0, pa2.x, 1e-12);
+        assertEquals(2.0, pa2.x(), 1e-12);
 
         Point pb1 = b.next();
-        assertEquals(1.0, pb1.x, 1e-12);
+        assertEquals(1.0, pb1.x(), 1e-12);
 
         Point pa3 = a.next();
-        assertEquals(3.0, pa3.x, 1e-12);
+        assertEquals(3.0, pa3.x(), 1e-12);
 
         Point pb2 = b.next();
-        assertEquals(2.0, pb2.x, 1e-12);
+        assertEquals(2.0, pb2.x(), 1e-12);
     }
 
     @Test
@@ -97,11 +97,11 @@ public class ArrayTabulatedFunctionIteratorTest {
         assertTrue(it.hasNext());
         assertTrue(it.hasNext());
         Point p0 = it.next();
-        assertEquals(7.0, p0.x, 1e-12);
+        assertEquals(7.0, p0.x(), 1e-12);
 
         assertTrue(it.hasNext());
         Point p1 = it.next();
-        assertEquals(8.0, p1.x, 1e-12);
+        assertEquals(8.0, p1.x(), 1e-12);
 
         assertFalse(it.hasNext());
         assertFalse(it.hasNext());

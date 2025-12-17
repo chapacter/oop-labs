@@ -2,7 +2,6 @@ package ru.ssau.tk.avokado.lab2.concurrent;
 
 import org.junit.jupiter.api.Test;
 import ru.ssau.tk.avokado.lab2.functions.ArrayTabulatedFunction;
-import ru.ssau.tk.avokado.lab2.functions.TabulatedFunction;
 
 import static org.junit.jupiter.api.Assertions.*;
 

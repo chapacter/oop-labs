@@ -4,12 +4,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 import ru.ssau.tk.avokado.lab2.functions.ArrayTabulatedFunction;
 import ru.ssau.tk.avokado.lab2.functions.TabulatedFunction;
-import ru.ssau.tk.avokado.lab2.functions.Point;
 import ru.ssau.tk.avokado.lab2.functions.factory.ArrayTabulatedFunctionFactory;
 import ru.ssau.tk.avokado.lab2.functions.factory.TabulatedFunctionFactory;
 
 import java.io.*;
-import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -183,12 +181,16 @@ public class FunctionsIOTest {
     public void testSerializeDoesNotCloseStreamAndAllowsNullFunction() throws Exception {
         class TrackableBAOS extends ByteArrayOutputStream {
             private boolean closed = false;
+
             @Override
             public void close() throws IOException {
                 closed = true;
                 super.close();
             }
-            public boolean isClosed() { return closed; }
+
+            public boolean isClosed() {
+                return closed;
+            }
         }
 
         TrackableBAOS tbaos = new TrackableBAOS();
@@ -231,7 +233,7 @@ public class FunctionsIOTest {
 
     @Test
     public void testWriteTextNullArgsThrow() {
-        final TabulatedFunction func = new ArrayTabulatedFunction(new double[]{0.0,1.0}, new double[]{0.0,1.0});
+        final TabulatedFunction func = new ArrayTabulatedFunction(new double[]{0.0, 1.0}, new double[]{0.0, 1.0});
         assertThrows(IllegalArgumentException.class, new Executable() {
             @Override
             public void execute() throws Throwable {

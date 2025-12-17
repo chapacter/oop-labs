@@ -1,12 +1,8 @@
 package ru.ssau.tk.avokado.lab2.functions;
 
 import org.junit.jupiter.api.Test;
-import ru.ssau.tk.avokado.lab2.functions.CompositeFunction;
-import ru.ssau.tk.avokado.lab2.functions.IdentityFunction;
-import ru.ssau.tk.avokado.lab2.functions.MathFunction;
-import ru.ssau.tk.avokado.lab2.functions.SqrFunction;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CompositeFunctionTest {
 
