@@ -1,0 +1,1611 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="lab5-api-collection" tests="240" time="0.000">
+    <testsuite name="Auth - register" id="bf02e66b-0eb3-432d-8ab6-16f3313ebe45" timestamp="2025-12-17T00:26:26.564Z"
+               tests="1" failures="10" errors="10" time="0.000">
+        <system-err><![CDATA[Iteration: 0
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 1
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 2
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 3
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 4
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 5
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 6
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 7
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 8
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 9
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+]]></system-err>
+        <testcase name="Registration - Status 201" time="0.000" classname="AuthRegister">
+            <failure type="AssertionFailure" message="expected undefined to deeply equal 201">
+                <![CDATA[Failed 10 times.]]>
+                <![CDATA[Collection JSON ID: lab5-collection-0001.]]>
+                <![CDATA[Collection name: lab5-api-collection.]]>
+                <![CDATA[Request name: Auth - register.]]>
+                <![CDATA[Test description: Registration - Status 201.]]>
+                <![CDATA[Error message: expected undefined to deeply equal 201.]]>
+                <![CDATA[Stacktrace: AssertionError: expected undefined to deeply equal 201
+   at Object.eval sandbox-script.js:1:1).]]>
+            </failure>
+        </testcase>
+    </testsuite>
+    <testsuite name="Auth - login" id="6981c173-3b3f-4f7b-a2d3-c4f6c0dd22af" timestamp="2025-12-17T00:26:26.564Z"
+               tests="1" failures="10" errors="10" time="0.000">
+        <system-err><![CDATA[Iteration: 0
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 1
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 2
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 3
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 4
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 5
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 6
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 7
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 8
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 9
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+]]></system-err>
+        <testcase name="Login - Status 200" time="0.000" classname="AuthLogin">
+            <failure type="AssertionFailure" message="expected undefined to deeply equal 200">
+                <![CDATA[Failed 10 times.]]>
+                <![CDATA[Collection JSON ID: lab5-collection-0001.]]>
+                <![CDATA[Collection name: lab5-api-collection.]]>
+                <![CDATA[Request name: Auth - login.]]>
+                <![CDATA[Test description: Login - Status 200.]]>
+                <![CDATA[Error message: expected undefined to deeply equal 200.]]>
+                <![CDATA[Stacktrace: AssertionError: expected undefined to deeply equal 200
+   at Object.eval sandbox-script.js:1:2).]]>
+            </failure>
+        </testcase>
+    </testsuite>
+    <testsuite name="Admin - clear" id="050ab847-f44c-447f-be94-4011e4a04665" timestamp="2025-12-17T00:26:26.564Z"
+               tests="1" failures="10" errors="10" time="0.000">
+        <system-err><![CDATA[Iteration: 0
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 1
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 2
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 3
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 4
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 5
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 6
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 7
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 8
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 9
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+]]></system-err>
+        <testcase name="Status is 200" time="0.000" classname="AdminClear">
+            <failure type="AssertionFailure" message="expected undefined to be one of [ 200 ]">
+                <![CDATA[Failed 10 times.]]>
+                <![CDATA[Collection JSON ID: lab5-collection-0001.]]>
+                <![CDATA[Collection name: lab5-api-collection.]]>
+                <![CDATA[Request name: Admin - clear.]]>
+                <![CDATA[Test description: Status is 200.]]>
+                <![CDATA[Error message: expected undefined to be one of [ 200 ].]]>
+                <![CDATA[Stacktrace: AssertionError: expected undefined to be one of [ 200 ]
+   at Object.eval sandbox-script.js:1:3).]]>
+            </failure>
+        </testcase>
+    </testsuite>
+    <testsuite name="Admin - populate" id="8f30248b-1e99-4891-98ee-3f3449e659cb" timestamp="2025-12-17T00:26:26.564Z"
+               tests="2" failures="20" errors="10" time="0.000">
+        <system-err><![CDATA[Iteration: 0
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 1
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 2
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 3
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 4
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 5
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 6
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 7
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 8
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 9
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+]]></system-err>
+        <testcase name="Status is 200 or 202" time="0.000" classname="AdminPopulate">
+            <failure type="AssertionFailure" message="expected undefined to be one of [ 200, 202 ]">
+                <![CDATA[Failed 10 times.]]>
+                <![CDATA[Collection JSON ID: lab5-collection-0001.]]>
+                <![CDATA[Collection name: lab5-api-collection.]]>
+                <![CDATA[Request name: Admin - populate.]]>
+                <![CDATA[Test description: Status is 200 or 202.]]>
+                <![CDATA[Error message: expected undefined to be one of [ 200, 202 ].]]>
+                <![CDATA[Stacktrace: AssertionError: expected undefined to be one of [ 200, 202 ]
+   at Object.eval sandbox-script.js:1:4).]]>
+            </failure>
+        </testcase>
+        <testcase name="Has json or text" time="0.000" classname="AdminPopulate">
+            <failure type="AssertionFailure" message="expected undefined to be truthy">
+                <![CDATA[Failed 10 times.]]>
+                <![CDATA[Collection JSON ID: lab5-collection-0001.]]>
+                <![CDATA[Collection name: lab5-api-collection.]]>
+                <![CDATA[Request name: Admin - populate.]]>
+                <![CDATA[Test description: Has json or text.]]>
+                <![CDATA[Error message: expected undefined to be truthy.]]>
+                <![CDATA[Stacktrace: AssertionError: expected undefined to be truthy
+   at Object.eval sandbox-script.js:2:4).]]>
+            </failure>
+        </testcase>
+    </testsuite>
+    <testsuite name="Users - find seed_user" id="f02b85a6-2c8a-4fce-ab6f-f56f306438c2"
+               timestamp="2025-12-17T00:26:26.564Z" tests="1" failures="10" errors="10" time="0.000">
+        <system-err><![CDATA[Iteration: 0
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 1
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 2
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 3
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 4
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 5
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 6
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 7
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 8
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 9
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+]]></system-err>
+        <testcase name="200" time="0.000" classname="UsersFindSeedUser">
+            <failure type="AssertionFailure" message="expected undefined to deeply equal 200">
+                <![CDATA[Failed 10 times.]]>
+                <![CDATA[Collection JSON ID: lab5-collection-0001.]]>
+                <![CDATA[Collection name: lab5-api-collection.]]>
+                <![CDATA[Request name: Users - find seed_user.]]>
+                <![CDATA[Test description: 200.]]>
+                <![CDATA[Error message: expected undefined to deeply equal 200.]]>
+                <![CDATA[Stacktrace: AssertionError: expected undefined to deeply equal 200
+   at Object.eval sandbox-script.js:1:5).]]>
+            </failure>
+        </testcase>
+    </testsuite>
+    <testsuite name="Functions - pick-or-create-for-seed" id="202d5358-0c2d-4100-9002-131b7dbce65d"
+               timestamp="2025-12-17T00:26:26.564Z" tests="1" failures="10" errors="10" time="0.000">
+        <system-err><![CDATA[Iteration: 0
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 1
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 2
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 3
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 4
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 5
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 6
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 7
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 8
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 9
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+]]></system-err>
+        <testcase name="200" time="0.000" classname="FunctionsPickOrCreateForSeed">
+            <failure type="AssertionFailure" message="expected undefined to deeply equal 200">
+                <![CDATA[Failed 10 times.]]>
+                <![CDATA[Collection JSON ID: lab5-collection-0001.]]>
+                <![CDATA[Collection name: lab5-api-collection.]]>
+                <![CDATA[Request name: Functions - pick-or-create-for-seed.]]>
+                <![CDATA[Test description: 200.]]>
+                <![CDATA[Error message: expected undefined to deeply equal 200.]]>
+                <![CDATA[Stacktrace: AssertionError: expected undefined to deeply equal 200
+   at Object.eval sandbox-script.js:1:6).]]>
+            </failure>
+        </testcase>
+    </testsuite>
+    <testsuite name="Users - list" id="f8d098f5-aad0-4ec7-a2e0-773752f95c33" timestamp="2025-12-17T00:26:26.564Z"
+               tests="2" failures="20" errors="10" time="0.000">
+        <system-err><![CDATA[Iteration: 0
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 1
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 2
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 3
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 4
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 5
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 6
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 7
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 8
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 9
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+]]></system-err>
+        <testcase name="200" time="0.000" classname="UsersList">
+            <failure type="AssertionFailure" message="expected undefined to deeply equal 200">
+                <![CDATA[Failed 10 times.]]>
+                <![CDATA[Collection JSON ID: lab5-collection-0001.]]>
+                <![CDATA[Collection name: lab5-api-collection.]]>
+                <![CDATA[Request name: Users - list.]]>
+                <![CDATA[Test description: 200.]]>
+                <![CDATA[Error message: expected undefined to deeply equal 200.]]>
+                <![CDATA[Stacktrace: AssertionError: expected undefined to deeply equal 200
+   at Object.eval sandbox-script.js:1:7).]]>
+            </failure>
+        </testcase>
+        <testcase name="Has content array" time="0.000" classname="UsersList">
+            <failure type="AssertionFailure" message="&quot;undefined&quot; is not valid JSON">
+                <![CDATA[Failed 10 times.]]>
+                <![CDATA[Collection JSON ID: lab5-collection-0001.]]>
+                <![CDATA[Collection name: lab5-api-collection.]]>
+                <![CDATA[Request name: Users - list.]]>
+                <![CDATA[Test description: Has content array.]]>
+                <![CDATA[Error message: "undefined" is not valid JSON.]]>
+                <![CDATA[Stacktrace: JSONError: "undefined" is not valid JSON
+   at Object.eval sandbox-script.js:2:7).]]>
+            </failure>
+        </testcase>
+    </testsuite>
+    <testsuite name="Users - get (seed or current)" id="820e5f52-629f-4121-8c96-8caebdaed77d"
+               timestamp="2025-12-17T00:26:26.564Z" tests="1" failures="10" errors="10" time="0.000">
+        <system-err><![CDATA[Iteration: 0
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 1
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 2
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 3
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 4
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 5
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 6
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 7
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 8
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 9
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+]]></system-err>
+        <testcase name="200 or 404" time="0.000" classname="UsersGetSeedOrCurrent">
+            <failure type="AssertionFailure" message="expected undefined to be one of [ 200, 404 ]">
+                <![CDATA[Failed 10 times.]]>
+                <![CDATA[Collection JSON ID: lab5-collection-0001.]]>
+                <![CDATA[Collection name: lab5-api-collection.]]>
+                <![CDATA[Request name: Users - get (seed or current).]]>
+                <![CDATA[Test description: 200 or 404.]]>
+                <![CDATA[Error message: expected undefined to be one of [ 200, 404 ].]]>
+                <![CDATA[Stacktrace: AssertionError: expected undefined to be one of [ 200, 404 ]
+   at Object.eval sandbox-script.js:1:8).]]>
+            </failure>
+        </testcase>
+    </testsuite>
+    <testsuite name="Users - create (test user)" id="b646d8e3-d08c-402f-87eb-c8911e730d6c"
+               timestamp="2025-12-17T00:26:26.564Z" tests="1" failures="10" errors="10" time="0.000">
+        <system-err><![CDATA[Iteration: 0
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 1
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 2
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 3
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 4
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 5
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 6
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 7
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 8
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 9
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+]]></system-err>
+        <testcase name="201 or 200" time="0.000" classname="UsersCreateTestUser">
+            <failure type="AssertionFailure" message="expected undefined to be one of [ 200, 201 ]">
+                <![CDATA[Failed 10 times.]]>
+                <![CDATA[Collection JSON ID: lab5-collection-0001.]]>
+                <![CDATA[Collection name: lab5-api-collection.]]>
+                <![CDATA[Request name: Users - create (test user).]]>
+                <![CDATA[Test description: 201 or 200.]]>
+                <![CDATA[Error message: expected undefined to be one of [ 200, 201 ].]]>
+                <![CDATA[Stacktrace: AssertionError: expected undefined to be one of [ 200, 201 ]
+   at Object.eval sandbox-script.js:1:9).]]>
+            </failure>
+        </testcase>
+    </testsuite>
+    <testsuite name="Users - update (createdUserId)" id="dfa35eba-1782-4313-b6df-e643727a1923"
+               timestamp="2025-12-17T00:26:26.564Z" tests="1" failures="10" errors="10" time="0.000">
+        <system-err><![CDATA[Iteration: 0
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 1
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 2
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 3
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 4
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 5
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 6
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 7
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 8
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 9
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+]]></system-err>
+        <testcase name="200 or 404" time="0.000" classname="UsersUpdateCreatedUserId">
+            <failure type="AssertionFailure" message="expected undefined to be one of [ 200, 404 ]">
+                <![CDATA[Failed 10 times.]]>
+                <![CDATA[Collection JSON ID: lab5-collection-0001.]]>
+                <![CDATA[Collection name: lab5-api-collection.]]>
+                <![CDATA[Request name: Users - update (createdUserId).]]>
+                <![CDATA[Test description: 200 or 404.]]>
+                <![CDATA[Error message: expected undefined to be one of [ 200, 404 ].]]>
+                <![CDATA[Stacktrace: AssertionError: expected undefined to be one of [ 200, 404 ]
+   at Object.eval sandbox-script.js:1:10).]]>
+            </failure>
+        </testcase>
+    </testsuite>
+    <testsuite name="Functions - list (for seed user)" id="c1a21473-a55d-4178-9b7e-c32da2fa98b0"
+               timestamp="2025-12-17T00:26:26.564Z" tests="1" failures="10" errors="10" time="0.000">
+        <system-err><![CDATA[Iteration: 0
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 1
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 2
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 3
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 4
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 5
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 6
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 7
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 8
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 9
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+]]></system-err>
+        <testcase name="200" time="0.000" classname="FunctionsListForSeedUser">
+            <failure type="AssertionFailure" message="expected undefined to deeply equal 200">
+                <![CDATA[Failed 10 times.]]>
+                <![CDATA[Collection JSON ID: lab5-collection-0001.]]>
+                <![CDATA[Collection name: lab5-api-collection.]]>
+                <![CDATA[Request name: Functions - list (for seed user).]]>
+                <![CDATA[Test description: 200.]]>
+                <![CDATA[Error message: expected undefined to deeply equal 200.]]>
+                <![CDATA[Stacktrace: AssertionError: expected undefined to deeply equal 200
+   at Object.eval sandbox-script.js:1:11).]]>
+            </failure>
+        </testcase>
+    </testsuite>
+    <testsuite name="Functions - get (funcId)" id="02940eec-f2a2-4337-b01f-f7d083149ef5"
+               timestamp="2025-12-17T00:26:26.564Z" tests="1" failures="10" errors="10" time="0.000">
+        <system-err><![CDATA[Iteration: 0
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 1
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 2
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 3
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 4
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 5
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 6
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 7
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 8
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 9
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+]]></system-err>
+        <testcase name="200 or 404" time="0.000" classname="FunctionsGetFuncId">
+            <failure type="AssertionFailure" message="expected undefined to be one of [ 200, 404 ]">
+                <![CDATA[Failed 10 times.]]>
+                <![CDATA[Collection JSON ID: lab5-collection-0001.]]>
+                <![CDATA[Collection name: lab5-api-collection.]]>
+                <![CDATA[Request name: Functions - get (funcId).]]>
+                <![CDATA[Test description: 200 or 404.]]>
+                <![CDATA[Error message: expected undefined to be one of [ 200, 404 ].]]>
+                <![CDATA[Stacktrace: AssertionError: expected undefined to be one of [ 200, 404 ]
+   at Object.eval sandbox-script.js:1:12).]]>
+            </failure>
+        </testcase>
+    </testsuite>
+    <testsuite name="Functions - create (use seedUserId)" id="20987918-7979-486e-9bbf-cf3b047d48e8"
+               timestamp="2025-12-17T00:26:26.564Z" tests="1" failures="10" errors="10" time="0.000">
+        <system-err><![CDATA[Iteration: 0
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 1
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 2
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 3
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 4
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 5
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 6
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 7
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 8
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 9
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+]]></system-err>
+        <testcase name="201 or 200" time="0.000" classname="FunctionsCreateUseSeedUserId">
+            <failure type="AssertionFailure" message="expected undefined to be one of [ 200, 201 ]">
+                <![CDATA[Failed 10 times.]]>
+                <![CDATA[Collection JSON ID: lab5-collection-0001.]]>
+                <![CDATA[Collection name: lab5-api-collection.]]>
+                <![CDATA[Request name: Functions - create (use seedUserId).]]>
+                <![CDATA[Test description: 201 or 200.]]>
+                <![CDATA[Error message: expected undefined to be one of [ 200, 201 ].]]>
+                <![CDATA[Stacktrace: AssertionError: expected undefined to be one of [ 200, 201 ]
+   at Object.eval sandbox-script.js:1:13).]]>
+            </failure>
+        </testcase>
+    </testsuite>
+    <testsuite name="Functions - update (funcId)" id="827850e9-d2e8-4d00-9e23-a61f35259f38"
+               timestamp="2025-12-17T00:26:26.564Z" tests="1" failures="10" errors="10" time="0.000">
+        <system-err><![CDATA[Iteration: 0
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 1
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 2
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 3
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 4
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 5
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 6
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 7
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 8
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 9
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+]]></system-err>
+        <testcase name="200 or 404" time="0.000" classname="FunctionsUpdateFuncId">
+            <failure type="AssertionFailure" message="expected undefined to be one of [ 200, 404 ]">
+                <![CDATA[Failed 10 times.]]>
+                <![CDATA[Collection JSON ID: lab5-collection-0001.]]>
+                <![CDATA[Collection name: lab5-api-collection.]]>
+                <![CDATA[Request name: Functions - update (funcId).]]>
+                <![CDATA[Test description: 200 or 404.]]>
+                <![CDATA[Error message: expected undefined to be one of [ 200, 404 ].]]>
+                <![CDATA[Stacktrace: AssertionError: expected undefined to be one of [ 200, 404 ]
+   at Object.eval sandbox-script.js:1:14).]]>
+            </failure>
+        </testcase>
+    </testsuite>
+    <testsuite name="Functions - by user (seedUserId)" id="ff45739d-c65a-4651-a058-38fdad0bfbcc"
+               timestamp="2025-12-17T00:26:26.564Z" tests="1" failures="10" errors="10" time="0.000">
+        <system-err><![CDATA[Iteration: 0
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 1
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 2
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 3
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 4
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 5
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 6
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 7
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 8
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 9
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+]]></system-err>
+        <testcase name="200" time="0.000" classname="FunctionsByUserSeedUserId">
+            <failure type="AssertionFailure" message="expected undefined to deeply equal 200">
+                <![CDATA[Failed 10 times.]]>
+                <![CDATA[Collection JSON ID: lab5-collection-0001.]]>
+                <![CDATA[Collection name: lab5-api-collection.]]>
+                <![CDATA[Request name: Functions - by user (seedUserId).]]>
+                <![CDATA[Test description: 200.]]>
+                <![CDATA[Error message: expected undefined to deeply equal 200.]]>
+                <![CDATA[Stacktrace: AssertionError: expected undefined to deeply equal 200
+   at Object.eval sandbox-script.js:1:15).]]>
+            </failure>
+        </testcase>
+    </testsuite>
+    <testsuite name="Points - list (for func)" id="269898b3-2682-4889-bd67-845231d814e3"
+               timestamp="2025-12-17T00:26:26.564Z" tests="1" failures="10" errors="10" time="0.000">
+        <system-err><![CDATA[Iteration: 0
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 1
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 2
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 3
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 4
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 5
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 6
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 7
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 8
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 9
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+]]></system-err>
+        <testcase name="200" time="0.000" classname="PointsListForFunc">
+            <failure type="AssertionFailure" message="expected undefined to deeply equal 200">
+                <![CDATA[Failed 10 times.]]>
+                <![CDATA[Collection JSON ID: lab5-collection-0001.]]>
+                <![CDATA[Collection name: lab5-api-collection.]]>
+                <![CDATA[Request name: Points - list (for func).]]>
+                <![CDATA[Test description: 200.]]>
+                <![CDATA[Error message: expected undefined to deeply equal 200.]]>
+                <![CDATA[Stacktrace: AssertionError: expected undefined to deeply equal 200
+   at Object.eval sandbox-script.js:1:16).]]>
+            </failure>
+        </testcase>
+    </testsuite>
+    <testsuite name="Points - get" id="3e766b6a-cd8a-4b40-adbb-67ae13e21df7" timestamp="2025-12-17T00:26:26.564Z"
+               tests="1" failures="10" errors="10" time="0.000">
+        <system-err><![CDATA[Iteration: 0
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 1
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 2
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 3
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 4
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 5
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 6
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 7
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 8
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 9
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+]]></system-err>
+        <testcase name="200 or 404" time="0.000" classname="PointsGet">
+            <failure type="AssertionFailure" message="expected undefined to be one of [ 200, 404 ]">
+                <![CDATA[Failed 10 times.]]>
+                <![CDATA[Collection JSON ID: lab5-collection-0001.]]>
+                <![CDATA[Collection name: lab5-api-collection.]]>
+                <![CDATA[Request name: Points - get.]]>
+                <![CDATA[Test description: 200 or 404.]]>
+                <![CDATA[Error message: expected undefined to be one of [ 200, 404 ].]]>
+                <![CDATA[Stacktrace: AssertionError: expected undefined to be one of [ 200, 404 ]
+   at Object.eval sandbox-script.js:1:17).]]>
+            </failure>
+        </testcase>
+    </testsuite>
+    <testsuite name="Points - create (use pFunctionId)" id="bbb528b9-07e1-4503-9d50-eb2d129e70d7"
+               timestamp="2025-12-17T00:26:26.564Z" tests="1" failures="10" errors="10" time="0.000">
+        <system-err><![CDATA[Iteration: 0
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 1
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 2
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 3
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 4
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 5
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 6
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 7
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 8
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 9
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+]]></system-err>
+        <testcase name="201 or 200" time="0.000" classname="PointsCreateUsePFunctionId">
+            <failure type="AssertionFailure" message="expected undefined to be one of [ 200, 201 ]">
+                <![CDATA[Failed 10 times.]]>
+                <![CDATA[Collection JSON ID: lab5-collection-0001.]]>
+                <![CDATA[Collection name: lab5-api-collection.]]>
+                <![CDATA[Request name: Points - create (use pFunctionId).]]>
+                <![CDATA[Test description: 201 or 200.]]>
+                <![CDATA[Error message: expected undefined to be one of [ 200, 201 ].]]>
+                <![CDATA[Stacktrace: AssertionError: expected undefined to be one of [ 200, 201 ]
+   at Object.eval sandbox-script.js:1:18).]]>
+            </failure>
+        </testcase>
+    </testsuite>
+    <testsuite name="Points - update (pointId)" id="80629e74-4a61-473c-a2f1-0d0ace915a6f"
+               timestamp="2025-12-17T00:26:26.564Z" tests="1" failures="10" errors="10" time="0.000">
+        <system-err><![CDATA[Iteration: 0
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 1
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 2
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 3
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 4
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 5
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 6
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 7
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 8
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 9
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+]]></system-err>
+        <testcase name="200 or 404" time="0.000" classname="PointsUpdatePointId">
+            <failure type="AssertionFailure" message="expected undefined to be one of [ 200, 404 ]">
+                <![CDATA[Failed 10 times.]]>
+                <![CDATA[Collection JSON ID: lab5-collection-0001.]]>
+                <![CDATA[Collection name: lab5-api-collection.]]>
+                <![CDATA[Request name: Points - update (pointId).]]>
+                <![CDATA[Test description: 200 or 404.]]>
+                <![CDATA[Error message: expected undefined to be one of [ 200, 404 ].]]>
+                <![CDATA[Stacktrace: AssertionError: expected undefined to be one of [ 200, 404 ]
+   at Object.eval sandbox-script.js:1:19).]]>
+            </failure>
+        </testcase>
+    </testsuite>
+    <testsuite name="Points - delete (pointId)" id="1f909e15-0017-45b1-b86f-5fc233fbbac7"
+               timestamp="2025-12-17T00:26:26.564Z" tests="1" failures="10" errors="10" time="0.000">
+        <system-err><![CDATA[Iteration: 0
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 1
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 2
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 3
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 4
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 5
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 6
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 7
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 8
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 9
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+]]></system-err>
+        <testcase name="200 or 204 or 404" time="0.000" classname="PointsDeletePointId">
+            <failure type="AssertionFailure" message="expected undefined to be one of [ 200, 204, 404 ]">
+                <![CDATA[Failed 10 times.]]>
+                <![CDATA[Collection JSON ID: lab5-collection-0001.]]>
+                <![CDATA[Collection name: lab5-api-collection.]]>
+                <![CDATA[Request name: Points - delete (pointId).]]>
+                <![CDATA[Test description: 200 or 204 or 404.]]>
+                <![CDATA[Error message: expected undefined to be one of [ 200, 204, 404 ].]]>
+                <![CDATA[Stacktrace: AssertionError: expected undefined to be one of [ 200, 204, 404 ]
+   at Object.eval sandbox-script.js:1:20).]]>
+            </failure>
+        </testcase>
+    </testsuite>
+    <testsuite name="Functions - delete (funcId)" id="3cabbfed-956f-445c-b43c-80892e743e17"
+               timestamp="2025-12-17T00:26:26.564Z" tests="1" failures="10" errors="10" time="0.000">
+        <system-err><![CDATA[Iteration: 0
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 1
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 2
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 3
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 4
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 5
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 6
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 7
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 8
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 9
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+]]></system-err>
+        <testcase name="200 or 204 or 404" time="0.000" classname="FunctionsDeleteFuncId">
+            <failure type="AssertionFailure" message="expected undefined to be one of [ 200, 204, 404 ]">
+                <![CDATA[Failed 10 times.]]>
+                <![CDATA[Collection JSON ID: lab5-collection-0001.]]>
+                <![CDATA[Collection name: lab5-api-collection.]]>
+                <![CDATA[Request name: Functions - delete (funcId).]]>
+                <![CDATA[Test description: 200 or 204 or 404.]]>
+                <![CDATA[Error message: expected undefined to be one of [ 200, 204, 404 ].]]>
+                <![CDATA[Stacktrace: AssertionError: expected undefined to be one of [ 200, 204, 404 ]
+   at Object.eval sandbox-script.js:1:21).]]>
+            </failure>
+        </testcase>
+    </testsuite>
+    <testsuite name="Users - delete (createdUserId)" id="5b5c5a57-c33d-432b-8250-8690c59d0a68"
+               timestamp="2025-12-17T00:26:26.564Z" tests="1" failures="10" errors="10" time="0.000">
+        <system-err><![CDATA[Iteration: 0
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 1
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 2
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 3
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 4
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 5
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 6
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 7
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 8
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 9
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+]]></system-err>
+        <testcase name="204 or 200 or 404" time="0.000" classname="UsersDeleteCreatedUserId">
+            <failure type="AssertionFailure" message="expected undefined to be one of [ 200, 204, 404 ]">
+                <![CDATA[Failed 10 times.]]>
+                <![CDATA[Collection JSON ID: lab5-collection-0001.]]>
+                <![CDATA[Collection name: lab5-api-collection.]]>
+                <![CDATA[Request name: Users - delete (createdUserId).]]>
+                <![CDATA[Test description: 204 or 200 or 404.]]>
+                <![CDATA[Error message: expected undefined to be one of [ 200, 204, 404 ].]]>
+                <![CDATA[Stacktrace: AssertionError: expected undefined to be one of [ 200, 204, 404 ]
+   at Object.eval sandbox-script.js:1:22).]]>
+            </failure>
+        </testcase>
+    </testsuite>
+    <testsuite name="Search - bfs" id="d05b77c6-f8c2-4fed-a2d6-d3cb5480ff39" timestamp="2025-12-17T00:26:26.564Z"
+               tests="1" failures="10" errors="10" time="0.000">
+        <system-err><![CDATA[Iteration: 0
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 1
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 2
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 3
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 4
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 5
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 6
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 7
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 8
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 9
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+]]></system-err>
+        <testcase name="200" time="0.000" classname="SearchBfs">
+            <failure type="AssertionFailure" message="expected undefined to deeply equal 200">
+                <![CDATA[Failed 10 times.]]>
+                <![CDATA[Collection JSON ID: lab5-collection-0001.]]>
+                <![CDATA[Collection name: lab5-api-collection.]]>
+                <![CDATA[Request name: Search - bfs.]]>
+                <![CDATA[Test description: 200.]]>
+                <![CDATA[Error message: expected undefined to deeply equal 200.]]>
+                <![CDATA[Stacktrace: AssertionError: expected undefined to deeply equal 200
+   at Object.eval sandbox-script.js:1:23).]]>
+            </failure>
+        </testcase>
+    </testsuite>
+    <testsuite name="Search - dfs" id="b9b66710-1a62-4c80-90da-35a1134bfc20" timestamp="2025-12-17T00:26:26.564Z"
+               tests="1" failures="10" errors="10" time="0.000">
+        <system-err><![CDATA[Iteration: 0
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 1
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 2
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 3
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 4
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 5
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 6
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 7
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 8
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+Iteration: 9
+RequestError: Error: getaddrinfo ENOTFOUND {{baseurl}}
+    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)
+
+---
+]]></system-err>
+        <testcase name="200" time="0.000" classname="SearchDfs">
+            <failure type="AssertionFailure" message="expected undefined to deeply equal 200">
+                <![CDATA[Failed 10 times.]]>
+                <![CDATA[Collection JSON ID: lab5-collection-0001.]]>
+                <![CDATA[Collection name: lab5-api-collection.]]>
+                <![CDATA[Request name: Search - dfs.]]>
+                <![CDATA[Test description: 200.]]>
+                <![CDATA[Error message: expected undefined to deeply equal 200.]]>
+                <![CDATA[Stacktrace: AssertionError: expected undefined to deeply equal 200
+   at Object.eval sandbox-script.js:1:24).]]>
+            </failure>
+        </testcase>
+    </testsuite>
+</testsuites>
