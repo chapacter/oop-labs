@@ -16,8 +16,8 @@ public class TabulatedFunctionFileOutputStream {
         TabulatedFunction arrayFunction = new ArrayTabulatedFunction(xValues, yValues);
         TabulatedFunction linkedListFunction = new LinkedListTabulatedFunction(xValues, yValues);
 
-        try (BufferedOutputStream arrayStream = new BufferedOutputStream( new FileOutputStream("output/array function.bin"));
-                BufferedOutputStream linkedListStream = new BufferedOutputStream( new FileOutputStream("output/linked list function.bin"))
+        try (BufferedOutputStream arrayStream = new BufferedOutputStream(new FileOutputStream("output/array function.bin"));
+             BufferedOutputStream linkedListStream = new BufferedOutputStream(new FileOutputStream("output/linked list function.bin"))
         ) {
             FunctionsIO.writeTabulatedFunction(arrayStream, arrayFunction);
             FunctionsIO.writeTabulatedFunction(linkedListStream, linkedListFunction);
@@ -25,8 +25,7 @@ public class TabulatedFunctionFileOutputStream {
             System.out.println("Функции успешно записаны в файлы:");
             System.out.println("- output/array function.bin");
             System.out.println("- output/linked list function.bin");
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             System.err.println("Ошибка при записи файлов:");
             e.printStackTrace();
         }

@@ -1,8 +1,12 @@
 package ru.ssau.tk.avokado.lab2.io;
 
-import ru.ssau.tk.avokado.lab2.functions.*;
-import java.io.*;
-import java.util.Arrays;
+import ru.ssau.tk.avokado.lab2.functions.ArrayTabulatedFunction;
+import ru.ssau.tk.avokado.lab2.functions.LinkedListTabulatedFunction;
+import ru.ssau.tk.avokado.lab2.functions.TabulatedFunction;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public final class TabulatedFunctionFileWriter {
 

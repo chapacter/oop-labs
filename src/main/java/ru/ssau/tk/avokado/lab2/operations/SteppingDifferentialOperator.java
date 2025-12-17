@@ -11,6 +11,12 @@ public abstract class SteppingDifferentialOperator implements DifferentialOperat
         this.step = step;
     }
 
+    private static void validateStep(double step) {
+        if (!(step > 0) || Double.isInfinite(step) || Double.isNaN(step)) {
+            throw new IllegalArgumentException("step must be positive finite and not NaN");
+        }
+    }
+
     public double getStep() {
         return step;
     }
@@ -18,11 +24,5 @@ public abstract class SteppingDifferentialOperator implements DifferentialOperat
     public void setStep(double step) {
         validateStep(step);
         this.step = step;
-    }
-
-    private static void validateStep(double step) {
-        if (!(step > 0) || Double.isInfinite(step) || Double.isNaN(step)) {
-            throw new IllegalArgumentException("step must be positive finite and not NaN");
-        }
     }
 }

@@ -81,9 +81,6 @@ public class SortingBenchmark {
         System.out.println("All sorting benchmarks finished. CSVs and aggregates written to project root.");
     }
 
-    private interface DbFetch<T> { List<T> get() throws SQLException; }
-    private interface MemFetch<T> { List<T> get() throws Exception; }
-
     private <T> void runBoth(String name, DbFetch<T> dbFetch, MemFetch<T> memFetch, int warmup, int measured) throws Exception {
         System.out.println("Benchmarking " + name + " (warmup=" + warmup + " measured=" + measured + ")");
 
@@ -138,52 +135,27 @@ public class SortingBenchmark {
     private Map<String, Long> aggregates(List<Long> arr) {
         Map<String, Long> out = new HashMap<>();
         if (arr == null || arr.isEmpty()) {
-            out.put("mean", 0L); out.put("median", 0L); out.put("std", 0L); return out;
+            out.put("mean", 0L);
+            out.put("median", 0L);
+            out.put("std", 0L);
+            return out;
         }
         int n = arr.size();
         double sum = 0;
         for (long v : arr) sum += v;
         long mean = Math.round(sum / n);
         List<Long> sorted = arr.stream().sorted().collect(Collectors.toList());
-        long median = sorted.get(n/2);
+        long median = sorted.get(n / 2);
         double ssd = 0;
         for (long v : arr) {
             double d = v - mean;
             ssd += d * d;
         }
         long std = Math.round(Math.sqrt(ssd / n));
-        out.put("mean", mean); out.put("median", median); out.put("std", std);
+        out.put("mean", mean);
+        out.put("median", median);
+        out.put("std", std);
         return out;
-    }
-
-    // Внутренние классы для представления данных
-    static class User {
-        long id;
-        String name;
-        String passwordHash;
-        int accessLvl;
-
-        public long getId() { return id; }
-        public String getName() { return name; }
-    }
-
-    static class Function {
-        long id;
-        String name;
-        long userId;
-        String funcResult;
-
-        public String getName() { return name; }
-    }
-
-    static class Point {
-        long id;
-        double x;
-        double y;
-        int indexInFunction;
-        long functionId;
-
-        public double getX() { return x; }
     }
 
     // Методы для получения данных с сортировкой из БД
@@ -308,5 +280,52 @@ public class SortingBenchmark {
             }
         }
         return points;
+    }
+
+    private interface DbFetch<T> {
+        List<T> get() throws SQLException;
+    }
+
+    private interface MemFetch<T> {
+        List<T> get() throws Exception;
+    }
+
+    // Внутренние классы для представления данных
+    static class User {
+        long id;
+        String name;
+        String passwordHash;
+        int accessLvl;
+
+        public long getId() {
+            return id;
+        }
+
+        public String getName() {
+            return name;
+        }
+    }
+
+    static class Function {
+        long id;
+        String name;
+        long userId;
+        String funcResult;
+
+        public String getName() {
+            return name;
+        }
+    }
+
+    static class Point {
+        long id;
+        double x;
+        double y;
+        int indexInFunction;
+        long functionId;
+
+        public double getX() {
+            return x;
+        }
     }
 }

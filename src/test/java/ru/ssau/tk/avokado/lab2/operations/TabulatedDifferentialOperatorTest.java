@@ -7,8 +7,8 @@ import ru.ssau.tk.avokado.lab2.functions.TabulatedFunction;
 import ru.ssau.tk.avokado.lab2.functions.factory.ArrayTabulatedFunctionFactory;
 import ru.ssau.tk.avokado.lab2.functions.factory.LinkedListTabulatedFunctionFactory;
 
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 class TabulatedDifferentialOperatorTest {
 
@@ -43,9 +43,9 @@ class TabulatedDifferentialOperatorTest {
     @Test
     void testFactoryGetterSetter() {
         TabulatedDifferentialOperator op = new TabulatedDifferentialOperator();
-        assertTrue(op.getFactory() instanceof ArrayTabulatedFunctionFactory);
+        assertInstanceOf(ArrayTabulatedFunctionFactory.class, op.getFactory());
 
         op.setFactory(new LinkedListTabulatedFunctionFactory());
-        assertTrue(op.getFactory() instanceof LinkedListTabulatedFunctionFactory);
+        assertInstanceOf(LinkedListTabulatedFunctionFactory.class, op.getFactory());
     }
 }
