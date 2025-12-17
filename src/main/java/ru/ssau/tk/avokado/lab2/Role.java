@@ -12,14 +12,6 @@ public enum Role {
         this.displayName = displayName;
     }
 
-    public String getCode() {
-        return code;
-    }
-
-    public String getDisplayName() {
-        return displayName;
-    }
-
     public static Role fromCode(String code) {
         for (Role role : values()) {
             if (role.code.equals(code)) {
@@ -27,6 +19,14 @@ public enum Role {
             }
         }
         throw new IllegalArgumentException("Unknown role code: " + code);
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public String getDisplayName() {
+        return displayName;
     }
 
     @Override
