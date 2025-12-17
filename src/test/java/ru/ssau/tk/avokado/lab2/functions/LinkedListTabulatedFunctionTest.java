@@ -1,12 +1,11 @@
 package ru.ssau.tk.avokado.lab2.functions;
 
 import org.junit.jupiter.api.Test;
-import ru.ssau.tk.avokado.lab2.functions.LinkedListTabulatedFunction;
-import ru.ssau.tk.avokado.lab2.functions.MathFunction;
-import ru.ssau.tk.avokado.lab2.functions.SqrFunction;
+
 import java.util.Iterator;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class LinkedListTabulatedFunctionTest {
 
@@ -168,6 +167,7 @@ class LinkedListTabulatedFunctionTest {
         assertEquals(function.getX(0), function.leftBound(), 1e-12);
         assertEquals(function.getX(2), function.rightBound(), 1e-12);
     }
+
     @Test
     void testRemoveFromBeginning() {
         double[] xValues = {1.0, 2.0, 3.0, 4.0};
@@ -300,8 +300,8 @@ class LinkedListTabulatedFunctionTest {
         int i = 0;
         while (iterator.hasNext()) {
             Point p = iterator.next();
-            assertEquals(i + 1, p.x);
-            assertEquals((i + 1) * 10, p.y);
+            assertEquals(i + 1, p.x());
+            assertEquals((i + 1) * 10, p.y());
             i++;
         }
         assertEquals(3, i);
@@ -316,8 +316,8 @@ class LinkedListTabulatedFunctionTest {
         int i = 0;
         double[] expectedY = {10, 20, 30};
         for (Point p : function) {
-            assertEquals(i + 1, p.x);
-            assertEquals(expectedY[i], p.y);
+            assertEquals(i + 1, p.x());
+            assertEquals(expectedY[i], p.y());
             i++;
         }
         assertEquals(3, i);
