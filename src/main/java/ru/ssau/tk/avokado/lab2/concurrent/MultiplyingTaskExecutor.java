@@ -1,16 +1,17 @@
 package ru.ssau.tk.avokado.lab2.concurrent;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.ssau.tk.avokado.lab2.functions.LinkedListTabulatedFunction;
 import ru.ssau.tk.avokado.lab2.functions.TabulatedFunction;
 import ru.ssau.tk.avokado.lab2.functions.UnitFunction;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MultiplyingTaskExecutor {
     private static final Logger logger = LoggerFactory.getLogger(MultiplyingTaskExecutor.class);
+
     public static void main(String[] args) {
         final double xFrom = 1.0;
         final double xTo = 1000.0;

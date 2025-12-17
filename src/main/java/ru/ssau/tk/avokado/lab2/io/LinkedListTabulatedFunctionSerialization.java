@@ -1,6 +1,7 @@
 package ru.ssau.tk.avokado.lab2.io;
 
-import ru.ssau.tk.avokado.lab2.functions.*;
+import ru.ssau.tk.avokado.lab2.functions.LinkedListTabulatedFunction;
+import ru.ssau.tk.avokado.lab2.functions.TabulatedFunction;
 import ru.ssau.tk.avokado.lab2.functions.factory.LinkedListTabulatedFunctionFactory;
 import ru.ssau.tk.avokado.lab2.operations.TabulatedDifferentialOperator;
 

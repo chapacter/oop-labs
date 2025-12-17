@@ -1,53 +1,19 @@
 package ru.ssau.tk.avokado.lab2.functions;
 
-import java.io.Serial;
-import java.util.Iterator;
-import java.io.Serializable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.Serial;
+import java.io.Serializable;
+import java.util.Iterator;
 
 
 public class LinkedListTabulatedFunction extends AbstractTabulatedFunction implements TabulatedFunction, Insertable, Removable, Serializable {
     @Serial
     private static final long serialVersionUID = -6692951459863380154L;
     private static final Logger logger = LoggerFactory.getLogger(LinkedListTabulatedFunction.class);
-
-    // Внутренний класс узла списка
-    private static class Node implements Serializable{
-        @Serial
-        private static final long serialVersionUID = -3158113372194908641L;
-
-        public Node next;
-        public Node prev;
-        public double x;
-        public double y;
-
-        public Node(double x, double y) {
-            this.x = x;
-            this.y = y;
-        }
-    }
-
-    private Node head;      // Голова списка
     protected int count;    // Количество элементов
-
-    // Добавление нового узла в конец списка
-    private void addNode(double x, double y) {
-        Node newNode = new Node(x, y);
-        if (head == null) {
-            head = newNode;
-            head.next = head;
-            head.prev = head;
-        } else {
-            Node last = head.prev;
-            last.next = newNode;
-            newNode.prev = last;
-            newNode.next = head;
-            head.prev = newNode;
-        }
-        count++;
-        logger.trace("addNode: добавлен узел x={}, y={}, count={}", x, y, count);
-    }
+    private Node head;      // Голова списка
 
     // Конструктор с массивами xValues и yValues
     public LinkedListTabulatedFunction(double[] xValues, double[] yValues) {
@@ -62,7 +28,6 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         }
         logger.info("LinkedListTabulatedFunction создана с {} точками", xValues.length);
     }
-
 
     // Конструктор с дискретизацией функции source
     public LinkedListTabulatedFunction(MathFunction source, double xFrom, double xTo, int count) {
@@ -84,6 +49,24 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
             logger.trace("LinkedListTabulatedFunction(source): i={}, x={}, y={}", i, x, y);
         }
         logger.info("LinkedListTabulatedFunction (from source) создана: [{}..{}], count={}", xFrom, xTo, count);
+    }
+
+    // Добавление нового узла в конец списка
+    private void addNode(double x, double y) {
+        Node newNode = new Node(x, y);
+        if (head == null) {
+            head = newNode;
+            head.next = head;
+            head.prev = head;
+        } else {
+            Node last = head.prev;
+            last.next = newNode;
+            newNode.prev = last;
+            newNode.next = head;
+            head.prev = newNode;
+        }
+        count++;
+        logger.trace("addNode: добавлен узел x={}, y={}, count={}", x, y, count);
     }
 
     // Получение узла по индексу
@@ -149,7 +132,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
     public int indexOfX(double x) {
         Node current = head;
         for (int i = 0; i < count; i++) {
-            if (current.x == x){
+            if (current.x == x) {
                 logger.trace("indexOfX: найден x={} на индексе {}", x, i);
                 return i;
             }
@@ -281,7 +264,8 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         addNode(x, y);
         logger.info("insert: вставлен в конец x={}, y={}", x, y);
     }
-        @Override
+
+    @Override
     public void remove(int index) {
         Node nodeToRemove = getNode(index);
 
@@ -300,11 +284,10 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         logger.debug("remove: новый count={}", count);
     }
 
-
     @Override
     public Iterator<Point> iterator() {
         logger.trace("iterator: создан итератор по LinkedListTabulatedFunction");
-        return new java.util.Iterator<>() {
+        return new Iterator<>() {
             private Node current = head;
             private int iteratedCount = 0;
 
@@ -321,11 +304,27 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
                     throw new java.util.NoSuchElementException();
                 }
                 Point point = new Point(current.x, current.y);
-                logger.trace("iterator.next: возвращаем ({}, {})", point.x, point.y);
+                logger.trace("iterator.next: возвращаем ({}, {})", point.x(), point.y());
                 current = current.next;
                 iteratedCount++;
                 return point;
             }
         };
+    }
+
+    // Внутренний класс узла списка
+    private static class Node implements Serializable {
+        @Serial
+        private static final long serialVersionUID = -3158113372194908641L;
+
+        public Node next;
+        public Node prev;
+        public double x;
+        public double y;
+
+        public Node(double x, double y) {
+            this.x = x;
+            this.y = y;
+        }
     }
 }

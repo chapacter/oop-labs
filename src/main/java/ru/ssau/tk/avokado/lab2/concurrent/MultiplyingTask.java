@@ -1,8 +1,8 @@
 package ru.ssau.tk.avokado.lab2.concurrent;
 
-import ru.ssau.tk.avokado.lab2.functions.TabulatedFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.ssau.tk.avokado.lab2.functions.TabulatedFunction;
 
 public class MultiplyingTask implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(MultiplyingTask.class);

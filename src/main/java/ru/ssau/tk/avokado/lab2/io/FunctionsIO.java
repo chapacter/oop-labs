@@ -1,11 +1,10 @@
 package ru.ssau.tk.avokado.lab2.io;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.ssau.tk.avokado.lab2.functions.Point;
 import ru.ssau.tk.avokado.lab2.functions.TabulatedFunction;
 import ru.ssau.tk.avokado.lab2.functions.factory.TabulatedFunctionFactory;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.text.NumberFormat;
@@ -35,8 +34,8 @@ public final class FunctionsIO {
         dataOutputStream.writeInt(function.getCount());
 
         for (Point point : function) {
-            dataOutputStream.writeDouble(point.x);
-            dataOutputStream.writeDouble(point.y);
+            dataOutputStream.writeDouble(point.x());
+            dataOutputStream.writeDouble(point.y());
         }
         dataOutputStream.flush();
         logger.debug("writeTabulatedFunction (binary): данные успешно записаны и сброшены");
@@ -59,7 +58,7 @@ public final class FunctionsIO {
         pw.println(function.getCount());
 
         for (Point p : function) {
-            pw.printf("%f %f%n", p.x, p.y);
+            pw.printf("%f %f%n", p.x(), p.y());
         }
         pw.flush();
         logger.debug("writeTabulatedFunction (text): данные записаны и сброшены");

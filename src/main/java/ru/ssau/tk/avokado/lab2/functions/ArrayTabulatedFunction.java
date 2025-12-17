@@ -1,14 +1,12 @@
 package ru.ssau.tk.avokado.lab2.functions;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Iterator;
-import ru.ssau.tk.avokado.lab2.exceptions.InterpolationException;
-import ru.ssau.tk.avokado.lab2.exceptions.DifferentLengthOfArraysException;
-import ru.ssau.tk.avokado.lab2.exceptions.ArrayIsNotSortedException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 // Прописываем класс ArrayTabulatedFunction для расширения класса AbstractTabulatedFunction
 public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements Insertable, Removable, Serializable {
@@ -131,7 +129,7 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
 
     @Override
     public double leftBound() {
-        logger.trace("leftBound: {}", xValues[0] );
+        logger.trace("leftBound: {}", xValues[0]);
         return xValues[0];
     }
 
@@ -270,7 +268,7 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
                     throw new java.util.NoSuchElementException();
                 }
                 Point p = new Point(xValues[i], yValues[i]);
-                logger.trace("iterator.next: i={}, point=({}, {})", i, p.x, p.y);
+                logger.trace("iterator.next: i={}, point=({}, {})", i, p.x(), p.y());
                 i++;
                 return p;
             }

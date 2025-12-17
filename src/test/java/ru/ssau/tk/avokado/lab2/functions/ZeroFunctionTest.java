@@ -1,9 +1,8 @@
 package ru.ssau.tk.avokado.lab2.functions;
 
 import org.junit.jupiter.api.Test;
-import ru.ssau.tk.avokado.lab2.functions.ZeroFunction;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ZeroFunctionTest {
 

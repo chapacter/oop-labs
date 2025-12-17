@@ -1,16 +1,15 @@
 package ru.ssau.tk.avokado.lab2.search;
 
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import ru.ssau.tk.avokado.lab2.DataGenerator;
 import ru.ssau.tk.avokado.lab2.DatabaseConnection;
-import ru.ssau.tk.avokado.lab2.Role;
 import ru.ssau.tk.avokado.lab2.dao.JdbcFunctionDao;
 import ru.ssau.tk.avokado.lab2.dao.JdbcUserDao;
 import ru.ssau.tk.avokado.lab2.dao.SearchJdbcFunctionDao;
 import ru.ssau.tk.avokado.lab2.dto.FunctionDto;
 import ru.ssau.tk.avokado.lab2.dto.SearchCriteria;
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import ru.ssau.tk.avokado.lab2.dto.UserDto;
-import ru.ssau.tk.avokado.lab2.DataGenerator;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -38,14 +37,14 @@ class SearchTest {
         // Удаляем все существующие таблицы перед созданием новых
         try (Connection conn = DatabaseConnection.getConnection()) {
             String dropTablesScript =
-                "DROP TABLE IF EXISTS result_values CASCADE;" +
-                "DROP TABLE IF EXISTS processed_functions CASCADE;" +
-                "DROP TABLE IF EXISTS tabulated_func CASCADE;" +
-                "DROP TABLE IF EXISTS points CASCADE;" +
-                "DROP TABLE IF EXISTS functions CASCADE;" +
-                "DROP TABLE IF EXISTS operations CASCADE;" +
-                "DROP TABLE IF EXISTS users CASCADE;";
-            
+                    "DROP TABLE IF EXISTS result_values CASCADE;" +
+                            "DROP TABLE IF EXISTS processed_functions CASCADE;" +
+                            "DROP TABLE IF EXISTS tabulated_func CASCADE;" +
+                            "DROP TABLE IF EXISTS points CASCADE;" +
+                            "DROP TABLE IF EXISTS functions CASCADE;" +
+                            "DROP TABLE IF EXISTS operations CASCADE;" +
+                            "DROP TABLE IF EXISTS users CASCADE;";
+
             PreparedStatement dropStmt = conn.prepareStatement(dropTablesScript);
             dropStmt.execute();
         } catch (SQLException e) {
@@ -108,7 +107,7 @@ class SearchTest {
         var result = advancedDao.search(criteria);
 
         assertNotNull(result);
-        assertFalse(result.getItems().isEmpty());
+        assertFalse(result.items().isEmpty());
     }
 
     @Test
@@ -162,7 +161,7 @@ class SearchTest {
         var result = advancedDao.multiFieldSearch(criteriaList);
 
         assertNotNull(result);
-        assertFalse(result.getItems().isEmpty());
+        assertFalse(result.items().isEmpty());
     }
 
     @Test

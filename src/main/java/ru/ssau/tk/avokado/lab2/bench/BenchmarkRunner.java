@@ -1,6 +1,7 @@
 package ru.ssau.tk.avokado.lab2.bench;
 
 import org.testcontainers.containers.PostgreSQLContainer;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -23,14 +24,14 @@ public class BenchmarkRunner {
         try (Connection connection = DriverManager.getConnection(jdbcUrl, username, password)) {
             // Выполняем инициализацию базы данных
             initializeDatabase(connection);
-            
+
             // Запускаем JDBC бенчмарки
             BenchmarkService benchmarkService = new BenchmarkService(connection);
             benchmarkService.run();
-            
+
             SortingBenchmark sortingBenchmark = new SortingBenchmark(connection);
             sortingBenchmark.run();
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
