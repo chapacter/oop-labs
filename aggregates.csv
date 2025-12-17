@@ -1,7 +1,0 @@
-test,impl,n,mean_ns,median_ns,std_ns,notes
-findFunctionByName,framework,500,8448495,4417300,N/A,"измерения JPA (warmup=200, measured=500)"
-findUserByName,framework,500,4637670,3507900,N/A,"измерения JPA (warmup=200, measured=500)"
-loadFunctionAndPoints,framework,500,10906465,4864500,N/A,"измерения JPA (warmup=200, measured=500)"
-findFunctionByName,manual,500,595992,548146,82988,"измерения JDBC (warmup=200, measured=500)"
-findUserByName,manual,500,58860,46931,30729,"измерения JDBC (warmup=200, measured=500)"
-loadFunctionAndPoints,manual,500,1128370,1046384,194494,"измерения JDBC (warmup=200, measured=500)"
