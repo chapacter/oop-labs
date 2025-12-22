@@ -152,7 +152,7 @@ public class TabulatedFunctionOperationServiceTest {
                 new double[]{0.0, 1.0, 4.0}
         );
 
-        assertThrows(InconsistentFunctionsException.class, new org.junit.jupiter.api.function.Executable() {
+        assertThrows(InconsistentFunctionsException.class, new Executable() {
             @Override
             public void execute() throws Throwable {
                 service.subtract(a, b);
