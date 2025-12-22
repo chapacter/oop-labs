@@ -20,4 +20,12 @@ public class AuthController {
     public UserDto register(@RequestBody CreateUserRequest req) {
         return userService.create(req);
     }
+
+    // Добавляем эндпоинт для совместимости с фронтендом
+    @PostMapping("/login")
+    public String login() {
+        // В Spring Security с Basic Auth этот метод не используется для аутентификации,
+        // но мы его добавляем для совместимости с фронтендом
+        return "Authenticated successfully";
+    }
 }

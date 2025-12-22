@@ -9,6 +9,9 @@ import ru.ssau.tk.avokado.lab2.dto.CreateUserRequest;
 import ru.ssau.tk.avokado.lab2.dto.UpdateUserRequest;
 import ru.ssau.tk.avokado.lab2.dto.UserDto;
 import ru.ssau.tk.avokado.lab2.service.UserService;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/users")
@@ -16,7 +19,9 @@ public class UserController {
     private final Logger logger = LoggerFactory.getLogger(UserController.class);
     private final UserService service;
 
-    public UserController(UserService service) { this.service = service; }
+    public UserController(UserService service) {
+        this.service = service;
+    }
 
     @GetMapping
     public Page<UserDto> list(@RequestParam(required = false) String name, Pageable pageable) {

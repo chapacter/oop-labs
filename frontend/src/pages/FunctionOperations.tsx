@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import {
   Box, Typography, Grid, Card, CardContent, CardActions, Button, Select, MenuItem,
-  FormControl, InputLabel, IconButton, CircularProgress, Tooltip, Container,
+  FormControl, InputLabel, IconButton, FunctionsIcon, SwapHorizIcon,
+  ArrowBackIcon, SaveIcon, PlayArrowIcon, CloseIcon, Tooltip, Container,
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, useMediaQuery, useTheme
 } from '@mui/material';
 import {
-  ArrowBack as ArrowBackIcon, Add as AddIcon, Remove as RemoveIcon,
-  Close as CloseIcon, Save as SaveIcon, PlayArrow as PlayArrowIcon,
-  Functions as FunctionsIcon, SwapHoriz as SwapHorizIcon
+  AddIcon, RemoveIcon
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import functionService, { FunctionDTO, PointDTO } from '../services/functionService';
@@ -47,7 +46,6 @@ const FunctionOperations: React.FC = () => {
         setLoading(false);
       }
     };
-
     loadFunctions();
   }, [navigate]);
 
@@ -67,7 +65,6 @@ const FunctionOperations: React.FC = () => {
     setFirstFunction(func);
     setResultPoints([]);
     setError(null);
-
     if (func) {
       const pts = await loadFunctionPoints(funcId);
       setFirstPoints(pts);
@@ -82,7 +79,6 @@ const FunctionOperations: React.FC = () => {
     setSecondFunction(func);
     setResultPoints([]);
     setError(null);
-
     if (func) {
       const pts = await loadFunctionPoints(funcId);
       setSecondPoints(pts);
@@ -95,36 +91,46 @@ const FunctionOperations: React.FC = () => {
     const temp = firstFunction;
     setFirstFunction(secondFunction);
     setSecondFunction(temp);
-
     const tempPoints = firstPoints;
     setFirstPoints(secondPoints);
     setSecondPoints(tempPoints);
-
     setSwapped(!swapped);
   };
 
-  const performOperation = () => {
+  const validateOperations = (): boolean => {
     if (!firstFunction || !secondFunction || firstPoints.length === 0 || secondPoints.length === 0) {
       setError('Выберите обе функции и убедитесь, что у них есть точки');
-      return;
+      return false;
     }
 
     if (firstPoints.length !== secondPoints.length) {
       setError('Функции должны иметь одинаковое количество точек');
-      return;
+      return false;
     }
 
     // Проверяем, что точки имеют одинаковые x-значения
     for (let i = 0; i < firstPoints.length; i++) {
       if (Math.abs(firstPoints[i].x - secondPoints[i].x) > 0.001) {
         setError('Функции должны иметь одинаковые значения X для всех точек');
-        return;
+        return false;
       }
+    }
+
+    if (!operation) {
+      setError('Выберите операцию');
+      return false;
+    }
+
+    return true;
+  };
+
+  const performOperation = () => {
+    if (!validateOperations()) {
+      return;
     }
 
     try {
       setError(null);
-
       let newPoints: PointDTO[] = [];
 
       switch (operation) {
@@ -191,6 +197,7 @@ const FunctionOperations: React.FC = () => {
       };
 
       const functionName = `${operationNames[operation]}: ${firstFunction?.name} и ${secondFunction?.name}`;
+
       const resultFunction = await functionService.createFunction({
         name: functionName,
         format: null,
@@ -244,7 +251,6 @@ const FunctionOperations: React.FC = () => {
               <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', fontWeight: 'bold' }}>
                 <FunctionsIcon sx={{ mr: 1 }} /> Выберите операцию
               </Typography>
-
               <Grid container spacing={2} alignItems="center">
                 <Grid item xs={12} sm={4}>
                   <FormControl fullWidth required>
@@ -262,7 +268,6 @@ const FunctionOperations: React.FC = () => {
                     </Select>
                   </FormControl>
                 </Grid>
-
                 <Grid item xs={12} sm={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                   <FormControl fullWidth required>
                     <Select
@@ -282,7 +287,6 @@ const FunctionOperations: React.FC = () => {
                     </Select>
                   </FormControl>
                 </Grid>
-
                 <Grid item xs={12} sm={4}>
                   <FormControl fullWidth required>
                     <InputLabel>Второе слагаемое (вычитаемое)</InputLabel>
@@ -299,7 +303,6 @@ const FunctionOperations: React.FC = () => {
                     </Select>
                   </FormControl>
                 </Grid>
-
                 <Grid item xs={12} sm={2}>
                   <Button
                     variant="contained"
@@ -313,7 +316,6 @@ const FunctionOperations: React.FC = () => {
                   </Button>
                 </Grid>
               </Grid>
-
               {error && (
                 <Box sx={{ mt: 2, p: 2, bgcolor: 'error.main', color: 'white', borderRadius: 1 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -332,7 +334,6 @@ const FunctionOperations: React.FC = () => {
               <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold' }}>
                 Функция A: {firstFunction?.name || 'Не выбрана'}
               </Typography>
-
               {firstPoints.length > 0 ? (
                 <TableContainer component={Paper} sx={{ maxHeight: 300 }}>
                   <Table stickyHeader size="small">
@@ -367,7 +368,6 @@ const FunctionOperations: React.FC = () => {
               <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold' }}>
                 Функция B: {secondFunction?.name || 'Не выбрана'}
               </Typography>
-
               {secondPoints.length > 0 ? (
                 <TableContainer component={Paper} sx={{ maxHeight: 300 }}>
                   <Table stickyHeader size="small">
@@ -413,7 +413,6 @@ const FunctionOperations: React.FC = () => {
                     Сохранить результат
                   </Button>
                 </Box>
-
                 <TableContainer component={Paper} sx={{ maxHeight: 300 }}>
                   <Table stickyHeader size="small">
                     <TableHead>

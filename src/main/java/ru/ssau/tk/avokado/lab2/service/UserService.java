@@ -10,6 +10,7 @@ import ru.ssau.tk.avokado.lab2.dto.UserDto;
 public interface UserService {
     Page<UserDto> list(String nameFilter, Pageable pageable);
     UserDto get(Long id);
+    UserDto getByName(String name);
     UserDto create(CreateUserRequest req);
     UserDto update(Long id, UpdateUserRequest req);
     void delete(Long id);

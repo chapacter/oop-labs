@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
-import { CssBaseline, Box } from '@mui/material';
+import { CssBaseline, Box, CircularProgress } from '@mui/material';
 import { darkTheme } from './theme';
 import authService from './services/authService';
 import Navbar from './components/Navbar';
@@ -66,7 +66,7 @@ function App() {
           height: '100vh',
           bgcolor: 'background.default'
         }}>
-          <div>Loading...</div>
+          <CircularProgress />
         </Box>
       </ThemeProvider>
     );

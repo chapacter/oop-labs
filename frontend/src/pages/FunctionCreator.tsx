@@ -28,7 +28,6 @@ const FunctionCreator: React.FC = () => {
           Создание функции
         </Typography>
       </Box>
-
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
           <Card
@@ -58,7 +57,6 @@ const FunctionCreator: React.FC = () => {
             </CardContent>
           </Card>
         </Grid>
-
         <Grid item xs={12} md={6}>
           <Card
             sx={{

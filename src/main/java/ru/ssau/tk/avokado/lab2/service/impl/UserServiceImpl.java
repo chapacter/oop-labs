@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -15,17 +16,13 @@ import ru.ssau.tk.avokado.lab2.dto.UserDto;
 import ru.ssau.tk.avokado.lab2.entities.User;
 import ru.ssau.tk.avokado.lab2.repositories.UserRepository;
 import ru.ssau.tk.avokado.lab2.service.UserService;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
-
     private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
-
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -47,6 +44,13 @@ public class UserServiceImpl implements UserService {
         logger.info("UserService.get id={}", id);
         return userRepository.findById(id).map(this::toDto)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found: " + id));
+    }
+
+    @Override
+    public UserDto getByName(String name) {
+        logger.info("UserService.getByName name={}", name);
+        return userRepository.findByName(name).map(this::toDto)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found: " + name));
     }
 
     @Override

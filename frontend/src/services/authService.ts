@@ -1,22 +1,23 @@
 import axios from 'axios';
 
-const API_URL = '/api';
-
 class AuthService {
   async login(username: string, password: string) {
     try {
-      // Просто сохраняем учетные данные
+      // Создаем заголовок Basic Auth
+      const authHeader = `Basic ${btoa(`${username}:${password}`)}`;
+
+      // Проверяем аутентификацию, делая запрос к защищенному ресурсу
+      const response = await axios.get('/api/users/me', {
+        headers: {
+          Authorization: authHeader
+        }
+      });
+
+      // Сохраняем учетные данные
       localStorage.setItem('auth', JSON.stringify({ username, password }));
+      localStorage.setItem('user', JSON.stringify(response.data));
 
-      // Создаем "виртуального" пользователя
-      const mockUser = {
-        name: username,
-        id: 1,
-        roles: ['ROLE_USER', 'ROLE_ADMIN']
-      };
-
-      localStorage.setItem('user', JSON.stringify(mockUser));
-      return mockUser;
+      return response.data;
     } catch (error) {
       console.error('Ошибка при входе:', error);
       this.logout();
@@ -32,22 +33,33 @@ class AuthService {
   getCurrentUser() {
     const userStr = localStorage.getItem('user');
     if (userStr) {
-      return JSON.parse(userStr);
+      try {
+        return JSON.parse(userStr);
+      } catch (e) {
+        console.error('Error parsing user from localStorage:', e);
+        return null;
+      }
     }
     return null;
   }
 
   isAuthenticated(): boolean {
-    return !!localStorage.getItem('auth');
+    const authStr = localStorage.getItem('auth');
+    return !!authStr;
   }
 
   getAuthHeaders() {
     const authStr = localStorage.getItem('auth');
     if (authStr) {
-      const { username, password } = JSON.parse(authStr);
-      return {
-        Authorization: `Basic ${btoa(`${username}:${password}`)}`
-      };
+      try {
+        const { username, password } = JSON.parse(authStr);
+        return {
+          Authorization: `Basic ${btoa(`${username}:${password}`)}`
+        };
+      } catch (e) {
+        console.error('Error parsing auth from localStorage:', e);
+        return {};
+      }
     }
     return {};
   }

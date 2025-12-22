@@ -19,6 +19,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import functionService, { FunctionDTO, PointDTO, ChartData as CustomChartData } from '../services/functionService';
 import toast from 'react-hot-toast';
 import authService from '../services/authService';
+import { ShowChart as ShowChartIcon } from '@mui/icons-material';
 
 // Регистрация компонентов Chart.js
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, ChartTooltip, Legend, Filler);

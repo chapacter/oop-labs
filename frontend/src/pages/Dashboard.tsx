@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import {
   Box, Typography, Grid, Card, CardContent, CardActions, Button,
-  CircularProgress, IconButton, Tooltip, Container, useMediaQuery
+  CircularProgress, IconButton, Tooltip, Container, TextField, useTheme, useMediaQuery
 } from '@mui/material';
 import {
   Edit as EditIcon, Delete as DeleteIcon, ShowChart as ShowChartIcon,
   Add as AddIcon, Refresh as RefreshIcon, Search as SearchIcon
 } from '@mui/icons-material';
-import { useNavigate, useTheme } from 'react-router-dom';
-import functionService, { FunctionDTO } from '../services/functionService';
+import { useNavigate } from 'react-router-dom';
+import functionService from '../services/functionService';
 import toast from 'react-hot-toast';
 import authService from '../services/authService';
 
 const Dashboard: React.FC = () => {
-  const [functions, setFunctions] = useState<FunctionDTO[]>([]);
+  const [functions, setFunctions] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
@@ -30,7 +30,7 @@ const Dashboard: React.FC = () => {
           return;
         }
         const data = await functionService.getAllFunctions(currentUser.id);
-        setFunctions(data);
+        setFunctions(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error('Ошибка при загрузке функций:', error);
         toast.error('Не удалось загрузить функции');
@@ -61,7 +61,7 @@ const Dashboard: React.FC = () => {
       const currentUser = authService.getCurrentUser();
       if (currentUser) {
         const data = await functionService.getAllFunctions(currentUser.id);
-        setFunctions(data);
+        setFunctions(Array.isArray(data) ? data : []);
         toast.success('Данные обновлены');
       }
     } catch (error) {
@@ -73,9 +73,9 @@ const Dashboard: React.FC = () => {
   };
 
   const filteredFunctions = functions.filter(func =>
-    func.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    func.funcResult.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    func.user.name.toLowerCase().includes(searchTerm.toLowerCase())
+    func.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    func.funcResult?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    func.user?.name?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   if (loading) {
@@ -139,7 +139,7 @@ const Dashboard: React.FC = () => {
           </Button>
         </Box>
       ) : (
-        <Grid container spacing={3}>
+        <Grid container spacing={2}>
           {filteredFunctions.map(func => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={func.id}>
               <Card
@@ -156,13 +156,13 @@ const Dashboard: React.FC = () => {
               >
                 <CardContent sx={{ flexGrow: 1 }}>
                   <Typography variant="h6" component="div" fontWeight="bold" gutterBottom>
-                    {func.name}
+                    {func.name || 'Без названия'}
                   </Typography>
                   <Typography variant="body2" color="text.secondary" sx={{ mt: 1, minHeight: 40 }}>
-                    Результат: {func.funcResult}
+                    Результат: {func.funcResult || 'Нет данных'}
                   </Typography>
                   <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                    <strong>Пользователь:</strong> {func.user.name}
+                    <strong>Пользователь:</strong> {func.user?.name || 'Неизвестен'}
                   </Typography>
                   <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
                     <strong>ID:</strong> {func.id}

@@ -17,11 +17,19 @@ class FunctionService {
       if (userId) params.userId = userId;
       if (withPoints) params.withPoints = true;
 
-      const response = await axios.get<FunctionDTO[]>(API_URL, {
+      const response = await axios.get(API_URL, {
         params,
         headers: authService.getAuthHeaders()
       });
-      return response.data;
+
+      // Проверяем, что response.data - это массив
+      if (Array.isArray(response.data)) {
+        return response.data;
+      } else if (response.data && response.data.content) {
+        // Для пагинации Spring Data
+        return response.data.content;
+      }
+      return [];
     } catch (error) {
       console.error('Ошибка при получении функций:', error);
       throw error;
@@ -61,7 +69,7 @@ class FunctionService {
         name: request.name,
         format: null,
         userId: request.userId,
-        funcResult: request.funcResult
+        funcResult: request.funcResult || "Auto-generated"
       }, {
         headers: authService.getAuthHeaders()
       });
@@ -121,7 +129,15 @@ class FunctionService {
       const response = await axios.get<PointDTO[]>(`/api/points?functionId=${functionId}`, {
         headers: authService.getAuthHeaders()
       });
-      return response.data;
+
+      // Проверяем, что response.data - это массив
+      if (Array.isArray(response.data)) {
+        return response.data;
+      } else if (response.data && response.data.content) {
+        // Для пагинации Spring Data
+        return response.data.content;
+      }
+      return [];
     } catch (error) {
       console.error(`Ошибка при получении точек для функции с ID ${functionId}:`, error);
       throw error;
@@ -174,7 +190,7 @@ class FunctionService {
         name,
         format: null,
         userId,
-        funcResult
+        funcResult: funcResult || "Auto-generated"
       }, {
         headers: authService.getAuthHeaders()
       });

@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   AppBar, Toolbar, Typography, Button, Box, IconButton, Drawer,
-  List, ListItem, ListItemText, ListItemIcon, useMediaQuery
+  List, ListItemButton, ListItemIcon, ListItemText, useMediaQuery
 } from '@mui/material';
 import {
   Menu as MenuIcon, Dashboard as DashboardIcon, Functions as FunctionsIcon,
@@ -31,36 +31,36 @@ const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
         Function Manager
       </Typography>
       <List>
-        <ListItem button component={Link} to="/dashboard">
+        <ListItemButton component={Link} to="/dashboard">
           <ListItemIcon>
             <DashboardIcon color="primary" />
           </ListItemIcon>
           <ListItemText primary="Dashboard" />
-        </ListItem>
-        <ListItem button component={Link} to="/functions/new">
+        </ListItemButton>
+        <ListItemButton component={Link} to="/functions/new">
           <ListItemIcon>
             <AddIcon color="primary" />
           </ListItemIcon>
           <ListItemText primary="Создать функцию" />
-        </ListItem>
-        <ListItem button component={Link} to="/operations">
+        </ListItemButton>
+        <ListItemButton component={Link} to="/operations">
           <ListItemIcon>
             <ScienceIcon color="primary" />
           </ListItemIcon>
           <ListItemText primary="Операции" />
-        </ListItem>
-        <ListItem button component={Link} to="/settings">
+        </ListItemButton>
+        <ListItemButton component={Link} to="/settings">
           <ListItemIcon>
             <SettingsIcon color="primary" />
           </ListItemIcon>
           <ListItemText primary="Настройки" />
-        </ListItem>
-        <ListItem button onClick={onLogout}>
+        </ListItemButton>
+        <ListItemButton onClick={onLogout}>
           <ListItemIcon>
             <ExitToAppIcon color="error" />
           </ListItemIcon>
           <ListItemText primary="Выйти" primaryTypographyProps={{ color: 'error' }} />
-        </ListItem>
+        </ListItemButton>
       </List>
     </Box>
   );
