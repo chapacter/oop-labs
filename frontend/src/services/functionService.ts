@@ -77,7 +77,7 @@ class FunctionService {
       const functionId = functionResponse.data.id;
 
       // Затем добавляем точки
-      const pointsPromises = request.points.map(point =>
+      const pointsPromises = request.points.map((point: any) =>
         axios.post<PointDTO>('/api/points', {
           functionId,
           indexInFunction: 0, // Будет установлено на сервере
@@ -133,9 +133,9 @@ class FunctionService {
       // Проверяем, что response.data - это массив
       if (Array.isArray(response.data)) {
         return response.data;
-      } else if (response.data && response.data.content) {
+      } else if (response.data && (response.data as any).content) {
         // Для пагинации Spring Data
-        return response.data.content;
+        return (response.data as any).content;
       }
       return [];
     } catch (error) {
@@ -176,7 +176,7 @@ class FunctionService {
   async getChartData(functionId: number): Promise<ChartData[]> {
     try {
       const points = await this.getFunctionPoints(functionId);
-      return points.map(point => ({ x: point.x, y: point.y }));
+      return points.map((point: any) => ({ x: point.x, y: point.y }));
     } catch (error) {
       console.error(`Ошибка при получении данных для графика функции с ID ${functionId}:`, error);
       throw error;

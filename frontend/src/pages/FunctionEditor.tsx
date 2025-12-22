@@ -50,7 +50,7 @@ const FunctionEditor: React.FC<FunctionEditorProps> = ({ mathFunctionMode = fals
       const pointsData = await functionService.getFunctionPoints(functionId);
 
       setName(funcData.name);
-      setPoints(pointsData.map(p => ({ x: p.x, y: p.y })));
+      setPoints(pointsData.map((p: any) => ({ x: p.x, y: p.y })));
       setIsEditing(true);
     } catch (error) {
       console.error('Ошибка при загрузке функции:', error);

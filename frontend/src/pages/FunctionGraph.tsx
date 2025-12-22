@@ -16,7 +16,8 @@ import {
   Title, Tooltip as ChartTooltip, Legend, Filler, ChartData, ChartOptions
 } from 'chart.js';
 import { useNavigate, useParams } from 'react-router-dom';
-import functionService, { FunctionDTO, PointDTO, ChartData as CustomChartData } from '../services/functionService';
+import functionService from '../services/functionService';
+import { FunctionDTO, PointDTO, ChartData as CustomChartData } from '../models';
 import toast from 'react-hot-toast';
 import authService from '../services/authService';
 import { ShowChart as ShowChartIcon } from '@mui/icons-material';
@@ -65,7 +66,7 @@ const FunctionGraph: React.FC = () => {
       setPoints(pts);
 
       // Подготавливаем данные для графика
-      const data = pts.map(p => ({ x: p.x, y: p.y }));
+      const data = pts.map((p: any) => ({ x: p.x, y: p.y }));
       setChartData(data);
     } catch (error) {
       console.error('Ошибка при загрузке данных функции:', error);
