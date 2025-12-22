@@ -1,16 +1,23 @@
 import React, { useState } from 'react';
-import { Box, Typography, TextField, Button, Container, Paper, CircularProgress } from '@mui/material';
+import { Box, Typography, TextField, Button, Container, Paper, CircularProgress, Link } from '@mui/material';
 import { LockOpen as LockOpenIcon } from '@mui/icons-material';
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 interface LoginProps {
   onLogin: (username: string, password: string) => Promise<boolean>;
+  onSwitchToRegister: () => void;
 }
 
-const Login: React.FC<LoginProps> = ({ onLogin }) => {
+const Login: React.FC<LoginProps> = ({ onLogin, onSwitchToRegister }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  
+  const handleSwitchToRegister = () => {
+    navigate('/register');
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,9 +35,11 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
       }));
 
       // Вызываем onLogin для обновления состояния аутентификации
-      await onLogin(username, password);
-
-      toast.success('Вы успешно вошли в систему!');
+      const success = await onLogin(username, password);
+      
+      if (success) {
+        toast.success('Вы успешно вошли в систему!');
+      }
     } catch (error) {
       console.error('Ошибка входа:', error);
       toast.error('Неверное имя пользователя или пароль');
@@ -85,9 +94,18 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
             </Button>
           </Box>
 
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
-            Для тестирования используйте любые учетные данные
-          </Typography>
+          <Box sx={{ mt: 2, textAlign: 'center' }}>
+            <Typography variant="body2" color="text.secondary">
+              Для тестирования используйте любые учетные данные
+            </Typography>
+            
+            <Typography variant="body2" sx={{ mt: 1 }}>
+              Нет аккаунта?{' '}
+              <Link component="button" variant="body2" onClick={handleSwitchToRegister}>
+                Зарегистрироваться
+              </Link>
+            </Typography>
+          </Box>
         </Box>
       </Paper>
     </Container>

@@ -6,6 +6,7 @@ import { darkTheme } from './theme';
 import authService from './services/authService';
 import Navbar from './components/Navbar';
 import Login from './pages/Login';
+import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import FunctionEditor from './pages/FunctionEditor';
 import FunctionGraph from './pages/FunctionGraph';
@@ -80,7 +81,7 @@ function App() {
         {isAuthenticated && <Navbar onLogout={handleLogout} />}
         <Box component="main" sx={{ mt: isAuthenticated ? 8 : 0, p: 3 }}>
           <Routes>
-            <Route path="/login" element={!isAuthenticated ? <Login onLogin={handleLogin} /> : <Navigate to="/dashboard" />} />
+            <Route path="/login" element={!isAuthenticated ? <Login onLogin={handleLogin} onSwitchToRegister={() => window.location.href = '/register'} /> : <Navigate to="/dashboard" />} />
             <Route path="/dashboard" element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />} />
             <Route path="/functions/new" element={isAuthenticated ? <FunctionCreator /> : <Navigate to="/login" />} />
             <Route path="/functions/from-array" element={isAuthenticated ? <FunctionEditor /> : <Navigate to="/login" />} />
@@ -90,6 +91,7 @@ function App() {
             <Route path="/operations" element={isAuthenticated ? <FunctionOperations /> : <Navigate to="/login" />} />
             <Route path="/settings" element={isAuthenticated ? <Settings /> : <Navigate to="/login" />} />
             <Route path="/" element={isAuthenticated ? <Navigate to="/dashboard" /> : <Navigate to="/login" />} />
+            <Route path="/register" element={!isAuthenticated ? <Register onRegister={handleLogin} onSwitchToLogin={() => window.location.href = '/login'} /> : <Navigate to="/dashboard" />} />
           </Routes>
         </Box>
       </Router>
