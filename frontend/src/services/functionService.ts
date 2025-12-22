@@ -1,3 +1,4 @@
+// src/services/functionService.ts
 import axios from 'axios';
 import {
   FunctionDTO,
@@ -9,6 +10,7 @@ import {
 import authService from './authService';
 
 const API_URL = '/api/functions';
+const POINTS_API = '/api/points';
 
 class FunctionService {
   async getAllFunctions(userId?: number, withPoints: boolean = false) {
@@ -76,9 +78,9 @@ class FunctionService {
 
       const functionId = functionResponse.data.id;
 
-      // Затем добавляем точки
+      // Затем добавляем точки (параллельно)
       const pointsPromises = request.points.map((point: any) =>
-        axios.post<PointDTO>('/api/points', {
+        axios.post<PointDTO>(POINTS_API, {
           functionId,
           indexInFunction: 0, // Будет установлено на сервере
           x: point.x,
@@ -124,20 +126,90 @@ class FunctionService {
     }
   }
 
+  /**
+   * Надёжно получает ВСЕ точки для функции:
+   * - если сервер возвращает массив -> возвращаем его;
+   * - если сервер возвращает Spring Page (data.content / content) -> загружаем все страницы;
+   * - если сервер возвращает HAL (_embedded.points) -> используем embedded;
+   * - в иных случаях пытаемся найти массив внутри объекта.
+   */
   async getFunctionPoints(functionId: number) {
     try {
-      const response = await axios.get<PointDTO[]>(`/api/points?functionId=${functionId}`, {
-        headers: authService.getAuthHeaders()
+      const headers = authService.getAuthHeaders();
+
+      // Первый запрос: пробуем получить либо весь массив, либо первую страницу
+      const firstParams: any = { functionId, page: 0, size: 1000 }; // size большой по умолчанию
+      const response = await axios.get(POINTS_API, {
+        params: firstParams,
+        headers
       });
 
-      // Проверяем, что response.data - это массив
-      if (Array.isArray(response.data)) {
-        return response.data;
-      } else if (response.data && (response.data as any).content) {
-        // Для пагинации Spring Data
-        return (response.data as any).content;
+      const data = response.data;
+
+      // 1) Если сервер вернул прямой массив — используем его
+      if (Array.isArray(data)) {
+        return data as PointDTO[];
       }
-      return [];
+
+      // 2) Spring Data Page-like: { content: [...], totalPages, totalElements, number, size }
+      if (data && Array.isArray((data as any).content)) {
+        const content = (data as any).content as PointDTO[];
+        const totalPages = typeof (data as any).totalPages === 'number'
+          ? (data as any).totalPages
+          : Math.ceil(((data as any).totalElements || content.length) / (firstParams.size || content.length || 1));
+
+        // если страниц больше одной — загружаем последовательно остальные
+        if (totalPages > 1) {
+          const all: PointDTO[] = [...content];
+          for (let page = 1; page < totalPages; page++) {
+            const resp = await axios.get(POINTS_API, {
+              params: { functionId, page, size: firstParams.size },
+              headers
+            });
+            const pageData = resp.data;
+            if (pageData && Array.isArray((pageData as any).content)) {
+              all.push(...(pageData as any).content);
+            } else if (Array.isArray(pageData)) {
+              all.push(...pageData);
+            } else {
+              // если неожиданный формат — прерываем
+              break;
+            }
+          }
+          return all;
+        }
+
+        // single page only
+        return content;
+      }
+
+      // 3) HAL format: { _embedded: { points: [...] } }
+      if (data && data._embedded) {
+        // пробуем найти любой массив внутри _embedded
+        const embeddedValues = Object.values(data._embedded).filter(v => Array.isArray(v));
+        if (embeddedValues.length) {
+          // объединяем все найденные массивы (обычно там только один)
+          return (embeddedValues as any[]).flat() as PointDTO[];
+        }
+      }
+
+      // 4) Попытка найти любое поле-массив внутри объекта
+      if (data && typeof data === 'object') {
+        const arrays = Object.values(data).filter(v => Array.isArray(v)) as any[];
+        if (arrays.length === 1) {
+          return arrays[0] as PointDTO[];
+        } else if (arrays.length > 1) {
+          // если несколько массивов — пробуем предпочесть очевидные имена
+          const preferred = (data as any).content || (data as any).items || (data as any).points || (data as any).data;
+          if (Array.isArray(preferred)) return preferred as PointDTO[];
+          // иначе возвращаем самый длинный массив
+          const longest = arrays.reduce((acc, cur) => (cur.length > acc.length ? cur : acc), arrays[0]);
+          return longest as PointDTO[];
+        }
+      }
+
+      // В противном случае — возвращаем пустой массив
+      return [] as PointDTO[];
     } catch (error) {
       console.error(`Ошибка при получении точек для функции с ID ${functionId}:`, error);
       throw error;
@@ -146,7 +218,7 @@ class FunctionService {
 
   async addPoint(functionId: number, x: number, y: number) {
     try {
-      const response = await axios.post<PointDTO>('/api/points', {
+      const response = await axios.post<PointDTO>(POINTS_API, {
         functionId,
         indexInFunction: 0, // Сервер сам определит индекс
         x,
@@ -163,7 +235,7 @@ class FunctionService {
 
   async deletePoint(pointId: number) {
     try {
-      await axios.delete(`/api/points/${pointId}`, {
+      await axios.delete(`${POINTS_API}/${pointId}`, {
         headers: authService.getAuthHeaders()
       });
       return true;
@@ -197,46 +269,29 @@ class FunctionService {
 
       const functionId = functionResponse.data.id;
 
-      // Генерируем точки в зависимости от типа функции
+      // Генерируем точки
       let points: { x: number; y: number }[] = [];
       const step = (intervalEnd - intervalStart) / (pointsCount - 1);
 
       for (let i = 0; i < pointsCount; i++) {
         const x = intervalStart + i * step;
         let y = 0;
-
         switch (mathFunctionType) {
-          case 'identity':
-            y = x;
-            break;
-          case 'square':
-            y = x * x;
-            break;
-          case 'cube':
-            y = x * x * x;
-            break;
-          case 'sqrt':
-            y = x >= 0 ? Math.sqrt(x) : 0;
-            break;
-          case 'sin':
-            y = Math.sin(x);
-            break;
-          case 'cos':
-            y = Math.cos(x);
-            break;
-          case 'exp':
-            y = Math.exp(x);
-            break;
-          default:
-            y = x; // по умолчанию тождественная функция
+          case 'identity': y = x; break;
+          case 'square': y = x * x; break;
+          case 'cube': y = x * x * x; break;
+          case 'sqrt': y = x >= 0 ? Math.sqrt(x) : 0; break;
+          case 'sin': y = Math.sin(x); break;
+          case 'cos': y = Math.cos(x); break;
+          case 'exp': y = Math.exp(x); break;
+          default: y = x;
         }
-
         points.push({ x, y });
       }
 
       // Добавляем точки
       const pointsPromises = points.map(point =>
-        axios.post<PointDTO>('/api/points', {
+        axios.post<PointDTO>(POINTS_API, {
           functionId,
           indexInFunction: 0,
           x: point.x,
