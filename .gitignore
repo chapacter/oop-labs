@@ -1,0 +1,25 @@
+/.idea/
+/.vscode/
+/frontend/node_modules/
+/target/
+/logs/
+/src/test/
+/sort_sort_functions_by_name_asc_db.csv
+/sort_sort_functions_by_name_asc_memory.csv
+/sort_sort_functions_by_user_id_asc_db.csv
+/sort_sort_functions_by_user_id_asc_memory.csv
+/sort_sort_points_by_function_id_asc_db.csv
+/sort_sort_points_by_function_id_asc_memory.csv
+/sort_sort_points_by_x_asc_db.csv
+/sort_sort_points_by_x_asc_memory.csv
+/sort_sort_users_by_id_asc_db.csv
+/sort_sort_users_by_id_asc_memory.csv
+/sort_sort_users_by_name_asc_db.csv
+/sort_sort_users_by_name_asc_memory.csv
+/sort_sort_users_by_name_desc_db.csv
+/sort_sort_users_by_name_desc_memory.csv
+/Лабораторная работа №7.docx.pdf
+/loadFunctionAndPoints_jpa.csv
+/findUserByName_jpa.csv
+/findFunctionByName_jpa.csv
+/aggregates_sorting.csv
