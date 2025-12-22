@@ -5,17 +5,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import ru.ssau.tk.avokado.lab2.entities.FunctionEntity;
 import ru.ssau.tk.avokado.lab2.repositories.FunctionRepository;
 import ru.ssau.tk.avokado.lab2.repositories.UserRepository;
 
 import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Component
 public class BenchmarkServiceFramework implements CommandLineRunner {
@@ -54,10 +51,6 @@ public class BenchmarkServiceFramework implements CommandLineRunner {
         runJpaBench("loadFunctionAndPoints_jpa", warmup, measured, this::opLoadFunctionAndPoints);
 
         logger.info("Framework-only benchmarks finished. CSV files in project root.");
-    }
-
-    private interface Action {
-        void run();
     }
 
     private void runJpaBench(String testName, int warmup, int measured, Action action) {
@@ -130,5 +123,9 @@ public class BenchmarkServiceFramework implements CommandLineRunner {
             } catch (Exception ignored) {
             }
         });
+    }
+
+    private interface Action {
+        void run();
     }
 }

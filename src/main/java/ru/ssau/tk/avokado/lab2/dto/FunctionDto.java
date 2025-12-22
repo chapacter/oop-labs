@@ -5,4 +5,5 @@ public record FunctionDto(Long id,
                           Integer format,
                           String funcResult,
                           SimpleUserDto user,
-                          Long pointsCount) {}
+                          Long pointsCount) {
+}

@@ -19,7 +19,8 @@ public class ResultValueEntity {
     @JoinColumn(name = "processed_function_id", nullable = false)
     private ProcessedFunctionEntity processedFunction;
 
-    public ResultValueEntity() { }
+    public ResultValueEntity() {
+    }
 
     public ResultValueEntity(Integer pointIndex, Double x, Double y, ProcessedFunctionEntity processedFunction) {
         this.pointIndex = pointIndex;
@@ -28,18 +29,43 @@ public class ResultValueEntity {
         this.processedFunction = processedFunction;
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public Integer getPointIndex() { return pointIndex; }
-    public void setPointIndex(Integer pointIndex) { this.pointIndex = pointIndex; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public Double getX() { return x; }
-    public void setX(Double x) { this.x = x; }
+    public Integer getPointIndex() {
+        return pointIndex;
+    }
 
-    public Double getY() { return y; }
-    public void setY(Double y) { this.y = y; }
+    public void setPointIndex(Integer pointIndex) {
+        this.pointIndex = pointIndex;
+    }
 
-    public ProcessedFunctionEntity getProcessedFunction() { return processedFunction; }
-    public void setProcessedFunction(ProcessedFunctionEntity processedFunction) { this.processedFunction = processedFunction; }
+    public Double getX() {
+        return x;
+    }
+
+    public void setX(Double x) {
+        this.x = x;
+    }
+
+    public Double getY() {
+        return y;
+    }
+
+    public void setY(Double y) {
+        this.y = y;
+    }
+
+    public ProcessedFunctionEntity getProcessedFunction() {
+        return processedFunction;
+    }
+
+    public void setProcessedFunction(ProcessedFunctionEntity processedFunction) {
+        this.processedFunction = processedFunction;
+    }
 }

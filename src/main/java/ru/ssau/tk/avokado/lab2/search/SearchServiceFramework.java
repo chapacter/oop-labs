@@ -14,7 +14,6 @@ import ru.ssau.tk.avokado.lab2.repositories.UserRepository;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class SearchServiceFramework {
@@ -125,12 +124,10 @@ public class SearchServiceFramework {
     private List<Object> childrenOf(Object o) {
         if (o == null) return Collections.emptyList();
         try {
-            if (o instanceof User) {
-                User u = (User) o;
+            if (o instanceof User u) {
                 if (u.getFunctions() == null) return Collections.emptyList();
                 return new ArrayList<>(u.getFunctions());
-            } else if (o instanceof FunctionEntity) {
-                FunctionEntity f = (FunctionEntity) o;
+            } else if (o instanceof FunctionEntity f) {
                 if (f.getPoints() == null) return Collections.emptyList();
                 return new ArrayList<>(f.getPoints());
             } else if (o instanceof TabulatedPoint) {
@@ -151,7 +148,8 @@ public class SearchServiceFramework {
         try {
             Method m = target.getClass().getMethod(methodName);
             return m.invoke(target);
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         return null;
     }
 
@@ -165,7 +163,8 @@ public class SearchServiceFramework {
                 double dField = ((Number) val).doubleValue();
                 return Double.compare(dVal, dField) == 0;
             }
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         return value.equalsIgnoreCase(String.valueOf(val));
     }
 
@@ -176,17 +175,26 @@ public class SearchServiceFramework {
         try {
             Method m = target.getClass().getMethod(getter);
             return m.invoke(target);
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         List<String> candidates = Arrays.asList(fieldName, camel, fieldName.replaceAll("_", ""), "indexInFunction", "index", "pointIndex");
         for (String cand : candidates) {
             Field f = findFieldInHierarchy(target.getClass(), cand);
             if (f != null) {
-                try { f.setAccessible(true); return f.get(target); } catch (Exception ignored) {}
+                try {
+                    f.setAccessible(true);
+                    return f.get(target);
+                } catch (Exception ignored) {
+                }
             }
         }
         for (Field f : target.getClass().getDeclaredFields()) {
             if (normalize(f.getName()).equals(normalize(fieldName))) {
-                try { f.setAccessible(true); return f.get(target); } catch (Exception ignored) {}
+                try {
+                    f.setAccessible(true);
+                    return f.get(target);
+                } catch (Exception ignored) {
+                }
             }
         }
         return null;
@@ -195,7 +203,10 @@ public class SearchServiceFramework {
     private Field findFieldInHierarchy(Class<?> cls, String name) {
         Class<?> cur = cls;
         while (cur != null && cur != Object.class) {
-            try { return cur.getDeclaredField(name); } catch (NoSuchFieldException ignored) {}
+            try {
+                return cur.getDeclaredField(name);
+            } catch (NoSuchFieldException ignored) {
+            }
             cur = cur.getSuperclass();
         }
         return null;
@@ -224,7 +235,8 @@ public class SearchServiceFramework {
         try {
             Method m = entity.getClass().getMethod("getId");
             return m.invoke(entity);
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         return entity.hashCode();
     }
 

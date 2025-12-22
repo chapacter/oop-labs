@@ -10,6 +10,8 @@ import java.util.List;
 
 public interface PointRepository extends JpaRepository<TabulatedPoint, Long> {
     List<TabulatedPoint> findByFunction(FunctionEntity function);
+
     Page<TabulatedPoint> findByFunction(FunctionEntity function, Pageable pageable);
+
     long countByFunction(FunctionEntity function);
 }

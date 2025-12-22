@@ -1,6 +1,7 @@
 package ru.ssau.tk.avokado.lab2.functions;
-import ru.ssau.tk.avokado.lab2.exceptions.DifferentLengthOfArraysException;
+
 import ru.ssau.tk.avokado.lab2.exceptions.ArrayIsNotSortedException;
+import ru.ssau.tk.avokado.lab2.exceptions.DifferentLengthOfArraysException;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -9,10 +10,36 @@ public abstract class AbstractTabulatedFunction implements TabulatedFunction, Se
     @Serial
     private static final long serialVersionUID = 45745025833456345L;
 
+    public static void checkLengthIsTheSame(double[] xValues, double[] yValues) {
+        if (xValues == null || yValues == null) {
+            throw new DifferentLengthOfArraysException("xValues or yValues is null");
+        }
+        if (xValues.length != yValues.length) {
+            throw new DifferentLengthOfArraysException("Lengths of xValues and yValues are different");
+        }
+    }
+
+    public static void checkSorted(double[] xValues) {
+        if (xValues == null) {
+            throw new ArrayIsNotSortedException("xValues is null");
+        }
+        for (int i = 1; i < xValues.length; i++) {
+            if (!(xValues[i] > xValues[i - 1])) {
+                throw new ArrayIsNotSortedException(
+                        "Array xValues is not strictly increasing at index " + i + ": "
+                                + xValues[i - 1] + " >= " + xValues[i]
+                );
+            }
+        }
+    }
+
     // Прописываем абстрактные защищённые методы
     protected abstract int floorIndexOfX(double x);
+
     protected abstract double extrapolateLeft(double x);
+
     protected abstract double extrapolateRight(double x);
+
     protected abstract double interpolate(double x, int floorIndex);
 
     // Прописываем защищённый метод интерполяции с реализацией по формуле из методички
@@ -38,28 +65,6 @@ public abstract class AbstractTabulatedFunction implements TabulatedFunction, Se
             }
         }
     }
-    public static void checkLengthIsTheSame(double[] xValues, double[] yValues) {
-        if (xValues == null || yValues == null) {
-            throw new DifferentLengthOfArraysException("xValues or yValues is null");
-        }
-        if (xValues.length != yValues.length) {
-            throw new DifferentLengthOfArraysException("Lengths of xValues and yValues are different");
-        }
-    }
-
-    public static void checkSorted(double[] xValues) {
-        if (xValues == null) {
-            throw new ArrayIsNotSortedException("xValues is null");
-        }
-        for (int i = 1; i < xValues.length; i++) {
-            if (!(xValues[i] > xValues[i - 1])) {
-                throw new ArrayIsNotSortedException(
-                        "Array xValues is not strictly increasing at index " + i + ": "
-                                + xValues[i - 1] + " >= " + xValues[i]
-                );
-            }
-        }
-    }
 
     @Override
     public String toString() {
@@ -71,9 +76,9 @@ public abstract class AbstractTabulatedFunction implements TabulatedFunction, Se
 
         for (Point point : this) {
             sb.append("[")
-                    .append(point.x)
+                    .append(point.x())
                     .append("; ")
-                    .append(point.y)
+                    .append(point.y())
                     .append("]\n");
         }
 

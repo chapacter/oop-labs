@@ -4,7 +4,8 @@ import org.junit.jupiter.api.Test;
 
 import java.io.*;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 public class ArrayTabulatedFunctionSerializationTest {
 
@@ -26,7 +27,7 @@ public class ArrayTabulatedFunctionSerializationTest {
         Object obj = ois.readObject();
         ois.close();
 
-        assertTrue(obj instanceof ArrayTabulatedFunction);
+        assertInstanceOf(ArrayTabulatedFunction.class, obj);
         ArrayTabulatedFunction restored = (ArrayTabulatedFunction) obj;
 
         assertEquals(original.getCount(), restored.getCount());

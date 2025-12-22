@@ -5,7 +5,8 @@ public class CreateUserRequest {
     private String password;
     private Integer accessLvl;
 
-    public CreateUserRequest() {}
+    public CreateUserRequest() {
+    }
 
     public CreateUserRequest(String name, String password, Integer accessLvl) {
         this.name = name;
@@ -13,12 +14,27 @@ public class CreateUserRequest {
         this.accessLvl = accessLvl;
     }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public String getName() {
+        return name;
+    }
 
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public Integer getAccessLvl() { return accessLvl; }
-    public void setAccessLvl(Integer accessLvl) { this.accessLvl = accessLvl; }
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Integer getAccessLvl() {
+        return accessLvl;
+    }
+
+    public void setAccessLvl(Integer accessLvl) {
+        this.accessLvl = accessLvl;
+    }
 }

@@ -4,7 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
-import ru.ssau.tk.avokado.lab2.dto.*;
+import ru.ssau.tk.avokado.lab2.dto.CreatePointRequest;
+import ru.ssau.tk.avokado.lab2.dto.PointDto;
+import ru.ssau.tk.avokado.lab2.dto.UpdatePointRequest;
 import ru.ssau.tk.avokado.lab2.service.PointService;
 
 @RestController
@@ -13,7 +15,9 @@ public class PointController {
     private final Logger logger = LoggerFactory.getLogger(PointController.class);
     private final PointService service;
 
-    public PointController(PointService service) { this.service = service; }
+    public PointController(PointService service) {
+        this.service = service;
+    }
 
     @GetMapping
     public org.springframework.data.domain.Page<PointDto> list(

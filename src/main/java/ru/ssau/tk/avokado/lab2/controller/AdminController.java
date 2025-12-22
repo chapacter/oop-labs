@@ -2,7 +2,10 @@ package ru.ssau.tk.avokado.lab2.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import ru.ssau.tk.avokado.lab2.bench.DbPopulatorFramework;
 
 @RestController
@@ -11,7 +14,9 @@ public class AdminController {
     private final Logger logger = LoggerFactory.getLogger(AdminController.class);
     private final DbPopulatorFramework populator;
 
-    public AdminController(DbPopulatorFramework populator) { this.populator = populator; }
+    public AdminController(DbPopulatorFramework populator) {
+        this.populator = populator;
+    }
 
     @PostMapping("/populate")
     public String populate(@RequestParam(defaultValue = "10000") int functions,

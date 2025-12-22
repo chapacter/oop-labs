@@ -1,9 +1,7 @@
 package ru.ssau.tk.avokado.lab2.functions;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
-import ru.ssau.tk.avokado.lab2.functions.MathFunction;
-import ru.ssau.tk.avokado.lab2.functions.NewtonMethod;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 

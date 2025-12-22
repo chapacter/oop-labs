@@ -4,12 +4,7 @@ import ru.ssau.tk.avokado.lab2.functions.ArrayTabulatedFunction;
 import ru.ssau.tk.avokado.lab2.functions.TabulatedFunction;
 import ru.ssau.tk.avokado.lab2.operations.TabulatedDifferentialOperator;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.file.Files;
+import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 

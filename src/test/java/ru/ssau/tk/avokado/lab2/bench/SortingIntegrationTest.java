@@ -6,9 +6,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.testcontainers.containers.PostgreSQLContainer;
 import ru.ssau.tk.avokado.lab2.entities.FunctionEntity;
 import ru.ssau.tk.avokado.lab2.repositories.FunctionRepository;
-import org.testcontainers.containers.PostgreSQLContainer;
 
 import java.util.Comparator;
 import java.util.List;

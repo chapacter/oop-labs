@@ -2,13 +2,13 @@ package ru.ssau.tk.avokado.lab2.bench;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import ru.ssau.tk.avokado.lab2.auth.Role;
 import ru.ssau.tk.avokado.lab2.entities.FunctionEntity;
 import ru.ssau.tk.avokado.lab2.entities.TabulatedPoint;
 import ru.ssau.tk.avokado.lab2.entities.User;
-import ru.ssau.tk.avokado.lab2.auth.Role;
 import ru.ssau.tk.avokado.lab2.repositories.FunctionRepository;
 import ru.ssau.tk.avokado.lab2.repositories.PointRepository;
 import ru.ssau.tk.avokado.lab2.repositories.UserRepository;

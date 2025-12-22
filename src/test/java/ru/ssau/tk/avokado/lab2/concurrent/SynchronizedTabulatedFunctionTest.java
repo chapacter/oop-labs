@@ -87,16 +87,16 @@ class SynchronizedTabulatedFunctionTest {
         int idx = 0;
         while (it.hasNext()) {
             Point p = it.next();
-            assertEquals(x[idx], p.x, 1e-12);
-            assertEquals(y[idx], p.y, 1e-12);
+            assertEquals(x[idx], p.x(), 1e-12);
+            assertEquals(y[idx], p.y(), 1e-12);
             idx++;
         }
         assertEquals(3, idx);
 
         idx = 0;
         for (Point p : sync) {
-            assertEquals(x[idx], p.x, 1e-12);
-            assertEquals(y[idx], p.y, 1e-12);
+            assertEquals(x[idx], p.x(), 1e-12);
+            assertEquals(y[idx], p.y(), 1e-12);
             idx++;
         }
         assertEquals(3, idx);
@@ -118,8 +118,8 @@ class SynchronizedTabulatedFunctionTest {
         assertEquals(base.hashCode(), syncWithMutex.hashCode());
 
         SynchronizedTabulatedFunction syncOtherMutex = new SynchronizedTabulatedFunction(base, new Object());
-        assertTrue(syncWithMutex.equals(syncOtherMutex));
-        assertTrue(syncOtherMutex.equals(syncWithMutex));
+        assertEquals(syncWithMutex, syncOtherMutex);
+        assertEquals(syncOtherMutex, syncWithMutex);
     }
 
     @Test
@@ -135,10 +135,10 @@ class SynchronizedTabulatedFunctionTest {
         SynchronizedTabulatedFunction sync1 = new SynchronizedTabulatedFunction(base1);
         SynchronizedTabulatedFunction sync2 = new SynchronizedTabulatedFunction(base2);
 
-        assertFalse(sync1.equals(sync2));
+        assertNotEquals(sync1, sync2);
 
         Object someObject = new Object();
-        assertFalse(sync1.equals(someObject));
+        assertNotEquals(sync1, someObject);
     }
 
     @Test
@@ -175,16 +175,16 @@ class SynchronizedTabulatedFunctionTest {
 
         assertTrue(iterator.hasNext());
         Point point1 = iterator.next();
-        assertEquals(1.0, point1.x, 1e-12);
-        assertEquals(10.0, point1.y, 1e-12);
+        assertEquals(1.0, point1.x(), 1e-12);
+        assertEquals(10.0, point1.y(), 1e-12);
 
         Point point2 = iterator.next();
-        assertEquals(2.0, point2.x, 1e-12);
-        assertEquals(20.0, point2.y, 1e-12);
+        assertEquals(2.0, point2.x(), 1e-12);
+        assertEquals(20.0, point2.y(), 1e-12);
 
         Point point3 = iterator.next();
-        assertEquals(3.0, point3.x, 1e-12);
-        assertEquals(30.0, point3.y, 1e-12);
+        assertEquals(3.0, point3.x(), 1e-12);
+        assertEquals(30.0, point3.y(), 1e-12);
 
         assertFalse(iterator.hasNext());
     }
@@ -205,13 +205,13 @@ class SynchronizedTabulatedFunctionTest {
 
         assertTrue(iterator2.hasNext());
         Point p2_1 = iterator2.next();
-        assertEquals(p1_1.x, p2_1.x, 1e-12);
-        assertEquals(p1_1.y, p2_1.y, 1e-12);
+        assertEquals(p1_1.x(), p2_1.x(), 1e-12);
+        assertEquals(p1_1.y(), p2_1.y(), 1e-12);
 
         assertTrue(iterator2.hasNext());
         Point p2_2 = iterator2.next();
-        assertEquals(p1_2.x, p2_2.x, 1e-12);
-        assertEquals(p1_2.y, p2_2.y, 1e-12);
+        assertEquals(p1_2.x(), p2_2.x(), 1e-12);
+        assertEquals(p1_2.y(), p2_2.y(), 1e-12);
 
         assertFalse(iterator2.hasNext());
     }
@@ -227,8 +227,8 @@ class SynchronizedTabulatedFunctionTest {
         for (Point point : sync) {
             sync.setY(count, -1.0);
 
-            assertEquals(x[count], point.x, 1e-12);
-            assertEquals(y[count], point.y, 1e-12);
+            assertEquals(x[count], point.x(), 1e-12);
+            assertEquals(y[count], point.y(), 1e-12);
 
             count++;
         }
@@ -265,8 +265,8 @@ class SynchronizedTabulatedFunctionTest {
         int count = 0;
         while (iterator.hasNext()) {
             Point point = iterator.next();
-            assertEquals(x[count], point.x, 1e-12);
-            assertEquals(y[count], point.y, 1e-12);
+            assertEquals(x[count], point.x(), 1e-12);
+            assertEquals(y[count], point.y(), 1e-12);
             count++;
         }
 

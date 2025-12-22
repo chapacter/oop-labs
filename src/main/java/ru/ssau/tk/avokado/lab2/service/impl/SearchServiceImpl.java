@@ -97,7 +97,8 @@ public class SearchServiceImpl implements SearchService {
                 // expand: user -> functions
                 List<FunctionEntity> funcs = functionRepository.findByUser(u);
                 for (FunctionEntity f : funcs) {
-                    if (bfs) queue.add(f); else stack.add(f);
+                    if (bfs) queue.add(f);
+                    else stack.add(f);
                 }
             } else if (cur instanceof FunctionEntity f) {
                 if (matchesFunction(f, field, value)) {
@@ -107,7 +108,8 @@ public class SearchServiceImpl implements SearchService {
                 // expand: function -> points
                 List<TabulatedPoint> pts = pointRepository.findByFunction(f);
                 for (TabulatedPoint p : pts) {
-                    if (bfs) queue.add(p); else stack.add(p);
+                    if (bfs) queue.add(p);
+                    else stack.add(p);
                 }
             } else if (cur instanceof TabulatedPoint p) {
                 if (matchesPoint(p, field, value)) {

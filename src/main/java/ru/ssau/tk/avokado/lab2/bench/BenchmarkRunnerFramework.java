@@ -1,10 +1,16 @@
 package ru.ssau.tk.avokado.lab2.bench;
 
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.ComponentScan;
 import org.testcontainers.containers.PostgreSQLContainer;
 
+@ComponentScan(basePackages = "ru.ssau.tk.avokado.lab2", excludeFilters = @ComponentScan.Filter(
+        type = org.springframework.context.annotation.FilterType.REGEX,
+        pattern = "ru\\.ssau\\.tk\\.avokado\\.lab2\\.search\\.SearchController"
+))
+@EntityScan(basePackages = "ru.ssau.tk.avokado.lab2.entities")
 @SpringBootApplication(scanBasePackages = "ru.ssau.tk.avokado.lab2")
 public class BenchmarkRunnerFramework {
 
@@ -19,9 +25,8 @@ public class BenchmarkRunnerFramework {
         System.setProperty("spring.datasource.url", postgres.getJdbcUrl());
         System.setProperty("spring.datasource.username", postgres.getUsername());
         System.setProperty("spring.datasource.password", postgres.getPassword());
-
-        System.setProperty("logging.level.org.hibernate.SQL", "OFF");
-        System.setProperty("logging.level.org.hibernate.type.descriptor.sql.BasicBinder", "OFF");
+        System.setProperty("spring.jpa.hibernate.ddl-auto", "create-drop");
+        System.setProperty("spring.profiles.active", "testcontainers");
 
         SpringApplication.run(BenchmarkRunnerFramework.class, args);
     }

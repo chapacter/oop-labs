@@ -4,7 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
-import ru.ssau.tk.avokado.lab2.dto.*;
+import ru.ssau.tk.avokado.lab2.dto.CreateFunctionRequest;
+import ru.ssau.tk.avokado.lab2.dto.FunctionDto;
+import ru.ssau.tk.avokado.lab2.dto.UpdateFunctionRequest;
 import ru.ssau.tk.avokado.lab2.service.FunctionService;
 
 import java.util.List;
@@ -15,7 +17,9 @@ public class FunctionController {
     private final Logger logger = LoggerFactory.getLogger(FunctionController.class);
     private final FunctionService service;
 
-    public FunctionController(FunctionService service) { this.service = service; }
+    public FunctionController(FunctionService service) {
+        this.service = service;
+    }
 
     @GetMapping
     public org.springframework.data.domain.Page<FunctionDto> list(

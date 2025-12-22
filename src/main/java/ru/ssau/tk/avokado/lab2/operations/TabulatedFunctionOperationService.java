@@ -1,12 +1,12 @@
 package ru.ssau.tk.avokado.lab2.operations;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.ssau.tk.avokado.lab2.exceptions.InconsistentFunctionsException;
 import ru.ssau.tk.avokado.lab2.functions.Point;
 import ru.ssau.tk.avokado.lab2.functions.TabulatedFunction;
 import ru.ssau.tk.avokado.lab2.functions.factory.ArrayTabulatedFunctionFactory;
 import ru.ssau.tk.avokado.lab2.functions.factory.TabulatedFunctionFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class TabulatedFunctionOperationService {
     private static final Logger logger = LoggerFactory.getLogger(TabulatedFunctionOperationService.class);
@@ -25,18 +25,6 @@ public class TabulatedFunctionOperationService {
         this.factory = new ArrayTabulatedFunctionFactory();
     }
 
-    public TabulatedFunctionFactory getFactory() {
-        return factory;
-    }
-
-    public void setFactory(TabulatedFunctionFactory factory) {
-        if (factory == null) {
-            throw new IllegalArgumentException("factory is null");
-        }
-        this.factory = factory;
-        logger.info("Фабрика установлена: {}", factory.getClass().getSimpleName());
-    }
-
     public static Point[] asPoints(TabulatedFunction tabulatedFunction) {
         if (tabulatedFunction == null) {
             throw new IllegalArgumentException("TabulatedFunction is null");
@@ -48,14 +36,22 @@ public class TabulatedFunctionOperationService {
 
         int i = 0;
         for (Point point : tabulatedFunction) {
-            points[i++] = new Point(point.x, point.y);
+            points[i++] = new Point(point.x(), point.y());
         }
         logger.debug("asPoints: преобразовано {} точек", count);
         return points;
     }
 
-    private interface BiOperation {
-        double apply(double u, double v);
+    public TabulatedFunctionFactory getFactory() {
+        return factory;
+    }
+
+    public void setFactory(TabulatedFunctionFactory factory) {
+        if (factory == null) {
+            throw new IllegalArgumentException("factory is null");
+        }
+        this.factory = factory;
+        logger.info("Фабрика установлена: {}", factory.getClass().getSimpleName());
     }
 
     private TabulatedFunction doOperation(TabulatedFunction a, TabulatedFunction b, BiOperation operation) {
@@ -77,15 +73,15 @@ public class TabulatedFunctionOperationService {
         double[] yValues = new double[n];
 
         for (int i = 0; i < n; i++) {
-            double xa = pa[i].x;
-            double xb = pb[i].x;
+            double xa = pa[i].x();
+            double xb = pb[i].x();
             if (Double.compare(xa, xb) != 0) {
-                logger.warn("doOperation: несоответствие x на позиции {}: {} != {}", i, pa[i].x, pb[i].x);
+                logger.warn("doOperation: несоответствие x на позиции {}: {} != {}", i, pa[i].x(), pb[i].x());
                 throw new InconsistentFunctionsException(
                         "x-values differ at index " + i + ": " + xa + " vs " + xb);
             }
             xValues[i] = xa;
-            yValues[i] = operation.apply(pa[i].y, pb[i].y);
+            yValues[i] = operation.apply(pa[i].y(), pb[i].y());
         }
         logger.info("doOperation: операция успешно применена к {} точкам", n);
         return factory.create(xValues, yValues);
@@ -111,7 +107,6 @@ public class TabulatedFunctionOperationService {
         });
     }
 
-
     public TabulatedFunction multiply(TabulatedFunction a, TabulatedFunction b) {
         logger.info("multiply: умножаем функции");
         return doOperation(a, b, new BiOperation() {
@@ -133,5 +128,9 @@ public class TabulatedFunctionOperationService {
                 return u / v;
             }
         });
+    }
+
+    private interface BiOperation {
+        double apply(double u, double v);
     }
 }

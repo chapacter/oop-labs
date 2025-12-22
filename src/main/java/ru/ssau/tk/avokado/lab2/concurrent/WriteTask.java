@@ -7,7 +7,9 @@ public class WriteTask implements Runnable {
     private final double value;
 
     public WriteTask(TabulatedFunction function, double value) {
-        if (function == null) { throw new IllegalArgumentException("Function == null");}
+        if (function == null) {
+            throw new IllegalArgumentException("Function == null");
+        }
 //        if (value == null) { throw new IllegalArgumentException("Value == null");}
 
         this.function = function;
@@ -17,7 +19,7 @@ public class WriteTask implements Runnable {
     @Override
     public void run() {
         for (int i = 0; i < function.getCount(); i++) {
-            synchronized(function) {
+            synchronized (function) {
                 function.setY(i, value);
                 System.out.printf("Writing for index %d complete%n", i);
             }

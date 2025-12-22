@@ -12,8 +12,12 @@ public interface FunctionService {
     Page<FunctionDto> list(String nameFilter, Long userId, boolean withPoints, Pageable pageable);
 
     FunctionDto get(Long id, boolean withPoints);
+
     FunctionDto create(CreateFunctionRequest req);
+
     FunctionDto update(Long id, UpdateFunctionRequest req);
+
     void delete(Long id);
+
     List<FunctionDto> findByUserId(Long userId);
 }

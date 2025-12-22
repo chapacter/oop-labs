@@ -10,7 +10,9 @@ import ru.ssau.tk.avokado.lab2.service.UserService;
 public class AdminUserController {
     private final UserService userService;
 
-    public AdminUserController(UserService userService) { this.userService = userService; }
+    public AdminUserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping("/{id}/roles")

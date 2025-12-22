@@ -23,10 +23,10 @@
     </appender>
 
     <root level="INFO">
-        <appender-ref ref="STDOUT" />
-        <appender-ref ref="FILE" />
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
     </root>
 
-    <logger name="ru.ssau.tk.avokado.lab2" level="DEBUG" />
+    <logger name="ru.ssau.tk.avokado.lab2" level="DEBUG"/>
 
 </configuration>

@@ -1,8 +1,9 @@
 package ru.ssau.tk.avokado.lab2.functions;
 
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class ArrayTabulatedFunctionTest {
 
@@ -11,7 +12,7 @@ class ArrayTabulatedFunctionTest {
         double[] x = {1.0, 2.0, 3.0};
         double[] y = {2.0, 4.0, 6.0};
 
-        ArrayTabulatedFunction function= new ArrayTabulatedFunction(x, y);
+        ArrayTabulatedFunction function = new ArrayTabulatedFunction(x, y);
 
         assertEquals(3, function.getCount());
         assertEquals(1.0, function.leftBound());
@@ -25,7 +26,7 @@ class ArrayTabulatedFunctionTest {
         double[] x = {1.0, 2.0, 3.0};
         double[] y = {2.0, 4.0, 6.0};
 
-        ArrayTabulatedFunction function= new ArrayTabulatedFunction(x, y);
+        ArrayTabulatedFunction function = new ArrayTabulatedFunction(x, y);
 
         function.setY(0, 10.0);
         assertEquals(10.0, function.getY(0));
@@ -42,7 +43,7 @@ class ArrayTabulatedFunctionTest {
         double[] x = {1.0, 2.0, 3.0};
         double[] y = {2.0, 4.0, 6.0};
 
-        ArrayTabulatedFunction function= new ArrayTabulatedFunction(x, y);
+        ArrayTabulatedFunction function = new ArrayTabulatedFunction(x, y);
 
         assertThrows(IllegalArgumentException.class, () -> function.getX(-1));
         assertThrows(IllegalArgumentException.class, () -> function.getX(3));
@@ -64,7 +65,7 @@ class ArrayTabulatedFunctionTest {
     void testInterpolationAndExtrapolation() {
         double[] x = {1.0, 2.0, 3.0};
         double[] y = {2.0, 4.0, 6.0};
-        ArrayTabulatedFunction function= new ArrayTabulatedFunction(x, y);
+        ArrayTabulatedFunction function = new ArrayTabulatedFunction(x, y);
 
         // Проверяем интерполяцию в середине
         double mid = function.interpolate(1.5, 0);
@@ -83,7 +84,7 @@ class ArrayTabulatedFunctionTest {
     void testFloorIndexOfXEdgeCases() {
         double[] x = {0.0, 5.0, 10.0};
         double[] y = {0.0, 25.0, 100.0};
-        ArrayTabulatedFunction function= new ArrayTabulatedFunction(x, y);
+        ArrayTabulatedFunction function = new ArrayTabulatedFunction(x, y);
 
         // Точно по точке
         assertEquals(0, function.floorIndexOfX(0.0));
@@ -102,7 +103,7 @@ class ArrayTabulatedFunctionTest {
     void testInsertAndRemove() {
         double[] x = {1.0, 3.0, 5.0};
         double[] y = {10.0, 30.0, 50.0};
-        ArrayTabulatedFunction function= new ArrayTabulatedFunction(x, y);
+        ArrayTabulatedFunction function = new ArrayTabulatedFunction(x, y);
 
         // Вставка нового элемента
         function.insert(4.0, 40.0);
@@ -124,19 +125,19 @@ class ArrayTabulatedFunctionTest {
     @Test
     void insert1() {
         MathFunction func = new IdentityFunction();
-        ArrayTabulatedFunction test = new ArrayTabulatedFunction(func,0,5,6);
+        ArrayTabulatedFunction test = new ArrayTabulatedFunction(func, 0, 5, 6);
 
         int oldCount = test.getCount();
 
         test.insert(2.5, 22222);
 
-        Assertions.assertEquals(oldCount+1, test.getCount());
+        Assertions.assertEquals(oldCount + 1, test.getCount());
     }
 
     @Test
     void insert2() {
         MathFunction func = new IdentityFunction();
-        ArrayTabulatedFunction test = new ArrayTabulatedFunction(func,0,5,6);
+        ArrayTabulatedFunction test = new ArrayTabulatedFunction(func, 0, 5, 6);
 
         int oldCount = test.getCount();
 

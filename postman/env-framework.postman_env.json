@@ -2,27 +2,111 @@
   "id": "env-framework-0001",
   "name": "framework-local",
   "values": [
-    {"key":"baseUrl","value":"http://localhost:8080","enabled":true},
-    {"key":"page","value":"0","enabled":true},
-    {"key":"size","value":"20","enabled":true},
-    {"key":"name","value":"","enabled":true},
-    {"key":"functions","value":"200","enabled":true},
-    {"key":"pointsPerFunction","value":"5","enabled":true},
-    {"key":"batchSize","value":"100","enabled":true},
-    {"key":"userId","value":"1","enabled":true},
-    {"key":"funcId","value":"1","enabled":true},
-    {"key":"pointId","value":"1","enabled":true},
-    {"key":"pFunctionId","value":"1","enabled":true},
-    {"key":"fUserId","value":"","enabled":true},
-    {"key":"fName","value":"","enabled":true},
-    {"key":"withPoints","value":"false","enabled":true},
-    {"key":"start","value":"user:seed_user","enabled":true},
-    {"key":"field","value":"name","enabled":true},
-    {"key":"value","value":"func","enabled":true},
-    {"key":"limit","value":"10","enabled":true},
-    {"key":"iter","value":"1","enabled":true},
-    { "key": "username", "value": "seed_user", "enabled": true },
-    { "key": "password", "value": "pass", "enabled": true }
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "enabled": true
+    },
+    {
+      "key": "page",
+      "value": "0",
+      "enabled": true
+    },
+    {
+      "key": "size",
+      "value": "20",
+      "enabled": true
+    },
+    {
+      "key": "name",
+      "value": "",
+      "enabled": true
+    },
+    {
+      "key": "functions",
+      "value": "200",
+      "enabled": true
+    },
+    {
+      "key": "pointsPerFunction",
+      "value": "5",
+      "enabled": true
+    },
+    {
+      "key": "batchSize",
+      "value": "100",
+      "enabled": true
+    },
+    {
+      "key": "userId",
+      "value": "1",
+      "enabled": true
+    },
+    {
+      "key": "funcId",
+      "value": "1",
+      "enabled": true
+    },
+    {
+      "key": "pointId",
+      "value": "1",
+      "enabled": true
+    },
+    {
+      "key": "pFunctionId",
+      "value": "1",
+      "enabled": true
+    },
+    {
+      "key": "fUserId",
+      "value": "",
+      "enabled": true
+    },
+    {
+      "key": "fName",
+      "value": "",
+      "enabled": true
+    },
+    {
+      "key": "withPoints",
+      "value": "false",
+      "enabled": true
+    },
+    {
+      "key": "start",
+      "value": "user:seed_user",
+      "enabled": true
+    },
+    {
+      "key": "field",
+      "value": "name",
+      "enabled": true
+    },
+    {
+      "key": "value",
+      "value": "func",
+      "enabled": true
+    },
+    {
+      "key": "limit",
+      "value": "10",
+      "enabled": true
+    },
+    {
+      "key": "iter",
+      "value": "1",
+      "enabled": true
+    },
+    {
+      "key": "username",
+      "value": "seed_user",
+      "enabled": true
+    },
+    {
+      "key": "password",
+      "value": "pass",
+      "enabled": true
+    }
   ],
   "_postman_variable_scope": "environment"
 }

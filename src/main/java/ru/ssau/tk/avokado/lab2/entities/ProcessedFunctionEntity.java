@@ -1,6 +1,7 @@
 package ru.ssau.tk.avokado.lab2.entities;
 
 import jakarta.persistence.*;
+
 import java.time.Instant;
 import java.util.List;
 
@@ -28,7 +29,8 @@ public class ProcessedFunctionEntity {
     @OneToMany(mappedBy = "processedFunction", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ResultValueEntity> resultValues;
 
-    public ProcessedFunctionEntity() { }
+    public ProcessedFunctionEntity() {
+    }
 
     public ProcessedFunctionEntity(FunctionEntity function, OperationEntity operation, String resultSummary) {
         this.function = function;
@@ -37,21 +39,51 @@ public class ProcessedFunctionEntity {
         this.createdAt = Instant.now();
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public FunctionEntity getFunction() { return function; }
-    public void setFunction(FunctionEntity function) { this.function = function; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public OperationEntity getOperation() { return operation; }
-    public void setOperation(OperationEntity operation) { this.operation = operation; }
+    public FunctionEntity getFunction() {
+        return function;
+    }
 
-    public String getResultSummary() { return resultSummary; }
-    public void setResultSummary(String resultSummary) { this.resultSummary = resultSummary; }
+    public void setFunction(FunctionEntity function) {
+        this.function = function;
+    }
 
-    public Instant getCreatedAt() { return createdAt; }
-    public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
+    public OperationEntity getOperation() {
+        return operation;
+    }
 
-    public List<ResultValueEntity> getResultValues() { return resultValues; }
-    public void setResultValues(List<ResultValueEntity> resultValues) { this.resultValues = resultValues; }
+    public void setOperation(OperationEntity operation) {
+        this.operation = operation;
+    }
+
+    public String getResultSummary() {
+        return resultSummary;
+    }
+
+    public void setResultSummary(String resultSummary) {
+        this.resultSummary = resultSummary;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public List<ResultValueEntity> getResultValues() {
+        return resultValues;
+    }
+
+    public void setResultValues(List<ResultValueEntity> resultValues) {
+        this.resultValues = resultValues;
+    }
 }

@@ -13,6 +13,7 @@ public interface FunctionRepository extends JpaRepository<FunctionEntity, Long> 
     Optional<FunctionEntity> findByName(String name);
 
     Page<FunctionEntity> findByUser(User user, Pageable pageable);
+
     List<FunctionEntity> findByUser(User user);
 
     Page<FunctionEntity> findByNameContaining(String name, Pageable pageable);

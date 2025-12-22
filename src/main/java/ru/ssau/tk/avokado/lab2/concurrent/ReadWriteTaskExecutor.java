@@ -1,8 +1,8 @@
 package ru.ssau.tk.avokado.lab2.concurrent;
 
+import ru.ssau.tk.avokado.lab2.functions.ConstantFunction;
 import ru.ssau.tk.avokado.lab2.functions.LinkedListTabulatedFunction;
 import ru.ssau.tk.avokado.lab2.functions.TabulatedFunction;
-import ru.ssau.tk.avokado.lab2.functions.ConstantFunction;
 
 public class ReadWriteTaskExecutor {
     public static void main(String[] args) {

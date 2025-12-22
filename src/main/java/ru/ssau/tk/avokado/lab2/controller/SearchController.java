@@ -1,6 +1,9 @@
 package ru.ssau.tk.avokado.lab2.controller;
 
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import ru.ssau.tk.avokado.lab2.dto.SearchResultDto;
 import ru.ssau.tk.avokado.lab2.service.SearchService;
 
@@ -12,7 +15,9 @@ public class SearchController {
 
     private final SearchService service;
 
-    public SearchController(SearchService service) { this.service = service; }
+    public SearchController(SearchService service) {
+        this.service = service;
+    }
 
     @GetMapping("/bfs")
     public List<SearchResultDto> bfs(

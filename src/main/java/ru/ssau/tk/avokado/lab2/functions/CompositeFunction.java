@@ -1,6 +1,6 @@
 package ru.ssau.tk.avokado.lab2.functions;
 
-public class CompositeFunction implements MathFunction{
+public class CompositeFunction implements MathFunction {
     private final MathFunction firstFun;
     private final MathFunction secondFun;
 

@@ -1,8 +1,8 @@
 package ru.ssau.tk.avokado.lab2.bench;
 
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
 import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Component;
 import ru.ssau.tk.avokado.lab2.entities.FunctionEntity;
 import ru.ssau.tk.avokado.lab2.entities.TabulatedPoint;
 import ru.ssau.tk.avokado.lab2.entities.User;
@@ -117,9 +117,6 @@ public class SortingBenchmarkFramework implements CommandLineRunner {
         System.out.println("All sorting benchmarks finished. CSVs and aggregates written to project root.");
     }
 
-    private interface DbFetch<T> { List<T> get(); }
-    private interface MemFetch<T> { List<T> get(); }
-
     private <T> void runBoth(String name, DbFetch<T> dbFetch, MemFetch<T> memFetch, int warmup, int measured) throws Exception {
         System.out.println("Benchmarking " + name + " (warmup=" + warmup + " measured=" + measured + ")");
 
@@ -172,21 +169,34 @@ public class SortingBenchmarkFramework implements CommandLineRunner {
     private Map<String, Long> aggregates(List<Long> arr) {
         Map<String, Long> out = new HashMap<>();
         if (arr == null || arr.isEmpty()) {
-            out.put("mean", 0L); out.put("median", 0L); out.put("std", 0L); return out;
+            out.put("mean", 0L);
+            out.put("median", 0L);
+            out.put("std", 0L);
+            return out;
         }
         int n = arr.size();
         double sum = 0;
         for (long v : arr) sum += v;
         long mean = Math.round(sum / n);
         List<Long> sorted = arr.stream().sorted().collect(Collectors.toList());
-        long median = sorted.get(n/2);
+        long median = sorted.get(n / 2);
         double ssd = 0;
         for (long v : arr) {
             double d = v - mean;
             ssd += d * d;
         }
         long std = Math.round(Math.sqrt(ssd / n));
-        out.put("mean", mean); out.put("median", median); out.put("std", std);
+        out.put("mean", mean);
+        out.put("median", median);
+        out.put("std", std);
         return out;
+    }
+
+    private interface DbFetch<T> {
+        List<T> get();
+    }
+
+    private interface MemFetch<T> {
+        List<T> get();
     }
 }

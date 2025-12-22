@@ -9,9 +9,6 @@ import ru.ssau.tk.avokado.lab2.dto.CreateUserRequest;
 import ru.ssau.tk.avokado.lab2.dto.UpdateUserRequest;
 import ru.ssau.tk.avokado.lab2.dto.UserDto;
 import ru.ssau.tk.avokado.lab2.service.UserService;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/users")
@@ -28,6 +25,12 @@ public class UserController {
         logger.info("GET /api/users name={}, page={}, size={}, sort={}", name,
                 pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort());
         return service.list(name, pageable);
+    }
+
+    @GetMapping("/me")
+    public UserDto getCurrentUser(org.springframework.security.core.Authentication authentication) {
+        logger.info("GET /api/users/me for user={}", authentication.getName());
+        return service.getByName(authentication.getName());
     }
 
     @GetMapping("/{id}")
@@ -53,4 +56,5 @@ public class UserController {
         logger.info("DELETE /api/users/{}", id);
         service.delete(id);
     }
+
 }

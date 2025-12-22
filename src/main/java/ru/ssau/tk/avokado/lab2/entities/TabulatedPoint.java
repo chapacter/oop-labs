@@ -19,7 +19,8 @@ public class TabulatedPoint {
     @JoinColumn(name = "function_id", nullable = false)
     private FunctionEntity function;
 
-    public TabulatedPoint() { }
+    public TabulatedPoint() {
+    }
 
     public TabulatedPoint(Integer indexInFunction, double x, double y, FunctionEntity function) {
         this.indexInFunction = indexInFunction;
@@ -28,18 +29,43 @@ public class TabulatedPoint {
         this.function = function;
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public Integer getIndexInFunction() { return indexInFunction; }
-    public void setIndexInFunction(Integer indexInFunction) { this.indexInFunction = indexInFunction; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public double getX() { return x; }
-    public void setX(double x) { this.x = x; }
+    public Integer getIndexInFunction() {
+        return indexInFunction;
+    }
 
-    public double getY() { return y; }
-    public void setY(double y) { this.y = y; }
+    public void setIndexInFunction(Integer indexInFunction) {
+        this.indexInFunction = indexInFunction;
+    }
 
-    public FunctionEntity getFunction() { return function; }
-    public void setFunction(FunctionEntity function) { this.function = function; }
+    public double getX() {
+        return x;
+    }
+
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+
+    public FunctionEntity getFunction() {
+        return function;
+    }
+
+    public void setFunction(FunctionEntity function) {
+        this.function = function;
+    }
 }

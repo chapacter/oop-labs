@@ -1,10 +1,10 @@
 package ru.ssau.tk.avokado.lab2.concurrent;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.ssau.tk.avokado.lab2.functions.Point;
 import ru.ssau.tk.avokado.lab2.functions.TabulatedFunction;
 import ru.ssau.tk.avokado.lab2.operations.TabulatedFunctionOperationService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -139,8 +139,7 @@ public class SynchronizedTabulatedFunction implements TabulatedFunction {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof SynchronizedTabulatedFunction)) return false;
-        SynchronizedTabulatedFunction that = (SynchronizedTabulatedFunction) o;
+        if (!(o instanceof SynchronizedTabulatedFunction that)) return false;
         synchronized (mutex) {
             return Objects.equals(delegate, that.delegate);
         }
@@ -153,10 +152,6 @@ public class SynchronizedTabulatedFunction implements TabulatedFunction {
         }
     }
 
-    public interface Operation<T> {
-        T apply(SynchronizedTabulatedFunction function);
-    }
-
     public <T> T doSynchronously(Operation<? extends T> operation) {
         if (operation == null) {
             logger.error("doSynchronously: operation == null");
@@ -166,5 +161,9 @@ public class SynchronizedTabulatedFunction implements TabulatedFunction {
         synchronized (mutex) {
             return operation.apply(this);
         }
+    }
+
+    public interface Operation<T> {
+        T apply(SynchronizedTabulatedFunction function);
     }
 }
