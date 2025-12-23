@@ -1,4 +1,3 @@
-// src/pages/FunctionOperations.tsx
 import React, { useState, useEffect } from 'react';
 import {
   Box, Typography, Grid, Card, CardContent, Button, Select, MenuItem,
@@ -25,9 +24,9 @@ type Operation = 'add' | 'subtract' | 'multiply' | 'divide' | null;
 
 interface ResultPoint {
   x: number;
-  y: number;   // результат
-  yA: number;  // значение A (первая функция) в этой x
-  yB: number;  // значение B (вторая функция) в этой x
+  y: number;
+  yA: number;
+  yB: number;
 }
 
 const EPS_X = 1e-9;
@@ -73,7 +72,6 @@ const FunctionOperations: React.FC = () => {
   const loadFunctionPoints = async (functionId: number): Promise<PointDTO[]> => {
     try {
       const pts = await functionService.getFunctionPoints(functionId);
-      // Приводим к числам и сортируем по x
       const normalized = (pts || []).map((p: any) => ({ ...p, x: Number(p.x), y: Number(p.y) }))
         .filter((p: any) => Number.isFinite(p.x) && Number.isFinite(p.y))
         .sort((a: any, b: any) => a.x - b.x);
@@ -135,15 +133,12 @@ const FunctionOperations: React.FC = () => {
     setError(null);
   };
 
-  // Возвращает значение y функции (points) в точке x с интерполяцией/экстраполяцией
   const getYAtX = (points: PointDTO[], x: number): number => {
     if (!points || points.length === 0) return NaN;
     if (points.length === 1) return points[0].y;
 
-    // Предполагаем, что points уже отсортированы по x (см. loadFunctionPoints)
     const n = points.length;
     if (x <= points[0].x + EPS_X) {
-      // экстраполяция слева по первым двум точкам
       const p0 = points[0], p1 = points[1];
       const dx = p1.x - p0.x;
       if (Math.abs(dx) < EPS_X) return p0.y;
@@ -151,7 +146,6 @@ const FunctionOperations: React.FC = () => {
       return p0.y + t * (p1.y - p0.y);
     }
     if (x >= points[n - 1].x - EPS_X) {
-      // экстраполяция справа по последним двум точкам
       const p0 = points[n - 2], p1 = points[n - 1];
       const dx = p1.x - p0.x;
       if (Math.abs(dx) < EPS_X) return p1.y;
@@ -159,8 +153,6 @@ const FunctionOperations: React.FC = () => {
       return p0.y + t * (p1.y - p0.y);
     }
 
-    // поиск интервала
-    // бинарный поиск для производительности
     let left = 0, right = n - 1;
     while (left <= right) {
       const mid = Math.floor((left + right) / 2);
@@ -169,7 +161,6 @@ const FunctionOperations: React.FC = () => {
       if (xm < x) left = mid + 1;
       else right = mid - 1;
     }
-    // теперь right < left, интервал между points[right] и points[left]
     const i0 = Math.max(0, right);
     const i1 = Math.min(n - 1, left);
     const p0 = points[i0];
@@ -195,7 +186,6 @@ const FunctionOperations: React.FC = () => {
       setError('Выберите операцию');
       return false;
     }
-    // деление: проверим, что нет деления на ноль на пересечении X-ов (мы проверим позже точнее)
     return true;
   };
 
@@ -204,13 +194,11 @@ const FunctionOperations: React.FC = () => {
     setResultPoints([]);
     if (!validateOperations()) return;
 
-    // Собираем объединённый набор X-ов
     const xsSet = new Set<number>();
     firstPoints.forEach(p => xsSet.add(Number(p.x)));
     secondPoints.forEach(p => xsSet.add(Number(p.x)));
     const xs = Array.from(xsSet).sort((a, b) => a - b);
 
-    // Если обе функции имеют непрерывные области с разным набором точек, интерполируем их значения на каждом x
     try {
       const results: ResultPoint[] = xs.map(x => {
         const yA = getYAtX(firstPoints, x);
@@ -277,9 +265,7 @@ const FunctionOperations: React.FC = () => {
         funcResult: `Результат операции ${operationNames[operation as NonNullable<Operation>]}`
       });
 
-      // Добавляем точки (сервер сам назначит индексы)
       for (const p of resultPoints) {
-        // если сервер ожидает числа, передаем числа
         await functionService.addPoint(resultFunction.id, Number(p.x), Number(p.y));
       }
 

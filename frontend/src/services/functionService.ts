@@ -1,4 +1,3 @@
-// src/services/functionService.ts
 import axios from 'axios';
 import {
   FunctionDTO,
@@ -24,11 +23,9 @@ class FunctionService {
         headers: authService.getAuthHeaders()
       });
 
-      // Проверяем, что response.data - это массив
       if (Array.isArray(response.data)) {
         return response.data;
       } else if (response.data && response.data.content) {
-        // Для пагинации Spring Data
         return response.data.content;
       }
       return [];
@@ -66,7 +63,6 @@ class FunctionService {
 
   async createFunctionFromArray(request: CreateFunctionFromArrayRequest) {
     try {
-      // Сначала создаем функцию
       const functionResponse = await axios.post<FunctionDTO>(API_URL, {
         name: request.name,
         format: null,
@@ -78,11 +74,10 @@ class FunctionService {
 
       const functionId = functionResponse.data.id;
 
-      // Затем добавляем точки (параллельно)
       const pointsPromises = request.points.map((point: any) =>
         axios.post<PointDTO>(POINTS_API, {
           functionId,
-          indexInFunction: 0, // Будет установлено на сервере
+          indexInFunction: 0,
           x: point.x,
           y: point.y
         }, {
@@ -126,19 +121,11 @@ class FunctionService {
     }
   }
 
-  /**
-   * Надёжно получает ВСЕ точки для функции:
-   * - если сервер возвращает массив -> возвращаем его;
-   * - если сервер возвращает Spring Page (data.content / content) -> загружаем все страницы;
-   * - если сервер возвращает HAL (_embedded.points) -> используем embedded;
-   * - в иных случаях пытаемся найти массив внутри объекта.
-   */
   async getFunctionPoints(functionId: number) {
     try {
       const headers = authService.getAuthHeaders();
 
-      // Первый запрос: пробуем получить либо весь массив, либо первую страницу
-      const firstParams: any = { functionId, page: 0, size: 1000 }; // size большой по умолчанию
+      const firstParams: any = { functionId, page: 0, size: 1000 };
       const response = await axios.get(POINTS_API, {
         params: firstParams,
         headers
@@ -146,19 +133,16 @@ class FunctionService {
 
       const data = response.data;
 
-      // 1) Если сервер вернул прямой массив — используем его
       if (Array.isArray(data)) {
         return data as PointDTO[];
       }
 
-      // 2) Spring Data Page-like: { content: [...], totalPages, totalElements, number, size }
       if (data && Array.isArray((data as any).content)) {
         const content = (data as any).content as PointDTO[];
         const totalPages = typeof (data as any).totalPages === 'number'
           ? (data as any).totalPages
           : Math.ceil(((data as any).totalElements || content.length) / (firstParams.size || content.length || 1));
 
-        // если страниц больше одной — загружаем последовательно остальные
         if (totalPages > 1) {
           const all: PointDTO[] = [...content];
           for (let page = 1; page < totalPages; page++) {
@@ -172,43 +156,34 @@ class FunctionService {
             } else if (Array.isArray(pageData)) {
               all.push(...pageData);
             } else {
-              // если неожиданный формат — прерываем
               break;
             }
           }
           return all;
         }
 
-        // single page only
         return content;
       }
 
-      // 3) HAL format: { _embedded: { points: [...] } }
       if (data && data._embedded) {
-        // пробуем найти любой массив внутри _embedded
         const embeddedValues = Object.values(data._embedded).filter(v => Array.isArray(v));
         if (embeddedValues.length) {
-          // объединяем все найденные массивы (обычно там только один)
           return (embeddedValues as any[]).flat() as PointDTO[];
         }
       }
 
-      // 4) Попытка найти любое поле-массив внутри объекта
       if (data && typeof data === 'object') {
         const arrays = Object.values(data).filter(v => Array.isArray(v)) as any[];
         if (arrays.length === 1) {
           return arrays[0] as PointDTO[];
         } else if (arrays.length > 1) {
-          // если несколько массивов — пробуем предпочесть очевидные имена
           const preferred = (data as any).content || (data as any).items || (data as any).points || (data as any).data;
           if (Array.isArray(preferred)) return preferred as PointDTO[];
-          // иначе возвращаем самый длинный массив
           const longest = arrays.reduce((acc, cur) => (cur.length > acc.length ? cur : acc), arrays[0]);
           return longest as PointDTO[];
         }
       }
 
-      // В противном случае — возвращаем пустой массив
       return [] as PointDTO[];
     } catch (error) {
       console.error(`Ошибка при получении точек для функции с ID ${functionId}:`, error);
@@ -220,7 +195,7 @@ class FunctionService {
     try {
       const response = await axios.post<PointDTO>(POINTS_API, {
         functionId,
-        indexInFunction: 0, // Сервер сам определит индекс
+        indexInFunction: 0,
         x,
         y
       }, {
@@ -257,7 +232,6 @@ class FunctionService {
 
   async createFromMathFunction(name: string, userId: number, funcResult: string, mathFunctionType: string, intervalStart: number, intervalEnd: number, pointsCount: number) {
     try {
-      // Создаем функцию
       const functionResponse = await axios.post<FunctionDTO>(API_URL, {
         name,
         format: null,
@@ -269,7 +243,6 @@ class FunctionService {
 
       const functionId = functionResponse.data.id;
 
-      // Генерируем точки
       let points: { x: number; y: number }[] = [];
       const step = (intervalEnd - intervalStart) / (pointsCount - 1);
 
@@ -289,7 +262,6 @@ class FunctionService {
         points.push({ x, y });
       }
 
-      // Добавляем точки
       const pointsPromises = points.map(point =>
         axios.post<PointDTO>(POINTS_API, {
           functionId,

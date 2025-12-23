@@ -1,4 +1,3 @@
-// src/components/FunctionGraph.tsx
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Box, Typography, Card, CardContent, IconButton, Button, Grid,
@@ -23,7 +22,6 @@ import { FunctionDTO, PointDTO, ChartData as CustomChartData } from '../models';
 import toast from 'react-hot-toast';
 import authService from '../services/authService';
 
-// Регистрируем компоненты Chart.js + плагин zoom
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, ChartTooltip, Legend, Filler, zoomPlugin);
 
 const FunctionGraph: React.FC = () => {
@@ -45,10 +43,8 @@ const FunctionGraph: React.FC = () => {
 
   useEffect(() => {
     if (id) loadFunctionData(Number(id));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
-  // Универсальная нормализация ответа API — пытается извлечь массив точек в различных форматах
   const normalizePoints = (raw: any): any[] => {
     if (!raw) return [];
     if (Array.isArray(raw)) return raw;
@@ -57,12 +53,9 @@ const FunctionGraph: React.FC = () => {
     if (raw.content && Array.isArray(raw.content)) return raw.content;
     if (raw.points && Array.isArray(raw.points)) return raw.points;
     if (raw.result && Array.isArray(raw.result)) return raw.result;
-    // Иногда API возвращает { page: {...}, elements: [...] }
     if (raw.elements && Array.isArray(raw.elements)) return raw.elements;
-    // Попытка собрать все массивы внутри объекта
     const arrays = Object.values(raw).filter(v => Array.isArray(v)).flat();
     if (arrays.length) return arrays;
-    // Если ничего не подошло — возвращаем пустой массив
     return [];
   };
 
@@ -78,18 +71,15 @@ const FunctionGraph: React.FC = () => {
       const func = await functionService.getFunctionById(functionId, true);
       setFuncData(func);
 
-      // Получаем "сырые" точки (возможен разный формат)
       const ptsRaw = await functionService.getFunctionPoints(functionId);
       setPointsRaw(ptsRaw);
 
       const normalized = normalizePoints(ptsRaw);
 
-      // Приводим к нужной форме и фильтруем NaN
       const numeric = normalized
         .map((p: any) => ({ x: Number(p.x), y: Number(p.y) }))
         .filter((pt: any) => Number.isFinite(pt.x) && Number.isFinite(pt.y));
 
-      // Журналируем для отладки
       console.info('[FunctionGraph] нормализовано точек (raw -> normalized -> numeric):', {
         rawLength: (Array.isArray(ptsRaw) ? ptsRaw.length : undefined),
         normalizedLength: normalized.length,
@@ -115,16 +105,12 @@ const FunctionGraph: React.FC = () => {
     try { chartRef.current?.resetZoom?.(); } catch (e) { /* ignore */ }
   };
 
-  // Сортировка по X — обязательно
   const sortedData = useMemo(() => {
     return chartData.slice().sort((a, b) => Number(a.x) - Number(b.x));
   }, [chartData]);
 
-  // тензия (сглаживание) отключаем при большом количестве точек
   const tension = sortedData.length > 500 ? 0 : 0.4;
 
-  // Отключаем decimation явно (чтобы Chart.js не "подрезал" точки)
-  // И конфиг для zoom/pan
   const options: ChartOptions<'line'> = useMemo(() => {
     const xValues = sortedData.map(p => Number((p as any).x)).filter(v => !isNaN(v));
     const yValues = sortedData.map(p => Number((p as any).y)).filter(v => !isNaN(v));
@@ -165,17 +151,13 @@ const FunctionGraph: React.FC = () => {
           intersect: isScatterChart,
         },
         legend: { display: false },
-        // явное отключение decimation (иногда включается глобально)
         decimation: { enabled: false },
-        // zoom/pan конфиг
         zoom: {
-          // @ts-ignore
           zoom: {
             wheel: { enabled: true },
             pinch: { enabled: true },
             mode: 'xy'
           },
-          // @ts-ignore
           pan: { enabled: true, mode: 'xy' },
           limits: { x: { min: -1e12, max: 1e12 }, y: { min: -1e12, max: 1e12 } }
         }
@@ -232,10 +214,8 @@ const FunctionGraph: React.FC = () => {
         intersect: isScatterChart
       }
     } as ChartOptions<'line'>;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sortedData, zoomLevel, panOffset, funcData, chartType, theme.palette.mode, theme.palette.primary.main, theme.palette.text.primary, theme.palette.text.secondary]);
 
-  // Подготовка датасета (отображаем все sortedData)
   const data = useMemo(() => {
     const isLineChart = chartType === 'line';
     const isScatterChart = chartType === 'scatter';
@@ -287,7 +267,7 @@ const FunctionGraph: React.FC = () => {
         <Typography variant="h4" component="h1" fontWeight="bold">График функции</Typography>
 
         <Box sx={{ ml: 2 }}>
-          {/* Отладочная информация: сколько точек пришло и сколько используется */}
+          {/**/}
           <Chip label={`API: ${Array.isArray(pointsRaw) ? pointsRaw.length : (pointsRaw ? 'obj' : 0)} → Используется: ${chartData.length}`} size="small" />
         </Box>
 
@@ -317,7 +297,7 @@ const FunctionGraph: React.FC = () => {
                 </Box>
               )}
 
-              {/* Панель управления графиком */}
+              {/**/}
               <Paper sx={{
                 position: 'absolute', bottom: 16, left: 16, right: 16, p: 1,
                 bgcolor: 'background.paper', borderRadius: 2, boxShadow: 3,

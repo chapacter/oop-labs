@@ -24,17 +24,14 @@ const Login: React.FC<LoginProps> = ({ onLogin, onSwitchToRegister }) => {
     setLoading(true);
 
     try {
-      // Просто сохраняем учетные данные без проверки на сервере
       localStorage.setItem('auth', JSON.stringify({ username, password }));
 
-      // Создаем "виртуального" пользователя с правами администратора
       localStorage.setItem('user', JSON.stringify({
         name: username,
         id: 1,
         roles: ['ROLE_USER', 'ROLE_ADMIN']
       }));
 
-      // Вызываем onLogin для обновления состояния аутентификации
       const success = await onLogin(username, password);
       
       if (success) {

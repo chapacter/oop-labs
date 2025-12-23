@@ -3,17 +3,14 @@ import axios, { AxiosError } from 'axios';
 class AuthService {
   async login(username: string, password: string) {
     try {
-      // Создаем заголовок Basic Auth
       const authHeader = `Basic ${btoa(`${username}:${password}`)}`;
 
-      // Проверяем аутентификацию, делая запрос к защищенному ресурсу
       const response = await axios.get('/api/users/me', {
         headers: {
           Authorization: authHeader
         }
       });
 
-      // Сохраняем учетные данные
       localStorage.setItem('auth', JSON.stringify({ username, password }));
       localStorage.setItem('user', JSON.stringify(response.data));
 

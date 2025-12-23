@@ -1,4 +1,3 @@
-// src/utils/notify.ts
 import toast from 'react-hot-toast';
 
 type NotifyType = 'success' | 'error' | 'info' | 'warning';
@@ -17,10 +16,9 @@ function playTone(frequency = 660, duration = 120, volume = 0.0025) {
     g.connect(ctx.destination);
     o.start();
     setTimeout(() => {
-      try { o.stop(); ctx.close(); } catch (e) { /* ignore */ }
+      try { o.stop(); ctx.close(); } catch (e) {}
     }, duration);
   } catch (e) {
-    // ignore
   }
 }
 
@@ -31,7 +29,6 @@ function shouldPlaySound(): boolean {
     const obj = JSON.parse(raw);
     if (obj && typeof obj.notificationSound !== 'undefined') return Boolean(obj.notificationSound);
   } catch (e) {
-    // ignore
   }
   return true;
 }
@@ -54,7 +51,6 @@ export const notify = {
     toast.error(msg);
   },
   info: (msg: string) => {
-    // info uses toast without special styling
     playForType('info');
     toast(msg);
   },

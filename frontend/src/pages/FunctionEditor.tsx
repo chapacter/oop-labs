@@ -1,4 +1,3 @@
-// src/components/FunctionEditor.tsx
 import React, { useEffect, useRef, useState } from 'react';
 import {
   Box, Typography, TextField, Button, Grid, Card, CardContent,
@@ -22,11 +21,9 @@ interface FunctionEditorProps {
 const MAX_POINTS = 1000;
 
 const parseCsvTextToPoints = (text: string): { x: number; y: number }[] => {
-  // Разрешаем разделители: ',' ';' '\t' или пробелы
   const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
   if (!lines.length) return [];
 
-  // Если первая строка содержит буквы 'x' или 'y' — считаем её заголовком
   const headerParts = lines[0].split(/[,;\t\s]+/).map(s => s.trim().toLowerCase());
   let startIndex = 0;
   if (headerParts.length >= 2 && (headerParts[0] === 'x' || headerParts[1] === 'y' || headerParts.includes('x'))) {
@@ -55,7 +52,6 @@ const FunctionEditor: React.FC<FunctionEditorProps> = ({ mathFunctionMode = fals
   const [intervalEnd, setIntervalEnd] = useState(10);
   const [pointsCount, setPointsCount] = useState(10);
 
-  // Bulk add UI state
   const [bulkOpen, setBulkOpen] = useState(false);
   const [bulkText, setBulkText] = useState('');
 
@@ -64,7 +60,6 @@ const FunctionEditor: React.FC<FunctionEditorProps> = ({ mathFunctionMode = fals
   const location = useLocation();
   const state = location.state as { fromDashboard?: boolean } | null;
 
-  // refs to inputs for keyboard navigation: keys 'x-INDEX' and 'y-INDEX'
   const inputRefs = useRef<Record<string, HTMLInputElement | null>>({});
 
   useEffect(() => {
@@ -76,7 +71,6 @@ const FunctionEditor: React.FC<FunctionEditorProps> = ({ mathFunctionMode = fals
         { x: 1, y: 1 }
       ]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, mathFunctionMode]);
 
   const loadFunctionData = async (functionId: number) => {
@@ -152,7 +146,6 @@ const FunctionEditor: React.FC<FunctionEditorProps> = ({ mathFunctionMode = fals
     }, 50);
   };
 
-  // CSV file upload handler
   const handleCsvUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -173,7 +166,6 @@ const FunctionEditor: React.FC<FunctionEditorProps> = ({ mathFunctionMode = fals
       toast.success(`Импортировано ${parsed.length} точек из CSV`);
     };
     reader.readAsText(file);
-    // очистим значение чтобы можно было загрузить тот же файл повторно
     (e.target as HTMLInputElement).value = '';
   };
 

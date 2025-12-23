@@ -1,4 +1,3 @@
-// src/App.tsx
 import React, { useEffect, useMemo, useState, createContext } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
@@ -147,8 +146,8 @@ function App() {
   useEffect(() => {
     try {
       setI18nLanguage(settings.language);
-    } catch (e) { /* ignore */ }
-  }, []); // one-time
+    } catch (e) {}
+  }, []);
 
   useEffect(() => {
     const checkAuth = async () => {

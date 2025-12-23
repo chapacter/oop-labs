@@ -30,7 +30,6 @@ const Register: React.FC<RegisterProps> = ({ onRegister, onSwitchToLogin }) => {
     setLoading(true);
 
     try {
-      // Выполняем регистрацию на сервере
       const response = await fetch('/api/auth/register', {
         method: 'POST',
         headers: {
@@ -42,7 +41,6 @@ const Register: React.FC<RegisterProps> = ({ onRegister, onSwitchToLogin }) => {
       if (response.ok) {
         toast.success('Регистрация прошла успешно!');
 
-        // Выполняем автоматический вход после регистрации
         await onRegister(username, password);
       } else {
         const errorData = await response.json();

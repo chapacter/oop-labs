@@ -1,4 +1,3 @@
-// src/pages/Settings.tsx
 import React, { useEffect, useState } from 'react';
 import {
   Box, Typography, Card, CardContent, Button, Grid, Switch, FormControlLabel,

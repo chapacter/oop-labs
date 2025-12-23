@@ -1,8 +1,5 @@
-// src/theme.ts
 import { createTheme } from '@mui/material/styles';
 
-// Рекомендуемый шрифт — Inter. Чтобы он отображался корректно, добавьте в public/index.html:
-// <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
 const baseTypography = {
   fontFamily: [
@@ -98,7 +95,6 @@ const commonComponents = {
     styleOverrides: {
       root: {
         '&:nth-of-type(odd)': {
-          // subtle striping handled per theme
         },
         '&:hover': {
           transform: 'none'
@@ -131,7 +127,7 @@ export const darkTheme = createTheme({
       contrastText: '#fff'
     },
     background: {
-      default: '#0f1416', // чуть светлее глубокого черного
+      default: '#0f1416',
       paper: '#14181a'
     },
     text: {
@@ -181,7 +177,6 @@ export const darkTheme = createTheme({
   }
 });
 
-// Light theme — более приятная белая тема (мягкие серые оттенки, тёплые тени)
 export const lightTheme = createTheme({
   palette: {
     mode: 'light',
@@ -198,7 +193,7 @@ export const lightTheme = createTheme({
       contrastText: '#ffffff'
     },
     background: {
-      default: '#f4f7fb', // мягкий бледно-голубой для меньшей контрастности
+      default: '#f4f7fb',
       paper: '#ffffff'
     },
     text: {

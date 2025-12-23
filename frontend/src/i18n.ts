@@ -1,11 +1,9 @@
-// src/i18n.ts
 import { useCallback, useEffect, useState } from 'react';
 
 export type Lang = 'ru' | 'en';
 
 const translations: Record<Lang, Record<string, string>> = {
   ru: {
-    // Settings
     'settings.title': 'Настройки',
     'settings.basic': 'Основные настройки',
     'settings.factoryType': 'Тип фабрики',
@@ -33,7 +31,6 @@ const translations: Record<Lang, Record<string, string>> = {
     'settings.export.success': 'Настройки успешно экспортированы',
     'settings.export.failed': 'Не удалось экспортировать настройки',
     'settings.reset.confirm': 'Вы уверены, что хотите сбросить все настройки на значения по умолчанию?',
-    // Functions / CRUD
     'function.create.success': 'Функция успешно создана',
     'function.create.error': 'Не удалось создать функцию',
     'function.update.success': 'Функция успешно обновлена',
@@ -42,16 +39,13 @@ const translations: Record<Lang, Record<string, string>> = {
     'function.delete.error': 'Не удалось удалить функцию',
     'function.save.result.success': 'Результат успешно сохранён',
     'function.save.result.error': 'Не удалось сохранить результат',
-    // Auth
     'auth.login.success': 'Вы успешно вошли в систему!',
     'auth.login.error': 'Неверное имя пользователя или пароль',
     'auth.check.error': 'Ошибка проверки аутентификации',
-    // General
     'error.generic': 'Произошла ошибка',
     'ok': 'ОК'
   },
   en: {
-    // Settings
     'settings.title': 'Settings',
     'settings.basic': 'Basic settings',
     'settings.factoryType': 'Factory type',
@@ -79,7 +73,6 @@ const translations: Record<Lang, Record<string, string>> = {
     'settings.export.success': 'Settings exported successfully',
     'settings.export.failed': 'Failed to export settings',
     'settings.reset.confirm': 'Are you sure you want to reset all settings to defaults?',
-    // Functions / CRUD
     'function.create.success': 'Function created successfully',
     'function.create.error': 'Failed to create function',
     'function.update.success': 'Function updated successfully',
@@ -88,11 +81,9 @@ const translations: Record<Lang, Record<string, string>> = {
     'function.delete.error': 'Failed to delete function',
     'function.save.result.success': 'Result saved successfully',
     'function.save.result.error': 'Failed to save result',
-    // Auth
     'auth.login.success': 'Logged in successfully!',
     'auth.login.error': 'Invalid username or password',
     'auth.check.error': 'Auth check failed',
-    // General
     'error.generic': 'An error occurred',
     'ok': 'OK'
   }
@@ -105,7 +96,7 @@ let currentLang: Lang = ((): Lang => {
       const obj = JSON.parse(raw);
       if (obj && obj.language) return obj.language;
     }
-  } catch (e) { /* ignore */ }
+  } catch (e) {}
   return 'ru';
 })();
 
@@ -122,7 +113,6 @@ export function setLanguage(lang: Lang) {
     obj.language = lang;
     localStorage.setItem('appSettings', JSON.stringify(obj));
   } catch (e) {
-    // ignore
   }
   window.dispatchEvent(new CustomEvent('appLanguageChanged', { detail: lang }));
 }
