@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 class AuthService {
   async login(username: string, password: string) {
@@ -63,6 +63,21 @@ class AuthService {
     }
     return {};
   }
+setupAxiosInterceptors() {
+  axios.interceptors.response.use(
+    (response) => response,
+    (error: AxiosError) => {
+      if (error.response?.status === 401) {
+        this.logout();
+        window.location.href = '/login';
+      } else if (error.response?.status === 404) {
+        window.location.href = '/';
+      }
+      return Promise.reject(error);
+    }
+  );
 }
+}
+
 
 export default new AuthService();

@@ -99,11 +99,14 @@
                     <release>${java.version}</release>
                 </configuration>
             </plugin>
-
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>ru.ssau.tk.avokado.lab2.BenchApplication</mainClass>
+                </configuration>
             </plugin>
+
         </plugins>
     </build>
 </project>

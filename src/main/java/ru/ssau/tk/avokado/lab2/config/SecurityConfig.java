@@ -12,8 +12,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 
 @Configuration
 @EnableWebSecurity
@@ -37,9 +37,9 @@ public class SecurityConfig {
                         .requestMatchers("/api/users/**").authenticated()
                         .anyRequest().authenticated()
                 )
-                .httpBasic(httpBasic -> httpBasic.authenticationEntryPoint(basicAuthenticationEntryPoint()))
+                .httpBasic(httpBasic -> httpBasic.authenticationEntryPoint(noPopupAuthenticationEntryPoint()))
                 .exceptionHandling(exceptionHandling ->
-                        exceptionHandling.authenticationEntryPoint(basicAuthenticationEntryPoint())
+                        exceptionHandling.authenticationEntryPoint(noPopupAuthenticationEntryPoint())
                 );
 
         logger.info("SecurityFilterChain configured (Basic Auth)");
@@ -47,11 +47,14 @@ public class SecurityConfig {
     }
 
     @Bean
-    public BasicAuthenticationEntryPoint basicAuthenticationEntryPoint() {
-        BasicAuthenticationEntryPoint entryPoint = new BasicAuthenticationEntryPoint();
-        entryPoint.setRealmName("Application");
-        return entryPoint;
+    public AuthenticationEntryPoint noPopupAuthenticationEntryPoint() {
+        return (request, response, authException) -> {
+            response.setStatus(401);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\":\"Unauthorized\", \"message\":\"Authentication required\"}");
+        };
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
