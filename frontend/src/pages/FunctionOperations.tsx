@@ -1,6 +1,7 @@
+// src/pages/FunctionOperations.tsx
 import React, { useState, useEffect } from 'react';
 import {
-  Box, Typography, Grid, Card, CardContent, CardActions, Button, Select, MenuItem,
+  Box, Typography, Grid, Card, CardContent, Button, Select, MenuItem,
   FormControl, InputLabel, IconButton, Tooltip, Container,
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, useMediaQuery, useTheme,
   CircularProgress
@@ -11,15 +12,26 @@ import {
   ArrowBack as ArrowBackIcon,
   Save as SaveIcon,
   PlayArrow as PlayArrowIcon,
-  Close as CloseIcon,
-  Add as AddIcon,
-  Remove as RemoveIcon
+  Close as CloseIcon
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import { SelectChangeEvent } from '@mui/material';
 import functionService from '../services/functionService';
 import { FunctionDTO, PointDTO } from '../models';
 import authService from '../services/authService';
 import toast from 'react-hot-toast';
+
+type Operation = 'add' | 'subtract' | 'multiply' | 'divide' | null;
+
+interface ResultPoint {
+  x: number;
+  y: number;   // результат
+  yA: number;  // значение A (первая функция) в этой x
+  yB: number;  // значение B (вторая функция) в этой x
+}
+
+const EPS_X = 1e-9;
+const EPS_Y = 1e-9;
 
 const FunctionOperations: React.FC = () => {
   const [functions, setFunctions] = useState<FunctionDTO[]>([]);
@@ -27,11 +39,12 @@ const FunctionOperations: React.FC = () => {
   const [secondFunction, setSecondFunction] = useState<FunctionDTO | null>(null);
   const [firstPoints, setFirstPoints] = useState<PointDTO[]>([]);
   const [secondPoints, setSecondPoints] = useState<PointDTO[]>([]);
-  const [resultPoints, setResultPoints] = useState<PointDTO[]>([]);
+  const [resultPoints, setResultPoints] = useState<ResultPoint[]>([]);
   const [loading, setLoading] = useState(true);
-  const [operation, setOperation] = useState<'add' | 'subtract' | 'multiply' | 'divide' | null>(null);
+  const [operation, setOperation] = useState<Operation>(null);
   const [error, setError] = useState<string | null>(null);
   const [swapped, setSwapped] = useState(false);
+
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -46,9 +59,9 @@ const FunctionOperations: React.FC = () => {
           return;
         }
         const data = await functionService.getAllFunctions(currentUser.id);
-        setFunctions(data);
-      } catch (error) {
-        console.error('Ошибка при загрузке функций:', error);
+        setFunctions(data || []);
+      } catch (err) {
+        console.error('Ошибка при загрузке функций:', err);
         toast.error('Не удалось загрузить функции');
       } finally {
         setLoading(false);
@@ -59,16 +72,21 @@ const FunctionOperations: React.FC = () => {
 
   const loadFunctionPoints = async (functionId: number): Promise<PointDTO[]> => {
     try {
-      return await functionService.getFunctionPoints(functionId);
-    } catch (error) {
-      console.error(`Ошибка при загрузке точек функции ${functionId}:`, error);
+      const pts = await functionService.getFunctionPoints(functionId);
+      // Приводим к числам и сортируем по x
+      const normalized = (pts || []).map((p: any) => ({ ...p, x: Number(p.x), y: Number(p.y) }))
+        .filter((p: any) => Number.isFinite(p.x) && Number.isFinite(p.y))
+        .sort((a: any, b: any) => a.x - b.x);
+      return normalized;
+    } catch (err) {
+      console.error(`Ошибка при загрузке точек функции ${functionId}:`, err);
       toast.error('Не удалось загрузить точки функции');
       return [];
     }
   };
 
-  const handleFirstFunctionChange = async (e: React.ChangeEvent<{ value: unknown }>) => {
-    const funcId = e.target.value as number;
+  const handleFirstFunctionChange = async (e: SelectChangeEvent<string>) => {
+    const funcId = Number(e.target.value);
     const func = functions.find(f => f.id === funcId) || null;
     setFirstFunction(func);
     setResultPoints([]);
@@ -81,8 +99,8 @@ const FunctionOperations: React.FC = () => {
     }
   };
 
-  const handleSecondFunctionChange = async (e: React.ChangeEvent<{ value: unknown }>) => {
-    const funcId = e.target.value as number;
+  const handleSecondFunctionChange = async (e: SelectChangeEvent<string>) => {
+    const funcId = Number(e.target.value);
     const func = functions.find(f => f.id === funcId) || null;
     setSecondFunction(func);
     setResultPoints([]);
@@ -96,90 +114,137 @@ const FunctionOperations: React.FC = () => {
   };
 
   const swapFunctions = () => {
-    const temp = firstFunction;
-    setFirstFunction(secondFunction);
-    setSecondFunction(temp);
-    const tempPoints = firstPoints;
-    setFirstPoints(secondPoints);
-    setSecondPoints(tempPoints);
-    setSwapped(!swapped);
+    setFirstFunction(prev => {
+      const next = secondFunction;
+      return next;
+    });
+    setSecondFunction(prev => {
+      const next = firstFunction;
+      return next;
+    });
+    setFirstPoints(prev => {
+      const next = secondPoints;
+      return next;
+    });
+    setSecondPoints(prev => {
+      const next = firstPoints;
+      return next;
+    });
+    setSwapped(s => !s);
+    setResultPoints([]);
+    setError(null);
+  };
+
+  // Возвращает значение y функции (points) в точке x с интерполяцией/экстраполяцией
+  const getYAtX = (points: PointDTO[], x: number): number => {
+    if (!points || points.length === 0) return NaN;
+    if (points.length === 1) return points[0].y;
+
+    // Предполагаем, что points уже отсортированы по x (см. loadFunctionPoints)
+    const n = points.length;
+    if (x <= points[0].x + EPS_X) {
+      // экстраполяция слева по первым двум точкам
+      const p0 = points[0], p1 = points[1];
+      const dx = p1.x - p0.x;
+      if (Math.abs(dx) < EPS_X) return p0.y;
+      const t = (x - p0.x) / dx;
+      return p0.y + t * (p1.y - p0.y);
+    }
+    if (x >= points[n - 1].x - EPS_X) {
+      // экстраполяция справа по последним двум точкам
+      const p0 = points[n - 2], p1 = points[n - 1];
+      const dx = p1.x - p0.x;
+      if (Math.abs(dx) < EPS_X) return p1.y;
+      const t = (x - p0.x) / dx;
+      return p0.y + t * (p1.y - p0.y);
+    }
+
+    // поиск интервала
+    // бинарный поиск для производительности
+    let left = 0, right = n - 1;
+    while (left <= right) {
+      const mid = Math.floor((left + right) / 2);
+      const xm = points[mid].x;
+      if (Math.abs(xm - x) <= EPS_X) return points[mid].y;
+      if (xm < x) left = mid + 1;
+      else right = mid - 1;
+    }
+    // теперь right < left, интервал между points[right] и points[left]
+    const i0 = Math.max(0, right);
+    const i1 = Math.min(n - 1, left);
+    const p0 = points[i0];
+    const p1 = points[i1];
+    if (!p0 || !p1) return NaN;
+    const dx = p1.x - p0.x;
+    if (Math.abs(dx) < EPS_X) return p0.y;
+    const t = (x - p0.x) / dx;
+    return p0.y + t * (p1.y - p0.y);
   };
 
   const validateOperations = (): boolean => {
-    if (!firstFunction || !secondFunction || firstPoints.length === 0 || secondPoints.length === 0) {
-      setError('Выберите обе функции и убедитесь, что у них есть точки');
+    setError(null);
+    if (!firstFunction || !secondFunction) {
+      setError('Выберите обе функции');
       return false;
     }
-
-    if (firstPoints.length !== secondPoints.length) {
-      setError('Функции должны иметь одинаковое количество точек');
+    if (!firstPoints.length || !secondPoints.length) {
+      setError('Обе функции должны содержать хотя бы одну точку');
       return false;
     }
-
-    // Проверяем, что точки имеют одинаковые x-значения
-    for (let i = 0; i < firstPoints.length; i++) {
-      if (Math.abs(firstPoints[i].x - secondPoints[i].x) > 0.001) {
-        setError('Функции должны иметь одинаковые значения X для всех точек');
-        return false;
-      }
-    }
-
     if (!operation) {
       setError('Выберите операцию');
       return false;
     }
-
+    // деление: проверим, что нет деления на ноль на пересечении X-ов (мы проверим позже точнее)
     return true;
   };
 
   const performOperation = () => {
-    if (!validateOperations()) {
-      return;
-    }
+    setError(null);
+    setResultPoints([]);
+    if (!validateOperations()) return;
 
+    // Собираем объединённый набор X-ов
+    const xsSet = new Set<number>();
+    firstPoints.forEach(p => xsSet.add(Number(p.x)));
+    secondPoints.forEach(p => xsSet.add(Number(p.x)));
+    const xs = Array.from(xsSet).sort((a, b) => a - b);
+
+    // Если обе функции имеют непрерывные области с разным набором точек, интерполируем их значения на каждом x
     try {
-      setError(null);
-      let newPoints: PointDTO[] = [];
-
-      switch (operation) {
-        case 'add':
-          newPoints = firstPoints.map((point, index) => ({
-            ...point,
-            y: point.y + secondPoints[index].y
-          }));
-          break;
-        case 'subtract':
-          newPoints = firstPoints.map((point, index) => ({
-            ...point,
-            y: point.y - secondPoints[index].y
-          }));
-          break;
-        case 'multiply':
-          newPoints = firstPoints.map((point, index) => ({
-            ...point,
-            y: point.y * secondPoints[index].y
-          }));
-          break;
-        case 'divide':
-          // Проверяем деление на ноль
-          for (const point of secondPoints) {
-            if (Math.abs(point.y) < 0.001) {
-              throw new Error('Обнаружено деление на ноль');
+      const results: ResultPoint[] = xs.map(x => {
+        const yA = getYAtX(firstPoints, x);
+        const yB = getYAtX(secondPoints, x);
+        if (!Number.isFinite(yA) || !Number.isFinite(yB)) {
+          throw new Error('Не удалось вычислить значение функции в некоторой точке');
+        }
+        let yRes = NaN;
+        switch (operation) {
+          case 'add':
+            yRes = yA + yB;
+            break;
+          case 'subtract':
+            yRes = yA - yB;
+            break;
+          case 'multiply':
+            yRes = yA * yB;
+            break;
+          case 'divide':
+            if (Math.abs(yB) < EPS_Y) {
+              throw new Error(`Деление на ноль при x = ${x}`);
             }
-          }
-          newPoints = firstPoints.map((point, index) => ({
-            ...point,
-            y: point.y / secondPoints[index].y
-          }));
-          break;
-        default:
-          setError('Выберите операцию');
-          return;
-      }
+            yRes = yA / yB;
+            break;
+          default:
+            throw new Error('Неизвестная операция');
+        }
+        return { x, y: yRes, yA, yB };
+      });
 
-      setResultPoints(newPoints);
+      setResultPoints(results);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Ошибка при выполнении операции');
+      const message = err instanceof Error ? err.message : 'Ошибка при выполнении операции';
+      setError(message);
     }
   };
 
@@ -196,32 +261,32 @@ const FunctionOperations: React.FC = () => {
         return;
       }
 
-      // Создаем новую функцию для результата
-      const operationNames = {
-        'add': 'Сложение',
-        'subtract': 'Вычитание',
-        'multiply': 'Умножение',
-        'divide': 'Деление'
-      };
+      const operationNames: Record<NonNullable<Operation>, string> = {
+        add: 'Сложение',
+        subtract: 'Вычитание',
+        multiply: 'Умножение',
+        divide: 'Деление'
+      } as any;
 
-      const functionName = `${operationNames[operation]}: ${firstFunction?.name} и ${secondFunction?.name}`;
+      const functionName = `${operationNames[operation as NonNullable<Operation>]}: ${firstFunction?.name || 'A'} и ${secondFunction?.name || 'B'}`;
 
       const resultFunction = await functionService.createFunction({
         name: functionName,
         format: null,
         userId: currentUser.id,
-        funcResult: `Результат операции ${operationNames[operation]}`
+        funcResult: `Результат операции ${operationNames[operation as NonNullable<Operation>]}`
       });
 
-      // Добавляем точки к новой функции
-      for (const point of resultPoints) {
-        await functionService.addPoint(resultFunction.id, point.x, point.y);
+      // Добавляем точки (сервер сам назначит индексы)
+      for (const p of resultPoints) {
+        // если сервер ожидает числа, передаем числа
+        await functionService.addPoint(resultFunction.id, Number(p.x), Number(p.y));
       }
 
       toast.success('Результат успешно сохранен');
       navigate(`/functions/${resultFunction.id}/graph`);
-    } catch (error) {
-      console.error('Ошибка при сохранении результата:', error);
+    } catch (err) {
+      console.error('Ошибка при сохранении результата:', err);
       toast.error('Не удалось сохранить результат');
     }
   };
@@ -264,12 +329,12 @@ const FunctionOperations: React.FC = () => {
                   <FormControl fullWidth required>
                     <InputLabel>Первое слагаемое (уменьшаемое)</InputLabel>
                     <Select
-                      value={firstFunction?.id || ''}
+                      value={firstFunction?.id?.toString() || ''}
                       onChange={handleFirstFunctionChange}
                       label="Первое слагаемое (уменьшаемое)"
                     >
                       {functions.map(func => (
-                        <MenuItem key={func.id} value={func.id}>
+                        <MenuItem key={func.id} value={String(func.id)}>
                           {func.name}
                         </MenuItem>
                       ))}
@@ -278,9 +343,10 @@ const FunctionOperations: React.FC = () => {
                 </Grid>
                 <Grid item xs={12} sm={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                   <FormControl fullWidth required>
+                    <InputLabel>Операция</InputLabel>
                     <Select
                       value={operation || ''}
-                      onChange={(e) => setOperation(e.target.value as any)}
+                      onChange={(e) => setOperation((e.target.value as Operation) || null)}
                       displayEmpty
                       sx={{ minWidth: 120 }}
                       label="Операция"
@@ -299,12 +365,12 @@ const FunctionOperations: React.FC = () => {
                   <FormControl fullWidth required>
                     <InputLabel>Второе слагаемое (вычитаемое)</InputLabel>
                     <Select
-                      value={secondFunction?.id || ''}
+                      value={secondFunction?.id?.toString() || ''}
                       onChange={handleSecondFunctionChange}
                       label="Второе слагаемое (вычитаемое)"
                     >
                       {functions.map(func => (
-                        <MenuItem key={func.id} value={func.id}>
+                        <MenuItem key={func.id} value={String(func.id)}>
                           {func.name}
                         </MenuItem>
                       ))}
@@ -324,6 +390,7 @@ const FunctionOperations: React.FC = () => {
                   </Button>
                 </Grid>
               </Grid>
+
               {error && (
                 <Box sx={{ mt: 2, p: 2, bgcolor: 'error.main', color: 'white', borderRadius: 1 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -354,8 +421,8 @@ const FunctionOperations: React.FC = () => {
                     <TableBody>
                       {firstPoints.map((point, index) => (
                         <TableRow key={index}>
-                          <TableCell>{point.x.toFixed(3)}</TableCell>
-                          <TableCell>{point.y.toFixed(3)}</TableCell>
+                          <TableCell>{point.x.toFixed(6)}</TableCell>
+                          <TableCell>{point.y.toFixed(6)}</TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
@@ -388,8 +455,8 @@ const FunctionOperations: React.FC = () => {
                     <TableBody>
                       {secondPoints.map((point, index) => (
                         <TableRow key={index}>
-                          <TableCell>{point.x.toFixed(3)}</TableCell>
-                          <TableCell>{point.y.toFixed(3)}</TableCell>
+                          <TableCell>{point.x.toFixed(6)}</TableCell>
+                          <TableCell>{point.y.toFixed(6)}</TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
@@ -432,14 +499,12 @@ const FunctionOperations: React.FC = () => {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {resultPoints.map((point, index) => (
+                      {resultPoints.map((pt, index) => (
                         <TableRow key={index}>
-                          <TableCell>{point.x.toFixed(3)}</TableCell>
-                          <TableCell sx={{ color: 'primary.main', fontWeight: 'bold' }}>
-                            {point.y.toFixed(4)}
-                          </TableCell>
-                          <TableCell>{firstPoints[index]?.y.toFixed(4)}</TableCell>
-                          <TableCell>{secondPoints[index]?.y.toFixed(4)}</TableCell>
+                          <TableCell>{pt.x.toFixed(6)}</TableCell>
+                          <TableCell sx={{ color: 'primary.main', fontWeight: 'bold' }}>{pt.y.toFixed(6)}</TableCell>
+                          <TableCell>{pt.yA.toFixed(6)}</TableCell>
+                          <TableCell>{pt.yB.toFixed(6)}</TableCell>
                         </TableRow>
                       ))}
                     </TableBody>

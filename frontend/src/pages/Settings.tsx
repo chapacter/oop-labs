@@ -1,102 +1,183 @@
-import React, { useState, useEffect } from 'react';
+// src/pages/Settings.tsx
+import React, { useEffect, useState } from 'react';
 import {
   Box, Typography, Card, CardContent, Button, Grid, Switch, FormControlLabel,
   TextField, MenuItem, Container, useTheme, useMediaQuery, IconButton,
-  List, ListItem, ListItemIcon, ListItemText, Divider, Paper, Tooltip
+  List, ListItem, ListItemIcon, ListItemText, Divider, Tooltip, Chip
 } from '@mui/material';
 import {
   ArrowBack as ArrowBackIcon, DarkMode as DarkModeIcon,
-  LightMode as LightModeIcon, Notifications as NotificationsIcon,
-  Save as SaveIcon, Refresh as RefreshIcon, Info as InfoIcon,
-  Settings as SettingsIcon, CloudDownload as CloudDownloadIcon,
+  LightMode as LightModeIcon, Save as SaveIcon, Refresh as RefreshIcon,
+  Info as InfoIcon, Settings as SettingsIcon, CloudDownload as CloudDownloadIcon,
   CloudUpload as CloudUploadIcon, Delete as DeleteIcon
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import toast from 'react-hot-toast';
 import authService from '../services/authService';
+import notify from '../utils/notify';
+import { useTranslation } from '../i18n';
+
+type FactoryType = 'array' | 'linked_list';
+type ThemeMode = 'light' | 'dark';
+type ExportFormat = 'json' | 'csv' | 'xml';
+type Lang = 'ru' | 'en';
+
+const APP_SETTINGS_KEY = 'appSettings';
+
+const objectToCSV = (obj: any) => {
+  const rows: string[] = [];
+  for (const key of Object.keys(obj)) {
+    const val = obj[key];
+    const value = (typeof val === 'object' && val !== null) ? JSON.stringify(val) : String(val);
+    const safe = value.includes(',') || value.includes('"') ? `"${value.replace(/"/g, '""')}"` : value;
+    rows.push(`${key},${safe}`);
+  }
+  return rows.join('\n');
+};
+
+const objectToXML = (obj: any) => {
+  const walk = (o: any): string => {
+    if (o === null || o === undefined) return '';
+    if (typeof o !== 'object') return String(o)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+
+    if (Array.isArray(o)) {
+      return o.map(item => `<item>${walk(item)}</item>`).join('');
+    }
+    return Object.keys(o).map(k => `<${k}>${walk(o[k])}</${k}>`).join('');
+  };
+  return `<root>${walk(obj)}</root>`;
+};
 
 const Settings: React.FC = () => {
-  const [factoryType, setFactoryType] = useState<'array' | 'linked_list'>('array');
-  const [themeMode, setThemeMode] = useState<'light' | 'dark'>('dark');
+  const { t, changeLanguage } = useTranslation();
+
+  const [factoryType, setFactoryType] = useState<FactoryType>('array');
+  const [themeMode, setThemeMode] = useState<ThemeMode>('dark');
   const [notificationSound, setNotificationSound] = useState(true);
-  const [dataExportFormat, setDataExportFormat] = useState<'json' | 'csv' | 'xml'>('json');
+  const [dataExportFormat, setDataExportFormat] = useState<ExportFormat>('json');
   const [autoSave, setAutoSave] = useState(true);
-  const [language, setLanguage] = useState<'ru' | 'en'>('ru');
+  const [language, setLanguage] = useState<Lang>('ru');
+
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
-    // Загружаем настройки из localStorage при монтировании
-    const savedSettings = JSON.parse(localStorage.getItem('appSettings') || '{}');
+    const savedSettings = JSON.parse(localStorage.getItem(APP_SETTINGS_KEY) || '{}');
     if (savedSettings.factoryType) setFactoryType(savedSettings.factoryType);
     if (savedSettings.themeMode) setThemeMode(savedSettings.themeMode);
     if (savedSettings.notificationSound !== undefined) setNotificationSound(savedSettings.notificationSound);
     if (savedSettings.dataExportFormat) setDataExportFormat(savedSettings.dataExportFormat);
     if (savedSettings.autoSave !== undefined) setAutoSave(savedSettings.autoSave);
-    if (savedSettings.language) setLanguage(savedSettings.language);
-  }, []);
+    if (savedSettings.language) {
+      setLanguage(savedSettings.language);
+      changeLanguage(savedSettings.language);
+    }
+  }, [changeLanguage]);
+
+  const getSettingsObject = () => ({
+    factoryType, themeMode, notificationSound, dataExportFormat, autoSave, language
+  });
+
+  const applyThemeLocally = (mode: ThemeMode) => {
+    setThemeMode(mode);
+    try {
+      document.documentElement.setAttribute('data-theme', mode);
+      if (mode === 'dark') {
+        document.documentElement.classList.add('theme-dark');
+        document.documentElement.classList.remove('theme-light');
+      } else {
+        document.documentElement.classList.add('theme-light');
+        document.documentElement.classList.remove('theme-dark');
+      }
+    } catch (e) {
+      // ignore
+    }
+  };
+
+  const persistAndBroadcast = (partial: Partial<Record<string, any>>) => {
+    try {
+      const raw = localStorage.getItem(APP_SETTINGS_KEY) || '{}';
+      const obj = JSON.parse(raw || '{}');
+      const next = { ...obj, ...partial };
+      localStorage.setItem(APP_SETTINGS_KEY, JSON.stringify(next));
+      window.dispatchEvent(new CustomEvent('appSettingsChanged', { detail: next }));
+      return next;
+    } catch (e) {
+      console.warn('Failed to persist settings', e);
+      return partial;
+    }
+  };
 
   const handleSaveSettings = () => {
-    const settings = {
-      factoryType,
-      themeMode,
-      notificationSound,
-      dataExportFormat,
-      autoSave,
-      language
-    };
-
-    localStorage.setItem('appSettings', JSON.stringify(settings));
-
-    // Применяем тему
-    if (themeMode === 'dark') {
-      document.documentElement.setAttribute('data-theme', 'dark');
-    } else {
-      document.documentElement.setAttribute('data-theme', 'light');
+    const settings = getSettingsObject();
+    try {
+      localStorage.setItem(APP_SETTINGS_KEY, JSON.stringify(settings));
+      applyThemeLocally(settings.themeMode);
+      changeLanguage(settings.language);
+      notify.success(t('settings.save'));
+    } catch (e) {
+      console.error(e);
+      notify.error(t('settings.export.failed'));
     }
-
-    toast.success('Настройки успешно сохранены');
   };
 
   const handleResetSettings = () => {
-    if (window.confirm('Вы уверены, что хотите сбросить все настройки на значения по умолчанию?')) {
-      localStorage.removeItem('appSettings');
-
-      // Сбрасываем на значения по умолчанию
-      setFactoryType('array');
-      setThemeMode('dark');
-      setNotificationSound(true);
-      setDataExportFormat('json');
-      setAutoSave(true);
-      setLanguage('ru');
-
-      toast.success('Настройки сброшены');
-    }
+    if (!window.confirm(t('settings.reset.confirm'))) return;
+    localStorage.removeItem(APP_SETTINGS_KEY);
+    setFactoryType('array');
+    applyThemeLocally('dark');
+    setNotificationSound(true);
+    setDataExportFormat('json');
+    setAutoSave(true);
+    setLanguage('ru');
+    changeLanguage('ru');
+    persistAndBroadcast({ factoryType: 'array', themeMode: 'dark', notificationSound: true, dataExportFormat: 'json', autoSave: true, language: 'ru' });
+    notify.success(t('settings.reset'));
   };
 
   const handleExportData = () => {
     try {
-      const data = {
-        settings: JSON.parse(localStorage.getItem('appSettings') || '{}'),
+      const dataObj = {
+        settings: getSettingsObject(),
         user: authService.getCurrentUser(),
         timestamp: new Date().toISOString()
       };
 
-      const dataStr = JSON.stringify(data, null, 2);
-      const dataUri = `data:application/json;charset=utf-8,${encodeURIComponent(dataStr)}`;
+      let dataStr = '';
+      let mime = 'application/octet-stream';
+      let ext = 'bin';
 
-      const exportFileDefaultName = `function-manager-settings-${new Date().toISOString().split('T')[0]}.json`;
+      if (dataExportFormat === 'json') {
+        dataStr = JSON.stringify(dataObj, null, 2);
+        mime = 'application/json;charset=utf-8';
+        ext = 'json';
+      } else if (dataExportFormat === 'csv') {
+        dataStr = objectToCSV(dataObj);
+        mime = 'text/csv;charset=utf-8';
+        ext = 'csv';
+      } else if (dataExportFormat === 'xml') {
+        dataStr = objectToXML(dataObj);
+        mime = 'application/xml;charset=utf-8';
+        ext = 'xml';
+      }
+
+      const dataUri = `data:${mime},${encodeURIComponent(dataStr)}`;
+      const exportFileDefaultName = `function-manager-settings-${new Date().toISOString().split('T')[0]}.${ext}`;
 
       const linkElement = document.createElement('a');
       linkElement.setAttribute('href', dataUri);
       linkElement.setAttribute('download', exportFileDefaultName);
+      document.body.appendChild(linkElement);
       linkElement.click();
+      linkElement.remove();
 
-      toast.success('Настройки успешно экспортированы');
+      notify.success(t('settings.export.success'));
     } catch (error) {
       console.error('Ошибка при экспорте данных:', error);
-      toast.error('Не удалось экспортировать настройки');
+      notify.error(t('settings.export.failed'));
     }
   };
 
@@ -108,52 +189,109 @@ const Settings: React.FC = () => {
     reader.onload = (event) => {
       try {
         const content = event.target?.result as string;
-        const importedData = JSON.parse(content);
+        const name = (file.name || '').toLowerCase();
+        const isJson = name.endsWith('.json') || file.type.includes('json');
+        const isCsv = name.endsWith('.csv') || file.type.includes('csv') || name.endsWith('.txt');
+        const isXml = name.endsWith('.xml') || file.type.includes('xml');
 
-        if (importedData.settings) {
-          localStorage.setItem('appSettings', JSON.stringify(importedData.settings));
+        let importedSettings: any = null;
 
-          // Применяем импортированные настройки
-          setFactoryType(importedData.settings.factoryType || 'array');
-          setThemeMode(importedData.settings.themeMode || 'dark');
-          setNotificationSound(importedData.settings.notificationSound !== undefined ? importedData.settings.notificationSound : true);
-          setDataExportFormat(importedData.settings.dataExportFormat || 'json');
-          setAutoSave(importedData.settings.autoSave !== undefined ? importedData.settings.autoSave : true);
-          setLanguage(importedData.settings.language || 'ru');
-
-          toast.success('Настройки успешно импортированы');
+        if (isJson) {
+          const imported = JSON.parse(content);
+          importedSettings = imported.settings ?? imported;
+        } else if (isCsv) {
+          const lines = content.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+          const res: any = {};
+          lines.forEach(line => {
+            const parts = line.split(/[;,]+/).map(s => s.trim());
+            if (parts.length >= 2) {
+              res[parts[0]] = (() => {
+                try { return JSON.parse(parts.slice(1).join(',')); } catch { return parts.slice(1).join(','); }
+              })();
+            }
+          });
+          importedSettings = res;
+        } else if (isXml) {
+          try {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(content, 'application/xml');
+            const root = doc.documentElement;
+            const res: any = {};
+            root.childNodes.forEach((child: any) => {
+              if (child.nodeType !== 1) return;
+              const text = child.textContent || '';
+              try { res[child.nodeName] = JSON.parse(text); } catch { res[child.nodeName] = text; }
+            });
+            importedSettings = res;
+          } catch (err) {
+            importedSettings = null;
+          }
         } else {
-          throw new Error('Неверный формат файла');
+          try {
+            const imported = JSON.parse(content);
+            importedSettings = imported.settings ?? imported;
+          } catch {
+            notify.error('Unknown file format. Supported JSON, CSV, XML.');
+            return;
+          }
         }
+
+        if (!importedSettings || typeof importedSettings !== 'object') {
+          notify.error(t('settings.import.failed'));
+          return;
+        }
+
+        const settings = {
+          factoryType: (importedSettings.factoryType as FactoryType) || 'array',
+          themeMode: (importedSettings.themeMode as ThemeMode) || 'dark',
+          notificationSound: importedSettings.notificationSound !== undefined ? Boolean(importedSettings.notificationSound) : true,
+          dataExportFormat: (importedSettings.dataExportFormat as ExportFormat) || 'json',
+          autoSave: importedSettings.autoSave !== undefined ? Boolean(importedSettings.autoSave) : true,
+          language: (importedSettings.language as Lang) || 'ru'
+        };
+
+        localStorage.setItem(APP_SETTINGS_KEY, JSON.stringify(settings));
+
+        setFactoryType(settings.factoryType);
+        applyThemeLocally(settings.themeMode);
+        setNotificationSound(settings.notificationSound);
+        setDataExportFormat(settings.dataExportFormat);
+        setAutoSave(settings.autoSave);
+        setLanguage(settings.language);
+        changeLanguage(settings.language);
+
+        window.dispatchEvent(new CustomEvent('appSettingsChanged', { detail: settings }));
+
+        notify.success(t('settings.import.success'));
       } catch (error) {
         console.error('Ошибка при импорте данных:', error);
-        toast.error('Не удалось импортировать настройки. Проверьте формат файла.');
+        notify.error(t('settings.import.failed'));
+      } finally {
+        (e.target as HTMLInputElement).value = '';
       }
     };
+
     reader.readAsText(file);
   };
 
   const handleClearCache = () => {
-    if (window.confirm('Вы уверены, что хотите очистить кеш приложения? Это удалит все сохраненные данные, включая настройки и данные о пользователе.')) {
-      localStorage.clear();
-      toast.success('Кеш успешно очищен. Приложение будет перезагружено.');
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
-    }
+    if (!window.confirm(t('settings.clearCache'))) return;
+    localStorage.clear();
+    notify.success(t('settings.clearCache'));
+    setTimeout(() => window.location.reload(), 800);
   };
 
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="lg" sx={{ pb: 4 }}>
       <Box sx={{ display: 'flex', alignItems: 'center', mb: 3, flexWrap: 'wrap', gap: 2 }}>
         <IconButton onClick={() => navigate('/dashboard')} sx={{ mr: 1 }}>
           <ArrowBackIcon />
         </IconButton>
         <Typography variant="h4" component="h1" fontWeight="bold">
-          Настройки
+          {t('settings.title')}
         </Typography>
         <Box sx={{ ml: 'auto', display: 'flex', gap: 1 }}>
-          <Tooltip title="Сбросить настройки">
+          <Tooltip title={t('settings.reset')}>
             <IconButton onClick={handleResetSettings} color="error">
               <RefreshIcon />
             </IconButton>
@@ -166,35 +304,36 @@ const Settings: React.FC = () => {
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', fontWeight: 'bold' }}>
-                <SettingsIcon sx={{ mr: 1 }} /> Основные настройки
+                <SettingsIcon sx={{ mr: 1 }} /> {t('settings.basic')}
               </Typography>
 
               <Box sx={{ mb: 3 }}>
                 <Typography variant="body1" gutterBottom sx={{ fontWeight: 'bold' }}>
-                  Тип фабрики для создания функций
+                  {t('settings.factoryType')}
                 </Typography>
                 <TextField
                   select
                   fullWidth
                   value={factoryType}
-                  onChange={(e) => setFactoryType(e.target.value as 'array' | 'linked_list')}
-                  label="Тип фабрики"
+                  onChange={(e) => {
+                    const val = e.target.value as FactoryType;
+                    setFactoryType(val);
+                    persistAndBroadcast({ ...getSettingsObject(), factoryType: val });
+                  }}
+                  label={t('settings.factoryType')}
                 >
-                  <MenuItem value="array">Массив (быстрый доступ)</MenuItem>
-                  <MenuItem value="linked_list">Связный список (гибкое изменение)</MenuItem>
+                  <MenuItem value="array">{t('settings.factory.array')}</MenuItem>
+                  <MenuItem value="linked_list">{t('settings.factory.linked_list')}</MenuItem>
                 </TextField>
-                <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                  Выберите способ хранения табулированных функций. Массив обеспечивает более быстрый доступ к элементам, а связный список — более эффективное добавление и удаление точек.
-                </Typography>
               </Box>
 
               <Box sx={{ mb: 3 }}>
                 <Typography variant="body1" gutterBottom sx={{ fontWeight: 'bold' }}>
-                  Тема интерфейса
+                  {t('settings.theme')}
                 </Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                   <IconButton
-                    onClick={() => setThemeMode('light')}
+                    onClick={() => { applyThemeLocally('light'); persistAndBroadcast({ ...getSettingsObject(), themeMode: 'light' }); }}
                     color={themeMode === 'light' ? 'primary' : 'default'}
                     sx={{ bgcolor: themeMode === 'light' ? 'primary.light' : 'background.paper' }}
                   >
@@ -202,42 +341,43 @@ const Settings: React.FC = () => {
                   </IconButton>
                   <Switch
                     checked={themeMode === 'dark'}
-                    onChange={(e) => setThemeMode(e.target.checked ? 'dark' : 'light')}
+                    onChange={(e) => { const mode = e.target.checked ? 'dark' : 'light'; applyThemeLocally(mode); persistAndBroadcast({ ...getSettingsObject(), themeMode: mode }); }}
                   />
                   <IconButton
-                    onClick={() => setThemeMode('dark')}
+                    onClick={() => { applyThemeLocally('dark'); persistAndBroadcast({ ...getSettingsObject(), themeMode: 'dark' }); }}
                     color={themeMode === 'dark' ? 'primary' : 'default'}
                     sx={{ bgcolor: themeMode === 'dark' ? 'primary.light' : 'background.paper' }}
                   >
                     <DarkModeIcon />
                   </IconButton>
                 </Box>
-                <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                  {themeMode === 'dark'
-                    ? 'Включена темная тема для комфортной работы в условиях слабого освещения.'
-                    : 'Включена светлая тема для работы в хорошо освещенных помещениях.'}
-                </Typography>
               </Box>
 
               <Box>
                 <Typography variant="body1" gutterBottom sx={{ fontWeight: 'bold' }}>
-                  Звуковые уведомления
+                  {t('settings.sound')}
                 </Typography>
                 <FormControlLabel
                   control={
                     <Switch
                       checked={notificationSound}
-                      onChange={(e) => setNotificationSound(e.target.checked)}
+                      onChange={(e) => {
+                        const newVal = e.target.checked;
+                        // persist first so notify reads updated value
+                        persistAndBroadcast({ ...getSettingsObject(), notificationSound: newVal });
+                        setNotificationSound(newVal);
+                        if (newVal) {
+                          notify.success(t('settings.sound.enabled'));
+                        } else {
+                          // show info about disabled (notify won't play sound because persisted value is false)
+                          notify.info(t('settings.sound.disabled'));
+                        }
+                      }}
                       color="primary"
                     />
                   }
-                  label={notificationSound ? 'Включены' : 'Отключены'}
+                  label={notificationSound ? t('settings.sound.enabled') : t('settings.sound.disabled')}
                 />
-                <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                  {notificationSound
-                    ? 'Воспроизводить звуковые сигналы при успешных операциях и ошибках.'
-                    : 'Отключить все звуковые уведомления.'}
-                </Typography>
               </Box>
             </CardContent>
           </Card>
@@ -247,63 +387,54 @@ const Settings: React.FC = () => {
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', fontWeight: 'bold' }}>
-                <CloudDownloadIcon sx={{ mr: 1 }} /> Импорт/Экспорт
+                <CloudDownloadIcon sx={{ mr: 1 }} /> {t('settings.export.format')}
               </Typography>
 
               <Box sx={{ mb: 3 }}>
-                <Typography variant="body1" gutterBottom sx={{ fontWeight: 'bold' }}>
-                  Формат экспорта данных
-                </Typography>
                 <TextField
                   select
                   fullWidth
                   value={dataExportFormat}
-                  onChange={(e) => setDataExportFormat(e.target.value as 'json' | 'csv' | 'xml')}
-                  label="Формат экспорта"
+                  onChange={(e) => { setDataExportFormat(e.target.value as ExportFormat); persistAndBroadcast({ ...getSettingsObject(), dataExportFormat: e.target.value }); }}
+                  label={t('settings.export.format')}
                 >
-                  <MenuItem value="json">JSON (рекомендуется)</MenuItem>
-                  <MenuItem value="csv">CSV (таблица)</MenuItem>
-                  <MenuItem value="xml">XML (структурированный)</MenuItem>
+                  <MenuItem value="json">{t('settings.export.json')}</MenuItem>
+                  <MenuItem value="csv">{t('settings.export.csv')}</MenuItem>
+                  <MenuItem value="xml">{t('settings.export.xml')}</MenuItem>
                 </TextField>
-                <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                  Выберите формат для экспорта данных функций и настроек.
-                </Typography>
               </Box>
 
               <Box sx={{ mb: 3 }}>
-                <Typography variant="body1" gutterBottom sx={{ fontWeight: 'bold' }}>
-                  Автоматическое сохранение
-                </Typography>
                 <FormControlLabel
                   control={
                     <Switch
                       checked={autoSave}
-                      onChange={(e) => setAutoSave(e.target.checked)}
+                      onChange={(e) => { setAutoSave(e.target.checked); persistAndBroadcast({ ...getSettingsObject(), autoSave: e.target.checked }); }}
                       color="primary"
                     />
                   }
-                  label={autoSave ? 'Включено' : 'Отключено'}
+                  label={autoSave ? 'Auto' : 'Manual'}
                 />
-                <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                  {autoSave
-                    ? 'Автоматически сохранять изменения при работе с функциями.'
-                    : 'Требовать подтверждения перед сохранением изменений.'}
-                </Typography>
               </Box>
 
               <Box>
                 <Typography variant="body1" gutterBottom sx={{ fontWeight: 'bold' }}>
-                  Язык интерфейса
+                  {t('settings.language')}
                 </Typography>
                 <TextField
                   select
                   fullWidth
                   value={language}
-                  onChange={(e) => setLanguage(e.target.value as 'ru' | 'en')}
-                  label="Язык"
+                  onChange={(e) => {
+                    const l = e.target.value as Lang;
+                    setLanguage(l);
+                    changeLanguage(l);
+                    persistAndBroadcast({ ...getSettingsObject(), language: l });
+                  }}
+                  label={t('settings.language')}
                 >
                   <MenuItem value="ru">Русский (Russian)</MenuItem>
-                  <MenuItem value="en">Английский (English)</MenuItem>
+                  <MenuItem value="en">English</MenuItem>
                 </TextField>
               </Box>
             </CardContent>
@@ -314,37 +445,10 @@ const Settings: React.FC = () => {
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', fontWeight: 'bold' }}>
-                <InfoIcon sx={{ mr: 1 }} /> Системная информация
+                <InfoIcon sx={{ mr: 1 }} /> System
               </Typography>
-
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={6} md={3}>
-                  <Typography variant="body1">
-                    <strong>Версия приложения:</strong> 1.0.0
-                  </Typography>
-                </Grid>
-                <Grid item xs={12} sm={6} md={3}>
-                  <Typography variant="body1">
-                    <strong>Backend:</strong> Spring Boot
-                  </Typography>
-                </Grid>
-                <Grid item xs={12} sm={6} md={3}>
-                  <Typography variant="body1">
-                    <strong>API Endpoint:</strong> /api
-                  </Typography>
-                </Grid>
-                <Grid item xs={12} sm={6} md={3}>
-                  <Typography variant="body1">
-                    <strong>База данных:</strong> PostgreSQL
-                  </Typography>
-                </Grid>
-              </Grid>
 
               <Divider sx={{ my: 2 }} />
-
-              <Typography variant="body1" gutterBottom sx={{ fontWeight: 'bold' }}>
-                Производительность
-              </Typography>
 
               <List dense>
                 <ListItem>
@@ -352,8 +456,8 @@ const Settings: React.FC = () => {
                     <CloudDownloadIcon color="success" />
                   </ListItemIcon>
                   <ListItemText
-                    primary="Экспорт настроек"
-                    secondary="Сохранить текущие настройки в файл"
+                    primary={t('settings.exportBtn')}
+                    secondary="Save current settings to a file"
                   />
                   <Button
                     variant="outlined"
@@ -361,7 +465,7 @@ const Settings: React.FC = () => {
                     onClick={handleExportData}
                     startIcon={<CloudDownloadIcon />}
                   >
-                    Экспорт
+                    {t('settings.exportBtn')}
                   </Button>
                 </ListItem>
 
@@ -370,11 +474,11 @@ const Settings: React.FC = () => {
                     <CloudUploadIcon color="primary" />
                   </ListItemIcon>
                   <ListItemText
-                    primary="Импорт настроек"
-                    secondary="Загрузить настройки из файла"
+                    primary={t('settings.importBtn')}
+                    secondary="Load settings from file (JSON/CSV/XML)"
                   />
                   <input
-                    accept=".json"
+                    accept=".json,.csv,.xml,text/*"
                     style={{ display: 'none' }}
                     id="import-settings"
                     type="file"
@@ -387,7 +491,7 @@ const Settings: React.FC = () => {
                       component="span"
                       startIcon={<CloudUploadIcon />}
                     >
-                      Импорт
+                      {t('settings.importBtn')}
                     </Button>
                   </label>
                 </ListItem>
@@ -397,8 +501,8 @@ const Settings: React.FC = () => {
                     <DeleteIcon color="error" />
                   </ListItemIcon>
                   <ListItemText
-                    primary="Очистка кеша"
-                    secondary="Удалить все локальные данные приложения"
+                    primary={t('settings.clearCache')}
+                    secondary="Remove all local data"
                   />
                   <Button
                     variant="outlined"
@@ -407,7 +511,7 @@ const Settings: React.FC = () => {
                     onClick={handleClearCache}
                     startIcon={<DeleteIcon />}
                   >
-                    Очистить
+                    {t('settings.clearCache')}
                   </Button>
                 </ListItem>
               </List>
@@ -423,7 +527,7 @@ const Settings: React.FC = () => {
               onClick={handleResetSettings}
               startIcon={<RefreshIcon />}
             >
-              Сбросить настройки
+              {t('settings.reset')}
             </Button>
             <Button
               variant="contained"
@@ -431,8 +535,9 @@ const Settings: React.FC = () => {
               startIcon={<SaveIcon />}
               sx={{ fontWeight: 'bold' }}
             >
-              Сохранить изменения
+              {t('settings.save')}
             </Button>
+            <Chip label={`Export: ${dataExportFormat.toUpperCase()}`} />
           </Box>
         </Grid>
       </Grid>

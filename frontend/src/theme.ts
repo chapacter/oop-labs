@@ -1,331 +1,249 @@
+// src/theme.ts
 import { createTheme } from '@mui/material/styles';
 
-// Основная темная тема
+// Рекомендуемый шрифт — Inter. Чтобы он отображался корректно, добавьте в public/index.html:
+// <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+const baseTypography = {
+  fontFamily: [
+    'Inter',
+    '-apple-system',
+    'BlinkMacSystemFont',
+    '"Segoe UI"',
+    'Roboto',
+    '"Helvetica Neue"',
+    'Arial',
+    'sans-serif',
+  ].join(','),
+  h1: { fontWeight: 700 },
+  h2: { fontWeight: 700 },
+  h3: { fontWeight: 700 },
+  h4: { fontWeight: 700 },
+  h5: { fontWeight: 600 },
+  h6: { fontWeight: 600 },
+  body1: { fontWeight: 400 },
+  body2: { fontWeight: 400 },
+  button: { fontWeight: 600, textTransform: 'none' }
+};
+
+const commonComponents = {
+  MuiButton: {
+    styleOverrides: {
+      root: {
+        borderRadius: 12,
+        padding: '10px 18px',
+        transition: 'transform 0.12s ease, box-shadow 0.12s ease',
+      },
+      contained: {
+        boxShadow: '0 6px 18px rgba(16, 24, 40, 0.08)',
+        '&:hover': {
+          transform: 'translateY(-1px)',
+          boxShadow: '0 8px 24px rgba(16, 24, 40, 0.12)'
+        }
+      }
+    }
+  },
+  MuiCard: {
+    styleOverrides: {
+      root: {
+        borderRadius: 14,
+        boxShadow: '0 8px 24px rgba(16,24,40,0.06)',
+        transition: 'transform 0.18s, box-shadow 0.18s',
+        '&:hover': {
+          transform: 'translateY(-4px)',
+          boxShadow: '0 12px 40px rgba(16,24,40,0.08)',
+        },
+      }
+    }
+  },
+  MuiPaper: {
+    styleOverrides: {
+      root: {
+        backgroundImage: 'none',
+      }
+    }
+  },
+  MuiTextField: {
+    styleOverrides: {
+      root: {
+        '& .MuiOutlinedInput-root': {
+          borderRadius: 10,
+          '&.Mui-focused fieldset': {
+            boxShadow: '0 6px 18px rgba(25,118,210,0.06)',
+          }
+        }
+      }
+    }
+  },
+  MuiSelect: {
+    styleOverrides: {
+      root: {
+        borderRadius: 10,
+      },
+      icon: {
+        opacity: 0.9
+      }
+    }
+  },
+  MuiTableHead: {
+    styleOverrides: {
+      root: {
+        '& .MuiTableCell-head': {
+          fontWeight: 700,
+        }
+      }
+    }
+  },
+  MuiTableRow: {
+    styleOverrides: {
+      root: {
+        '&:nth-of-type(odd)': {
+          // subtle striping handled per theme
+        },
+        '&:hover': {
+          transform: 'none'
+        }
+      }
+    }
+  },
+  MuiTooltip: {
+    styleOverrides: {
+      tooltip: {
+        borderRadius: 8,
+        fontSize: '0.875rem'
+      }
+    }
+  }
+};
+
+// Dark theme
 export const darkTheme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: '#64b5f6', // Светло-голубой
+      main: '#64b5f6',
       light: '#9be7ff',
       dark: '#218cbf',
-      contrastText: '#ffffff',
+      contrastText: '#ffffff'
     },
     secondary: {
-      main: '#81c784', // Светло-зеленый
-      light: '#b5fab8',
-      dark: '#559a5c',
-      contrastText: '#000000',
+      main: '#81c784',
+      contrastText: '#fff'
     },
     background: {
-      default: '#121212',
-      paper: '#1e1e1e',
+      default: '#0f1416', // чуть светлее глубокого черного
+      paper: '#14181a'
     },
     text: {
-      primary: '#ffffff',
-      secondary: '#b0b0b0',
-      disabled: '#757575',
+      primary: '#e6eef6',
+      secondary: '#b8c6d6'
     },
-    error: {
-      main: '#e57373',
-      dark: '#d32f2f',
-      light: '#ef9a9a',
-    },
-    warning: {
-      main: '#ffb74d',
-      dark: '#f57c00',
-      light: '#ffe0b2',
-    },
-    info: {
-      main: '#4fc3f7',
-      dark: '#0288d1',
-      light: '#b3e5fc',
-    },
-    success: {
-      main: '#81c784',
-      dark: '#388e3c',
-      light: '#c8e6c9',
-    },
+    error: { main: '#ef9a9a' },
+    warning: { main: '#ffb74d' },
+    info: { main: '#4fc3f7' },
+    success: { main: '#81c784' }
   },
-  typography: {
-    fontFamily: [
-      '-apple-system',
-      'BlinkMacSystemFont',
-      '"Segoe UI"',
-      'Roboto',
-      '"Helvetica Neue"',
-      'Arial',
-      'sans-serif',
-    ].join(','),
-    h1: {
-      fontWeight: 700,
-    },
-    h2: {
-      fontWeight: 700,
-    },
-    h3: {
-      fontWeight: 700,
-    },
-    h4: {
-      fontWeight: 700,
-    },
-    h5: {
-      fontWeight: 600,
-    },
-    h6: {
-      fontWeight: 600,
-    },
-    body1: {
-      fontWeight: 400,
-    },
-    body2: {
-      fontWeight: 400,
-    },
-    button: {
-      fontWeight: 600,
-      textTransform: 'none',
-    },
-  },
+  shape: { borderRadius: 12 },
+  typography: baseTypography,
   components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          borderRadius: 8,
-          padding: '8px 16px',
-          fontWeight: 600,
-        },
-        contained: {
-          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
-          '&:hover': {
-            boxShadow: '0 6px 16px rgba(0, 0, 0, 0.3)',
-          },
-        },
-      },
-    },
-    MuiCard: {
-      styleOverrides: {
-        root: {
-          borderRadius: 16,
-          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
-          transition: 'transform 0.3s, box-shadow 0.3s',
-          '&:hover': {
-            transform: 'translateY(-2px)',
-            boxShadow: '0 12px 40px rgba(0, 0, 0, 0.4)',
-          },
-        },
-      },
-    },
-    MuiPaper: {
-      styleOverrides: {
-        root: {
-          backgroundImage: 'none', // Убираем фоновое изображение по умолчанию
-        },
-      },
-    },
-    MuiTextField: {
-      styleOverrides: {
-        root: {
-          '& .MuiOutlinedInput-root': {
-            '&.Mui-focused fieldset': {
-              borderColor: '#64b5f6',
-            },
-          },
-        },
-      },
-    },
-    MuiSelect: {
-      styleOverrides: {
-        icon: {
-          color: '#ffffff',
-        },
-      },
-    },
+    ...commonComponents,
     MuiTableHead: {
       styleOverrides: {
         root: {
-          backgroundColor: '#2d2d2d',
+          backgroundColor: '#182022',
           '& .MuiTableCell-head': {
-            fontWeight: 600,
-            color: '#ffffff',
-          },
-        },
-      },
+            fontWeight: 700,
+            color: '#e6eef6'
+          }
+        }
+      }
     },
     MuiTableRow: {
       styleOverrides: {
         root: {
           '&:nth-of-type(odd)': {
-            backgroundColor: 'rgba(255, 255, 255, 0.04)',
+            backgroundColor: 'rgba(255,255,255,0.02)'
           },
           '&:hover': {
-            backgroundColor: 'rgba(100, 181, 246, 0.1)',
-          },
-        },
-      },
+            backgroundColor: 'rgba(100,181,246,0.06)'
+          }
+        }
+      }
     },
-  },
+    MuiCssBaseline: {
+      styleOverrides: {
+        body: {
+          WebkitFontSmoothing: 'antialiased',
+          MozOsxFontSmoothing: 'grayscale'
+        }
+      }
+    }
+  }
 });
 
-// Светлая тема
+// Light theme — более приятная белая тема (мягкие серые оттенки, тёплые тени)
 export const lightTheme = createTheme({
   palette: {
     mode: 'light',
     primary: {
-      main: '#1976d2', // Синий
-      light: '#64b5f6',
-      dark: '#0d47a1',
-      contrastText: '#ffffff',
+      main: '#0d6efd',
+      light: '#5ea6ff',
+      dark: '#0047b3',
+      contrastText: '#ffffff'
     },
     secondary: {
-      main: '#388e3c', // Зеленый
-      light: '#81c784',
-      dark: '#1b5e20',
-      contrastText: '#ffffff',
+      main: '#198754',
+      light: '#5bd08e',
+      dark: '#0b3e25',
+      contrastText: '#ffffff'
     },
     background: {
-      default: '#f5f5f5',
-      paper: '#ffffff',
+      default: '#f4f7fb', // мягкий бледно-голубой для меньшей контрастности
+      paper: '#ffffff'
     },
     text: {
-      primary: '#000000',
-      secondary: '#555555',
-      disabled: '#999999',
+      primary: '#0b1b2b',
+      secondary: '#556270'
     },
-    error: {
-      main: '#d32f2f',
-      dark: '#b71c1c',
-      light: '#e57373',
-    },
-    warning: {
-      main: '#ed6c02',
-      dark: '#e65100',
-      light: '#ff9800',
-    },
-    info: {
-      main: '#0288d1',
-      dark: '#01579b',
-      light: '#4fc3f7',
-    },
-    success: {
-      main: '#388e3c',
-      dark: '#1b5e20',
-      light: '#81c784',
-    },
+    error: { main: '#d32f2f' },
+    warning: { main: '#ff9800' },
+    info: { main: '#0288d1' },
+    success: { main: '#2e7d32' }
   },
-  typography: {
-    fontFamily: [
-      '-apple-system',
-      'BlinkMacSystemFont',
-      '"Segoe UI"',
-      'Roboto',
-      '"Helvetica Neue"',
-      'Arial',
-      'sans-serif',
-    ].join(','),
-    h1: {
-      fontWeight: 700,
-    },
-    h2: {
-      fontWeight: 700,
-    },
-    h3: {
-      fontWeight: 700,
-    },
-    h4: {
-      fontWeight: 700,
-    },
-    h5: {
-      fontWeight: 600,
-    },
-    h6: {
-      fontWeight: 600,
-    },
-    body1: {
-      fontWeight: 400,
-    },
-    body2: {
-      fontWeight: 400,
-    },
-    button: {
-      fontWeight: 600,
-      textTransform: 'none',
-    },
-  },
+  shape: { borderRadius: 12 },
+  typography: baseTypography,
   components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          borderRadius: 8,
-          padding: '8px 16px',
-          fontWeight: 600,
-        },
-        contained: {
-          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-          '&:hover': {
-            boxShadow: '0 6px 16px rgba(0, 0, 0, 0.15)',
-          },
-        },
-      },
-    },
-    MuiCard: {
-      styleOverrides: {
-        root: {
-          borderRadius: 16,
-          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-          transition: 'transform 0.3s, box-shadow 0.3s',
-          '&:hover': {
-            transform: 'translateY(-2px)',
-            boxShadow: '0 12px 40px rgba(0, 0, 0, 0.15)',
-          },
-        },
-      },
-    },
-    MuiPaper: {
-      styleOverrides: {
-        root: {
-          backgroundImage: 'none', // Убираем фоновое изображение по умолчанию
-        },
-      },
-    },
-    MuiTextField: {
-      styleOverrides: {
-        root: {
-          '& .MuiOutlinedInput-root': {
-            '&.Mui-focused fieldset': {
-              borderColor: '#1976d2',
-            },
-          },
-        },
-      },
-    },
-    MuiSelect: {
-      styleOverrides: {
-        icon: {
-          color: '#000000',
-        },
-      },
-    },
+    ...commonComponents,
     MuiTableHead: {
       styleOverrides: {
         root: {
-          backgroundColor: '#f0f0f0',
+          backgroundColor: '#f1f5f9',
           '& .MuiTableCell-head': {
-            fontWeight: 600,
-            color: '#000000',
-          },
-        },
-      },
+            fontWeight: 700,
+            color: '#0b1b2b'
+          }
+        }
+      }
     },
     MuiTableRow: {
       styleOverrides: {
         root: {
           '&:nth-of-type(odd)': {
-            backgroundColor: 'rgba(0, 0, 0, 0.02)',
+            backgroundColor: 'rgba(11,27,43,0.02)'
           },
           '&:hover': {
-            backgroundColor: 'rgba(25, 118, 210, 0.08)',
-          },
-        },
-      },
+            backgroundColor: 'rgba(13,110,253,0.06)'
+          }
+        }
+      }
     },
-  },
+    MuiCssBaseline: {
+      styleOverrides: {
+        body: {
+          WebkitFontSmoothing: 'antialiased',
+          MozOsxFontSmoothing: 'grayscale'
+        }
+      }
+    }
+  }
 });

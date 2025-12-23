@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react';
+// src/components/FunctionEditor.tsx
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Box, Typography, TextField, Button, Grid, Card, CardContent,
   IconButton, MenuItem, FormControl, InputLabel, Select,
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
-  Paper, CircularProgress, Tooltip, Divider
+  Paper, CircularProgress, Tooltip, Divider, Collapse
 } from '@mui/material';
 import {
   Add as AddIcon, Delete as DeleteIcon, Save as SaveIcon,
-  ArrowBack as ArrowBackIcon, Functions as FunctionsIcon, DataArray as DataArrayIcon
+  ArrowBack as ArrowBackIcon, Functions as FunctionsIcon, DataArray as DataArrayIcon,
+  UploadFile as UploadFileIcon
 } from '@mui/icons-material';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import functionService from '../services/functionService';
@@ -16,6 +18,32 @@ import toast from 'react-hot-toast';
 interface FunctionEditorProps {
   mathFunctionMode?: boolean;
 }
+
+const MAX_POINTS = 1000;
+
+const parseCsvTextToPoints = (text: string): { x: number; y: number }[] => {
+  // Разрешаем разделители: ',' ';' '\t' или пробелы
+  const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+  if (!lines.length) return [];
+
+  // Если первая строка содержит буквы 'x' или 'y' — считаем её заголовком
+  const headerParts = lines[0].split(/[,;\t\s]+/).map(s => s.trim().toLowerCase());
+  let startIndex = 0;
+  if (headerParts.length >= 2 && (headerParts[0] === 'x' || headerParts[1] === 'y' || headerParts.includes('x'))) {
+    startIndex = 1;
+  }
+
+  const points: { x: number; y: number }[] = [];
+  for (let i = startIndex; i < lines.length; i++) {
+    const parts = lines[i].split(/[,;\t\s]+/).map(s => s.trim()).filter(Boolean);
+    if (parts.length < 2) continue;
+    const x = parseFloat(parts[0]);
+    const y = parseFloat(parts[1]);
+    if (!Number.isFinite(x) || !Number.isFinite(y)) continue;
+    points.push({ x, y });
+  }
+  return points;
+};
 
 const FunctionEditor: React.FC<FunctionEditorProps> = ({ mathFunctionMode = false }) => {
   const [name, setName] = useState('');
@@ -26,21 +54,29 @@ const FunctionEditor: React.FC<FunctionEditorProps> = ({ mathFunctionMode = fals
   const [intervalStart, setIntervalStart] = useState(0);
   const [intervalEnd, setIntervalEnd] = useState(10);
   const [pointsCount, setPointsCount] = useState(10);
+
+  // Bulk add UI state
+  const [bulkOpen, setBulkOpen] = useState(false);
+  const [bulkText, setBulkText] = useState('');
+
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const location = useLocation();
   const state = location.state as { fromDashboard?: boolean } | null;
 
+  // refs to inputs for keyboard navigation: keys 'x-INDEX' and 'y-INDEX'
+  const inputRefs = useRef<Record<string, HTMLInputElement | null>>({});
+
   useEffect(() => {
     if (id) {
       loadFunctionData(Number(id));
     } else if (!mathFunctionMode) {
-      // Если создаем новую функцию из массива, добавляем две начальные точки
       setPoints([
         { x: 0, y: 0 },
         { x: 1, y: 1 }
       ]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, mathFunctionMode]);
 
   const loadFunctionData = async (functionId: number) => {
@@ -50,7 +86,7 @@ const FunctionEditor: React.FC<FunctionEditorProps> = ({ mathFunctionMode = fals
       const pointsData = await functionService.getFunctionPoints(functionId);
 
       setName(funcData.name);
-      setPoints(pointsData.map((p: any) => ({ x: p.x, y: p.y })));
+      setPoints(pointsData.map((p: any) => ({ x: Number(p.x), y: Number(p.y) })));
       setIsEditing(true);
     } catch (error) {
       console.error('Ошибка при загрузке функции:', error);
@@ -62,11 +98,83 @@ const FunctionEditor: React.FC<FunctionEditorProps> = ({ mathFunctionMode = fals
   };
 
   const handleAddPoint = () => {
-    if (points.length >= 100) {
-      toast.error('Максимальное количество точек: 100');
+    if (points.length >= MAX_POINTS) {
+      toast.error(`Максимальное количество точек: ${MAX_POINTS}`);
       return;
     }
-    setPoints([...points, { x: 0, y: 0 }]);
+    setPoints(prev => [...prev, { x: 0, y: 0 }]);
+  };
+
+  const handleBulkAdd = () => {
+    if (!bulkText.trim()) {
+      toast.error('Вставьте точки в формате "x,y" — по одной точке в строке.');
+      return;
+    }
+
+    const lines = bulkText.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+    const parsed: { x: number; y: number }[] = [];
+    const invalidLines: number[] = [];
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      const parts = line.split(/[,;\s]+/).filter(Boolean);
+      if (parts.length < 2) {
+        invalidLines.push(i + 1);
+        continue;
+      }
+      const x = parseFloat(parts[0]);
+      const y = parseFloat(parts[1]);
+      if (!Number.isFinite(x) || !Number.isFinite(y)) {
+        invalidLines.push(i + 1);
+        continue;
+      }
+      parsed.push({ x, y });
+    }
+
+    if (invalidLines.length) {
+      toast.error(`Некорректные строки: ${invalidLines.slice(0, 10).join(', ')}${invalidLines.length > 10 ? ', ...' : ''}`);
+      return;
+    }
+
+    if (points.length + parsed.length > MAX_POINTS) {
+      toast.error(`Нельзя добавить: превысится лимит ${MAX_POINTS} точек (текущие: ${points.length}, добавляемые: ${parsed.length})`);
+      return;
+    }
+
+    setPoints(prev => [...prev, ...parsed]);
+    setBulkText('');
+    setBulkOpen(false);
+    toast.success(`Добавлено ${parsed.length} точек`);
+    setTimeout(() => {
+      const idx = points.length;
+      inputRefs.current[`x-${idx}`]?.focus();
+      inputRefs.current[`x-${idx}`]?.select();
+    }, 50);
+  };
+
+  // CSV file upload handler
+  const handleCsvUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const content = String(ev.target?.result || '');
+      const parsed = parseCsvTextToPoints(content);
+      if (!parsed.length) {
+        toast.error('CSV не содержит корректных точек (ожидается 2 колонки x и y).');
+        return;
+      }
+      if (points.length + parsed.length > MAX_POINTS) {
+        toast.error(`Нельзя добавить: превысится лимит ${MAX_POINTS} точек (текущие: ${points.length}, добавляемые: ${parsed.length})`);
+        return;
+      }
+      setPoints(prev => [...prev, ...parsed]);
+      toast.success(`Импортировано ${parsed.length} точек из CSV`);
+    };
+    reader.readAsText(file);
+    // очистим значение чтобы можно было загрузить тот же файл повторно
+    (e.target as HTMLInputElement).value = '';
   };
 
   const handlePointChange = (index: number, field: 'x' | 'y', value: string) => {
@@ -93,6 +201,45 @@ const FunctionEditor: React.FC<FunctionEditorProps> = ({ mathFunctionMode = fals
     }
     const newPoints = points.filter((_, i) => i !== index);
     setPoints(newPoints);
+    setTimeout(() => {
+      const nextIndex = Math.min(index, newPoints.length - 1);
+      inputRefs.current[`x-${nextIndex}`]?.focus();
+    }, 0);
+  };
+
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, index: number, field: 'x' | 'y') => {
+    const key = e.key.toLowerCase();
+    if (!['w', 'a', 's', 'd', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright'].includes(key)) return;
+    e.preventDefault();
+
+    const total = points.length;
+    const col = field;
+    if (key === 'a' || key === 'arrowleft') {
+      const targetKey = `x-${index}`;
+      inputRefs.current[targetKey]?.focus();
+      inputRefs.current[targetKey]?.select();
+      return;
+    }
+    if (key === 'd' || key === 'arrowright') {
+      const targetKey = `y-${index}`;
+      inputRefs.current[targetKey]?.focus();
+      inputRefs.current[targetKey]?.select();
+      return;
+    }
+    if (key === 'w' || key === 'arrowup') {
+      const prevIndex = Math.max(0, index - 1);
+      const targetKey = `${col}-${prevIndex}`;
+      inputRefs.current[targetKey]?.focus();
+      inputRefs.current[targetKey]?.select();
+      return;
+    }
+    if (key === 's' || key === 'arrowdown') {
+      const nextIndex = Math.min(total - 1, index + 1);
+      const targetKey = `${col}-${nextIndex}`;
+      inputRefs.current[targetKey]?.focus();
+      inputRefs.current[targetKey]?.select();
+      return;
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -103,7 +250,6 @@ const FunctionEditor: React.FC<FunctionEditorProps> = ({ mathFunctionMode = fals
       return;
     }
 
-    // Сортируем точки по X
     const sortedPoints = [...points].sort((a, b) => a.x - b.x);
     setPoints(sortedPoints);
 
@@ -114,7 +260,6 @@ const FunctionEditor: React.FC<FunctionEditorProps> = ({ mathFunctionMode = fals
       const userId = currentUser.id || 1;
 
       if (mathFunctionMode && !isEditing) {
-        // Создание функции из математической функции
         const newFunction = await functionService.createFromMathFunction(
           name || `Функция ${mathFunctionType}`,
           userId,
@@ -128,23 +273,17 @@ const FunctionEditor: React.FC<FunctionEditorProps> = ({ mathFunctionMode = fals
         toast.success('Функция успешно создана');
         navigate(`/functions/${newFunction.id}/graph`);
       } else if (isEditing && id) {
-        // Обновление существующей функции
         await functionService.updateFunction(Number(id), name, "Auto-generated");
-
-        // Для упрощения, пересоздадим все точки
         const existingPoints = await functionService.getFunctionPoints(Number(id));
         for (const point of existingPoints) {
           await functionService.deletePoint(point.id);
         }
-
         for (const point of sortedPoints) {
           await functionService.addPoint(Number(id), point.x, point.y);
         }
-
         toast.success('Функция успешно обновлена');
         navigate(`/functions/${id}/graph`);
       } else {
-        // Создание новой функции из массива точек
         const newFunction = await functionService.createFunctionFromArray({
           name: name || 'Новая функция',
           userId: userId,
@@ -158,29 +297,17 @@ const FunctionEditor: React.FC<FunctionEditorProps> = ({ mathFunctionMode = fals
 
     } catch (error: any) {
       console.error('Ошибка при сохранении функции:', error);
-
       let errorMessage = 'Не удалось сохранить функцию. Проверьте введенные данные.';
-
       if (error.response) {
-        // Обработка ошибок от сервера
         if (error.response.data) {
           errorMessage = error.response.data.message || error.response.data.error || errorMessage;
         }
       }
-
       toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
   };
-
-  if (loading) {
-    return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
-        <CircularProgress />
-      </Box>
-    );
-  }
 
   return (
     <Box>
@@ -292,6 +419,58 @@ const FunctionEditor: React.FC<FunctionEditorProps> = ({ mathFunctionMode = fals
                     <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
                       <DataArrayIcon sx={{ mr: 1 }} /> Точки функции
                     </Typography>
+
+                    <Box sx={{ mb: 1, display: 'flex', gap: 1, alignItems: 'center' }}>
+                      <Button variant="outlined" startIcon={<AddIcon />} onClick={handleAddPoint} disabled={points.length >= MAX_POINTS}>
+                        Добавить точку
+                      </Button>
+
+                      <Button variant="outlined" onClick={() => setBulkOpen(prev => !prev)}>
+                        {bulkOpen ? 'Скрыть массовое добавление' : 'Добавить несколько точек'}
+                      </Button>
+
+                      <input
+                        accept=".csv,text/csv"
+                        id="csv-upload"
+                        type="file"
+                        style={{ display: 'none' }}
+                        onChange={handleCsvUpload}
+                      />
+                      <label htmlFor="csv-upload">
+                        <Button variant="outlined" component="span" startIcon={<UploadFileIcon />}>
+                          Импорт CSV
+                        </Button>
+                      </label>
+
+                      <Typography variant="body2" color="text.secondary" sx={{ ml: 'auto' }}>
+                        Всего точек: {points.length} (максимум {MAX_POINTS})
+                      </Typography>
+                    </Box>
+
+                    <Collapse in={bulkOpen}>
+                      <Box sx={{ mb: 2 }}>
+                        <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                          Вставьте точки построчно в формате <code>x,y</code> или <code>x y</code>. Пример:
+                          <br />
+                          <code>0,0</code><br />
+                          <code>0.1,0.0998</code><br />
+                          <code>0.2,0.1987</code>
+                        </Typography>
+                        <TextField
+                          multiline
+                          minRows={3}
+                          fullWidth
+                          placeholder="x,y (каждая точка в новой строке)"
+                          value={bulkText}
+                          onChange={(e) => setBulkText(e.target.value)}
+                        />
+                        <Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
+                          <Button variant="contained" onClick={handleBulkAdd}>Добавить точки</Button>
+                          <Button variant="outlined" onClick={() => { setBulkText(''); setBulkOpen(false); }}>Отмена</Button>
+                        </Box>
+                      </Box>
+                    </Collapse>
+
                     <TableContainer component={Paper}>
                       <Table>
                         <TableHead>
@@ -308,22 +487,26 @@ const FunctionEditor: React.FC<FunctionEditorProps> = ({ mathFunctionMode = fals
                               <TableCell>{index + 1}</TableCell>
                               <TableCell>
                                 <TextField
+                                  inputRef={(el) => { inputRefs.current[`x-${index}`] = el; }}
                                   type="number"
                                   value={point.x}
                                   onChange={(e) => handlePointChange(index, 'x', e.target.value)}
                                   size="small"
                                   fullWidth
                                   inputProps={{ step: "any" }}
+                                  onKeyDown={(e) => handleInputKeyDown(e as any, index, 'x')}
                                 />
                               </TableCell>
                               <TableCell>
                                 <TextField
+                                  inputRef={(el) => { inputRefs.current[`y-${index}`] = el; }}
                                   type="number"
                                   value={point.y}
                                   onChange={(e) => handlePointChange(index, 'y', e.target.value)}
                                   size="small"
                                   fullWidth
                                   inputProps={{ step: "any" }}
+                                  onKeyDown={(e) => handleInputKeyDown(e as any, index, 'y')}
                                 />
                               </TableCell>
                               <TableCell>
@@ -342,19 +525,6 @@ const FunctionEditor: React.FC<FunctionEditorProps> = ({ mathFunctionMode = fals
                         </TableBody>
                       </Table>
                     </TableContainer>
-                    <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <Typography variant="body2" color="text.secondary">
-                        Всего точек: {points.length} (максимум 100)
-                      </Typography>
-                      <Button
-                        variant="outlined"
-                        startIcon={<AddIcon />}
-                        onClick={handleAddPoint}
-                        disabled={points.length >= 100}
-                      >
-                        Добавить точку
-                      </Button>
-                    </Box>
                   </Grid>
                 </>
               )}
